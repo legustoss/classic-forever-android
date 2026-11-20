@@ -9,6 +9,10 @@ import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
+internal data class MemoryRegion(val start: Long, val end: Long)
+
+internal enum class StoreState { PATCHED, ORIGINAL, INVALID }
+
 /**
  * Android port of classic-forever-linux.py.
  *
@@ -32,7 +36,7 @@ import java.nio.ByteOrder
 object ClassicForeverPatcher {
     // Defaults from classic-forever-linux.py. Change here, or via classic-forever.properties.
     private const val DEFAULT_PORTAL = "auth.gpon.com.co"
-    private val DEFAULT_NEW_KEY = hex("02596F0D0C061A8B30745988FD72C59E29EC367FB0F341F28E0F08D037BAFC69")
+    internal val DEFAULT_NEW_KEY = hex("02596F0D0C061A8B30745988FD72C59E29EC367FB0F341F28E0F08D037BAFC69")
 
     const val CONFIG_NAME = "BetaSuspendedTest.wtf"
     const val LAUNCH_ARGS = "-config $CONFIG_NAME"
@@ -40,7 +44,7 @@ object ClassicForeverPatcher {
     private val EXE_NAMES = listOf(EXE_NAME, "Wow.exe", "WowB.exe").map { it.lowercase() }
 
     // Measured 2026-09-20; identical in builds 69977 and 70009.
-    private val KNOWN_KEYS = listOf(
+    internal val KNOWN_KEYS = listOf(
         hex("9B0671C815DFF513BFD4A2B26AE1F84EC9106841B2FB620DB65F6ADE7C21AD06"), // 1, search anchor
         hex("112451B9843C2799E4750AA3D9B9AFABF536A645B863C4ADB2078B932B354E04"),
         hex("A6B858485748BF38BE193517AB90F8DE169EFF0989EA9360DB346A378B0FFE15"),
@@ -54,11 +58,11 @@ object ClassicForeverPatcher {
         hex("9E91586DD4B115AB0568B21959E181F6545910BC5E2F30B8975CA09D7BC3EFCE"),
         hex("769C824A1DADD19AEEFA420414D1732DAF44537F98AA229FC5477BCA55F9D59A"),
     )
-    private const val TARGET_GROUP = 8
-    private const val ENTRY_SIZE = 40
-    private const val ENTRY_COUNT = 12
-    private const val BLOCK_SIZE = ENTRY_SIZE * ENTRY_COUNT
-    private val EXPECTED_FLAGS = intArrayOf(1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1)
+    internal const val TARGET_GROUP = 8
+    internal const val ENTRY_SIZE = 40
+    internal const val ENTRY_COUNT = 12
+    internal const val BLOCK_SIZE = ENTRY_SIZE * ENTRY_COUNT
+    internal val EXPECTED_FLAGS = intArrayOf(1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1)
     private const val CHUNK = 8 * 1024 * 1024
     private const val MAX_WAIT_MS = 5 * 60 * 1000L
 
@@ -93,14 +97,57 @@ object ClassicForeverPatcher {
                     when (parts[0].trim().lowercase()) {
                         "portal" -> portal = parts[1].trim().ifBlank { portal }
                         "key" -> {
-                            val parsed = hex(parts[1].trim())
-                            if (parsed.size == 32) key = parsed
+                            val value = parts[1].trim()
+                            if (isValidPublicKeyHex(value)) key = hex(value)
                         }
                     }
                 }
             }.onFailure { log("Could not read classic-forever.properties", it) }
         }
         return Settings(portal, key)
+    }
+
+    /** Pure validation of the 64-hex public key, usable in unit tests without a device. */
+    internal fun isValidPublicKeyHex(value: String): Boolean {
+        val clean = value.trim()
+        if (clean.length != 64) return false
+        return clean.all { it in '0'..'9' || it in 'a'..'f' || it in 'A'..'F' }
+    }
+
+    /** Pure parser for a /proc/<pid>/maps dump; filters anonymous private read/write regions. */
+    internal fun parseHeapRegions(maps: String): List<MemoryRegion> {
+        val regions = mutableListOf<MemoryRegion>()
+        maps.lineSequence().forEach { line ->
+            val parts = line.split(Regex("\\s+"), limit = 6)
+            if (parts.size < 5) return@forEach
+            val perms = parts[1]
+            val inode = parts[4]
+            val path = if (parts.size > 5) parts[5].trim() else ""
+            if (perms != "rw-p" || inode != "0" || path.startsWith("[v") || path == "[stack]") return@forEach
+            val bounds = parts[0].split("-")
+            if (bounds.size != 2) return@forEach
+            regions += MemoryRegion(bounds[0].toLong(16), bounds[1].toLong(16))
+        }
+        return regions
+    }
+
+    /** Pure validation of a 12-entry store block; no /proc access. */
+    internal fun validateStoreBlock(raw: ByteArray, key: ByteArray): StoreState {
+        if (raw.size < BLOCK_SIZE) return StoreState.INVALID
+        for (e in 0 until ENTRY_COUNT) {
+            val o = e * ENTRY_SIZE
+            val ident = ByteBuffer.wrap(raw, o, 4).order(ByteOrder.LITTLE_ENDIAN).int
+            if (ident != e + 1) return StoreState.INVALID
+            val stored = raw.copyOfRange(o + 4, o + 36)
+            val ok = if (e == TARGET_GROUP - 1) {
+                stored contentEquals KNOWN_KEYS[e] || stored contentEquals key
+            } else {
+                stored contentEquals KNOWN_KEYS[e]
+            }
+            if (!ok || raw[o + 36].toInt() != EXPECTED_FLAGS[e]) return StoreState.INVALID
+        }
+        val o8 = (TARGET_GROUP - 1) * ENTRY_SIZE + 4
+        return if (raw.copyOfRange(o8, o8 + 32) contentEquals key) StoreState.PATCHED else StoreState.ORIGINAL
     }
 
     /** Writes `WTF/BetaSuspendedTest.wtf` from the normal Config.wtf with the private portal. */
@@ -245,29 +292,15 @@ object ClassicForeverPatcher {
 
     // -------------------------------------------------------------------------------- memory access
 
-    private fun heapRegions(pid: Int): List<Pair<Long, Long>> {
-        val regions = mutableListOf<Pair<Long, Long>>()
-        try {
-            File("/proc/$pid/maps").readLines().forEach { line ->
-                val parts = line.split(Regex("\\s+"), limit = 6)
-                if (parts.size < 5) return@forEach
-                val perms = parts[1]
-                val inode = parts[4]
-                val path = if (parts.size > 5) parts[5].trim() else ""
-                // Anonymous private read/write mappings: the client's heap under Wine.
-                if (perms != "rw-p" || inode != "0" || path.startsWith("[v") || path == "[stack]") return@forEach
-                val bounds = parts[0].split("-")
-                if (bounds.size != 2) return@forEach
-                regions += bounds[0].toLong(16) to bounds[1].toLong(16)
-            }
-        } catch (_: IOException) {
-            // Process went away while reading maps.
-        }
-        return regions
+    private fun heapRegions(pid: Int): List<MemoryRegion> = try {
+        parseHeapRegions(File("/proc/$pid/maps").readText())
+    } catch (_: IOException) {
+        // Process went away while reading maps.
+        emptyList()
     }
 
-    private fun regionOf(pid: Int, address: Long, size: Int): Pair<Long, Long>? =
-        heapRegions(pid).firstOrNull { it.first <= address && address + size <= it.second }
+    private fun regionOf(pid: Int, address: Long, size: Int): MemoryRegion? =
+        heapRegions(pid).firstOrNull { it.start <= address && address + size <= it.end }
 
     private fun read(pid: Int, address: Long, size: Int): ByteArray {
         RandomAccessFile("/proc/$pid/mem", "r").use { mem ->
@@ -327,20 +360,11 @@ object ClassicForeverPatcher {
         } catch (_: IOException) {
             return "invalid"
         }
-        for (e in 0 until ENTRY_COUNT) {
-            val o = e * ENTRY_SIZE
-            val ident = ByteBuffer.wrap(raw, o, 4).order(ByteOrder.LITTLE_ENDIAN).int
-            if (ident != e + 1) return "invalid"
-            val stored = raw.copyOfRange(o + 4, o + 36)
-            val ok = if (e == TARGET_GROUP - 1) {
-                stored contentEquals KNOWN_KEYS[e] || stored contentEquals key
-            } else {
-                stored contentEquals KNOWN_KEYS[e]
-            }
-            if (!ok || raw[o + 36].toInt() != EXPECTED_FLAGS[e]) return "invalid"
+        return when (validateStoreBlock(raw, key)) {
+            StoreState.PATCHED -> "patched"
+            StoreState.ORIGINAL -> "original"
+            StoreState.INVALID -> "invalid"
         }
-        val o8 = (TARGET_GROUP - 1) * ENTRY_SIZE + 4
-        return if (raw.copyOfRange(o8, o8 + 32) contentEquals key) "patched" else "original"
     }
 
     private fun findStores(pid: Int, key: ByteArray): Pair<List<Pair<Long, String>>, String> {
@@ -357,23 +381,34 @@ object ClassicForeverPatcher {
 
     private fun patch(pid: Int, array: Long, key: ByteArray) {
         val address = array + (TARGET_GROUP - 1) * ENTRY_SIZE + 4
+        // Idempotency: a repeated call on an already patched store must not wait or rewrite.
+        if (storeState(pid, array, key) == "patched") {
+            log("Store 0x${array.toString(16)} is already patched; nothing to write")
+            return
+        }
         val original = KNOWN_KEYS[TARGET_GROUP - 1]
         var written = false
         for (attempt in 0 until 20) {
-            if (regionOf(pid, address, 32) == null) throw IOException("key is not in anonymous rw memory")
+            if (regionOf(pid, address, 32) == null) {
+                throw IOException("pid=$pid addr=0x${address.toString(16)}: key is not in anonymous rw memory")
+            }
             if (read(pid, address, 32) contentEquals original) {
                 RandomAccessFile("/proc/$pid/mem", "rw").use { mem ->
                     mem.seek(address)
                     mem.write(key)
                 }
-                if (!(read(pid, address, 32) contentEquals key)) throw IOException("read-back verification failed")
+                if (!(read(pid, address, 32) contentEquals key)) {
+                    throw IOException("pid=$pid addr=0x${address.toString(16)}: read-back verification failed")
+                }
                 written = true
                 break
             }
-            Thread.sleep(300)
+            Thread.sleep((100L * attempt).coerceAtMost(300L))
         }
-        if (!written) throw IOException("key bytes changed before write")
-        if (storeState(pid, array, key) != "patched") throw IOException("store did not validate after patch")
+        if (!written) throw IOException("pid=$pid addr=0x${address.toString(16)}: key bytes changed before write")
+        if (storeState(pid, array, key) != "patched") {
+            throw IOException("pid=$pid addr=0x${address.toString(16)}: store did not validate after patch")
+        }
         log("Server public key written at 0x${address.toString(16)}")
     }
 
