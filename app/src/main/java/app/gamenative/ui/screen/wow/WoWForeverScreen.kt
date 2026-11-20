@@ -1437,8 +1437,9 @@ private fun containerConfig(gameRoot: File, gpu: GpuProfile, screenSize: String,
         put("displayRenderer", "vulkan")
         put("dxwrapper", "dxvk-$DXVK_VERSION-1")
         // Async shader compilation keeps first-time zone visits from stuttering; the async pipeline
-        // cache avoids recompiling the same shaders on the next launch.
-        put("dxwrapperConfig", "version=$DXVK_VERSION-1,async=1,asyncCache=1")
+        // cache avoids recompiling the same shaders on the next launch. syncInterval=0 matches
+        // gxVSync=0 in the game config; maxFrameLatency keeps only a short queue of presented frames.
+        put("dxwrapperConfig", "version=$DXVK_VERSION-1,async=1,asyncCache=1,syncInterval=0,maxFrameLatency=2")
         put("wineVersion", "$PROTON_VERSION-1")
         put("containerVariant", "bionic")
         put("fexcoreVersion", "2609-0")

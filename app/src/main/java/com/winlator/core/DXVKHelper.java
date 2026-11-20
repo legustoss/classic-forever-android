@@ -36,6 +36,17 @@ public class DXVKHelper {
             envVars.put("DXVK_FEATURE_LEVEL", maxFeatureLevel);
         }
 
+        // dxvk.conf: force a stricter frame latency (0 = keep the application's value).
+        String maxFrameLatency = config.get("maxFrameLatency");
+        if (!maxFrameLatency.isEmpty() && !maxFrameLatency.equals("0")) {
+            content += "dxgi.maxFrameLatency = "+maxFrameLatency+"\n";
+        }
+
+        // dxvk.conf: 0 disables presentation vsync entirely, -1 keeps the application's choice.
+        String syncInterval = config.get("syncInterval");
+        if (!syncInterval.isEmpty() && !syncInterval.equals("-1")) {
+            content += "dxgi.syncInterval = "+syncInterval+"\n";
+        }
 
         String framerate = config.get("framerate");
         if (!framerate.isEmpty() && !framerate.equals("0")) {
