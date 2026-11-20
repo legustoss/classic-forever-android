@@ -494,8 +494,8 @@ fun WoWForeverScreen(
             windowSizeClass = windowSizeClass,
             foldingFeature = foldingFeature,
             header = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(20.dp))
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = context.getString(R.string.wow_title),
                     fontSize = 24.sp,
@@ -620,7 +620,7 @@ fun WoWForeverScreen(
                 }
             }
             },
-            actions = {
+            notices = {
             if (files.needsInstall && files.hasStorageAccess) {
                 Spacer(modifier = Modifier.height(16.dp))
                 InstallCard(
@@ -750,8 +750,8 @@ fun WoWForeverScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
+            },
+            actions = {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -842,8 +842,6 @@ fun WoWForeverScreen(
             },
             details = {
                 CommunityCard(serverStatus)
-                Spacer(modifier = Modifier.height(16.dp))
-                LogPreviewCard()
             },
         )
     }
@@ -1279,6 +1277,7 @@ private fun LauncherLayout(
     foldingFeature: FoldingFeature?,
     header: @Composable () -> Unit,
     status: @Composable () -> Unit,
+    notices: @Composable () -> Unit,
     actions: @Composable () -> Unit,
     details: @Composable () -> Unit,
 ) {
@@ -1295,90 +1294,36 @@ private fun LauncherLayout(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             header()
             status()
+            notices()
             actions()
-            details()
         }
-        WindowWidthSizeClass.Medium -> Column(
+        WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
         ) {
             header()
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 Column(
-                    modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.weight(1.15f).verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     status()
+                    notices()
+                }
+                Spacer(modifier = Modifier.width(gutter))
+                Column(modifier = Modifier.weight(0.85f)) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    details()
+                    Spacer(modifier = Modifier.weight(1f))
                     actions()
                 }
-                Spacer(modifier = Modifier.width(gutter))
-                Column(modifier = Modifier.weight(0.9f).verticalScroll(rememberScrollState())) {
-                    details()
-                }
             }
-        }
-        WindowWidthSizeClass.Expanded -> Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-        ) {
-            header()
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
-                Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
-                    status()
-                }
-                Spacer(modifier = Modifier.width(gutter))
-                Column(
-                    modifier = Modifier.weight(1.25f).verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                ) {
-                    actions()
-                }
-                Spacer(modifier = Modifier.width(gutter))
-                Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
-                    details()
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun LogPreviewCard() {
-    val context = LocalContext.current
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .neonGlow()
-            .border(1.dp, WowBorder, RoundedCornerShape(16.dp)),
-        colors = CardDefaults.cardColors(containerColor = WowPanel.copy(alpha = 0.85f)),
-        shape = RoundedCornerShape(16.dp),
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            SectionTitle(context.getString(R.string.wow_status_patcher), WowNeon)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = ClassicForeverPatcher.lastStatus,
-                fontSize = 12.sp,
-                color = WowNeonDim,
-                maxLines = 4,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = context.getString(R.string.wow_logs_hint),
-                fontSize = 11.sp,
-                color = WowSubtle,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
         }
     }
 }
