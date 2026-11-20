@@ -74,6 +74,11 @@ import app.gamenative.utils.ClientCompatibility
 import app.gamenative.utils.ClassicForeverPatcher
 import app.gamenative.utils.ClientVersionChecker
 import app.gamenative.utils.LocaleHelper
+import app.gamenative.utils.Net
+import app.gamenative.utils.ServerStatus
+import app.gamenative.utils.ServerStatusConfig
+import app.gamenative.utils.ServerStatusFactory
+import app.gamenative.utils.ServerStatusKind
 import app.gamenative.utils.StorageUtils
 import app.gamenative.utils.renderReleaseNotes
 import com.winlator.container.Container
@@ -127,6 +132,7 @@ fun WoWForeverScreen(
     var showStoragePermissionDialog by remember { mutableStateOf(false) }
     var versionStatus by remember { mutableStateOf<WowClientDownloader.VersionCheckResult?>(null) }
     var compatibility by remember { mutableStateOf<ClientCompatibility?>(null) }
+    var serverStatus by remember { mutableStateOf(ServerStatus.UNKNOWN) }
     var isCheckingVersion by remember { mutableStateOf(false) }
     var isUpdating by remember { mutableStateOf(false) }
     var updateStatusText by remember { mutableStateOf("") }
@@ -417,6 +423,17 @@ fun WoWForeverScreen(
         }
     }
 
+    // Non-blocking: a missing or failing data source must never hold up the launcher.
+    LaunchedEffect(gamePath) {
+        val config = withContext(Dispatchers.IO) {
+            val properties = File(gamePath, "classic-forever.properties")
+            ServerStatusConfig.parse(if (properties.isFile) properties.readText() else null)
+        }
+        serverStatus = withContext(Dispatchers.IO) {
+            ServerStatusFactory.create(config, Net.http).fetch()
+        }
+    }
+
     LaunchedEffect(gamePath) {
         val ready = checkFiles()
         // Every setup path reads or writes shared storage, so ask up front rather than after the user picks one.
@@ -593,7 +610,7 @@ fun WoWForeverScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            CommunityCard()
+            CommunityCard(serverStatus)
 
             if (files.needsInstall && files.hasStorageAccess) {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -1196,7 +1213,7 @@ object GamePath {
 }
 
 @Composable
-private fun CommunityCard() {
+private fun CommunityCard(status: ServerStatus) {
     val context = LocalContext.current
     fun open(url: String) {
         runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
@@ -1234,6 +1251,18 @@ private fun CommunityCard() {
                     Text(context.getString(R.string.wow_discord), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
+            val label = when (status.kind) {
+                ServerStatusKind.DISCORD_ONLINE -> context.getString(R.string.wow_status_discord_online)
+                ServerStatusKind.IN_GAME_ONLINE -> context.getString(R.string.wow_status_ingame_online)
+                ServerStatusKind.UNKNOWN -> context.getString(R.string.wow_status_unknown)
+            }
+            val text = if (status.kind != ServerStatusKind.UNKNOWN && status.count != null) {
+                "$label: ${status.count}"
+            } else {
+                label
+            }
+            Text(text = text, fontSize = 11.sp, color = WowSubtle)
         }
     }
 }

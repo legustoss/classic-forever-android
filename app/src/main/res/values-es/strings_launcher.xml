@@ -94,4 +94,7 @@
     <string name="wow_skip_update">Omitir esta actualización</string>
     <string name="wow_client_unknown">La compilación del cliente es desconocida. Puedes lanzar, pero no se garantiza la compatibilidad.</string>
     <string name="wow_update_game">Actualizar juego</string>
+    <string name="wow_status_discord_online">En Discord</string>
+    <string name="wow_status_ingame_online">En el juego</string>
+    <string name="wow_status_unknown">En línea: —</string>
 </resources>

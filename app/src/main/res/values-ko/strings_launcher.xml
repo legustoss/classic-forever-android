@@ -94,4 +94,7 @@
     <string name="wow_skip_update">이 업데이트 건너뛰기</string>
     <string name="wow_client_unknown">클라이언트 빌드를 알 수 없습니다. 실행할 수 있지만 호환성은 보장되지 않습니다.</string>
     <string name="wow_update_game">게임 업데이트</string>
+    <string name="wow_status_discord_online">Discord 접속 중</string>
+    <string name="wow_status_ingame_online">게임 접속 중</string>
+    <string name="wow_status_unknown">온라인: —</string>
 </resources>

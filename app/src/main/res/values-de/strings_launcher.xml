@@ -94,4 +94,7 @@
     <string name="wow_skip_update">Update überspringen</string>
     <string name="wow_client_unknown">Client-Build unbekannt. Start möglich, aber Kompatibilität nicht garantiert.</string>
     <string name="wow_update_game">Spiel aktualisieren</string>
+    <string name="wow_status_discord_online">In Discord</string>
+    <string name="wow_status_ingame_online">Im Spiel</string>
+    <string name="wow_status_unknown">Online: —</string>
 </resources>

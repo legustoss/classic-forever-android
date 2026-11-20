@@ -94,4 +94,7 @@
     <string name="wow_skip_update">跳过此次更新</string>
     <string name="wow_client_unknown">客户端版本未知。可以继续启动，但无法保证兼容性。</string>
     <string name="wow_update_game">更新游戏</string>
+    <string name="wow_status_discord_online">Discord 在线</string>
+    <string name="wow_status_ingame_online">游戏内在线</string>
+    <string name="wow_status_unknown">在线：—</string>
 </resources>

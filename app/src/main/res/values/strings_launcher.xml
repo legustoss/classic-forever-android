@@ -95,4 +95,7 @@
     <string name="wow_skip_update">Skip this update</string>
     <string name="wow_client_unknown">Client build is unknown. You can launch, but compatibility is not guaranteed.</string>
     <string name="wow_update_game">Update game</string>
+    <string name="wow_status_discord_online">Discord online</string>
+    <string name="wow_status_ingame_online">In-game online</string>
+    <string name="wow_status_unknown">Online: —</string>
 </resources>

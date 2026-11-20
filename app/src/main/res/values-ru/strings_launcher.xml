@@ -94,4 +94,7 @@
     <string name="wow_skip_update">Пропустить обновление</string>
     <string name="wow_client_unknown">Версия клиента неизвестна. Можно запустить, но совместимость не гарантирована.</string>
     <string name="wow_update_game">Обновить игру</string>
+    <string name="wow_status_discord_online">В Discord</string>
+    <string name="wow_status_ingame_online">В игре</string>
+    <string name="wow_status_unknown">Онлайн: —</string>
 </resources>
