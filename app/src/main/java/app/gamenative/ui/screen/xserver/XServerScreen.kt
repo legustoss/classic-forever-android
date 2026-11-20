@@ -2066,6 +2066,7 @@ fun XServerScreen(
                                         "\n\twindowName: ${window.name}" +
                                         "\n\twindowClassName: ${window.className}" +
                                         "\n\tprocessId: ${window.processId}" +
+                                        "\n\tgeometry: ${window.x},${window.y} ${window.width}x${window.height}" +
                                         "\n\thasParent: ${window.parent != null}" +
                                         "\n\tchildrenSize: ${window.children.size}",
                             )
@@ -2085,6 +2086,7 @@ fun XServerScreen(
                                         "\n\twindowName: ${window.name}" +
                                         "\n\twindowClassName: ${window.className}" +
                                         "\n\tprocessId: ${window.processId}" +
+                                        "\n\tgeometry: ${window.x},${window.y} ${window.width}x${window.height}" +
                                         "\n\thasParent: ${window.parent != null}" +
                                         "\n\tchildrenSize: ${window.children.size}",
                             )

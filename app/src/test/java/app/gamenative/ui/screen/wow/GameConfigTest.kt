@@ -45,6 +45,7 @@ class GameConfigTest {
             configWtf(root).readLines().filter { it.contains("Resolution ") },
         )
         assertTrue(configWtf(root).readLines().contains("SET RenderScale \"0.5\""))
+        assertTrue(configWtf(root).readLines().contains("SET gxFullscreen \"1\""))
     }
 
     @Test
