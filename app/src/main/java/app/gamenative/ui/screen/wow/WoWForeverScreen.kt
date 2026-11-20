@@ -499,7 +499,7 @@ fun WoWForeverScreen(
                 Spacer(modifier = Modifier.height(if (wide) 2.dp else 8.dp))
                 Text(
                     text = context.getString(R.string.wow_title),
-                    fontSize = if (wide) 18.sp else 24.sp,
+                    fontSize = if (wide) 16.sp else 24.sp,
                     fontWeight = FontWeight.Black,
                     fontFamily = FontFamily.Serif,
                     letterSpacing = if (wide) 2.sp else 3.sp,
@@ -509,7 +509,7 @@ fun WoWForeverScreen(
                 )
                 Text(
                     text = context.getString(R.string.wow_subtitle),
-                    fontSize = if (wide) 10.sp else 12.sp,
+                    fontSize = if (wide) 9.sp else 12.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = if (wide) 1.sp else 2.sp,
                     color = WowNeon,
@@ -519,14 +519,14 @@ fun WoWForeverScreen(
                 Spacer(modifier = Modifier.height(if (wide) 2.dp else 6.dp))
                 Text(
                     text = context.getString(R.string.wow_edition, gpu.edition),
-                    fontSize = if (wide) 9.sp else 11.sp,
+                    fontSize = if (wide) 8.sp else 11.sp,
                     color = WowSubtle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = context.getString(R.string.wow_check_app, BuildConfig.VERSION_NAME),
-                    fontSize = if (wide) 9.sp else 10.sp,
+                    fontSize = if (wide) 8.sp else 10.sp,
                     color = WowSubtle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -542,7 +542,7 @@ fun WoWForeverScreen(
                     )
                     Text(
                         text = "${gpu.compatibility.gpuModel}: $warning",
-                        fontSize = if (wide) 9.sp else 11.sp,
+                        fontSize = if (wide) 8.sp else 11.sp,
                         color = WowNeon,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.Center,
@@ -564,7 +564,7 @@ fun WoWForeverScreen(
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column(modifier = Modifier.padding(if (wide) 12.dp else 20.dp)) {
-                    SectionTitle(context.getString(R.string.wow_readiness), WowNeon)
+                    SectionTitle(context.getString(R.string.wow_readiness), WowNeon, dense = wide)
                     Spacer(modifier = Modifier.height(if (wide) 8.dp else 14.dp))
 
                     Column(verticalArrangement = Arrangement.spacedBy(if (wide) 5.dp else 8.dp)) {
@@ -580,22 +580,6 @@ fun WoWForeverScreen(
                             dense = wide,
                         )
                         CheckItem(label = context.getString(R.string.wow_check_storage), ready = files.hasStorageAccess, dense = wide)
-                        CheckItem(
-                            label = if (hasSavedLogin) context.getString(R.string.wow_check_login_configured) else context.getString(R.string.wow_check_login_missing),
-                            ready = hasSavedLogin,
-                            dense = wide,
-                        )
-                        appUpdate?.let {
-                            CheckItem(
-                                label = context.getString(R.string.wow_check_app_update, BuildConfig.VERSION_NAME, it.version),
-                                ready = false,
-                                dense = wide,
-                            )
-                        } ?: CheckItem(
-                            label = context.getString(R.string.wow_check_app, BuildConfig.VERSION_NAME),
-                            ready = true,
-                            dense = wide,
-                        )
                         versionStatus?.let { version ->
                             CheckItem(
                                 label = if (version.isOutdated) {
@@ -840,14 +824,14 @@ fun WoWForeverScreen(
                     OutlinedButton(
                         onClick = { showSettings = true },
                         enabled = !isLaunching && !isUpdating,
-                        modifier = Modifier.fillMaxWidth().height(if (wide) 40.dp else 48.dp),
+                        modifier = Modifier.fillMaxWidth().height(if (wide) 36.dp else 48.dp),
                         shape = RoundedCornerShape(14.dp),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
                         border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
                     ) {
                         Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(context.getString(R.string.wow_settings), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        Text(context.getString(R.string.wow_settings), fontSize = if (wide) 12.sp else 13.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -1340,6 +1324,7 @@ private fun LauncherLayout(
                 Column(modifier = Modifier.weight(0.85f)) {
                     Spacer(modifier = Modifier.weight(1f))
                     details()
+                    Spacer(modifier = Modifier.height(16.dp))
                     Spacer(modifier = Modifier.weight(1f))
                     actions()
                 }
@@ -1363,12 +1348,12 @@ private fun CommunityCard(status: ServerStatus, dense: Boolean = false) {
         shape = RoundedCornerShape(16.dp),
     ) {
         Column(modifier = Modifier.padding(if (dense) 12.dp else 16.dp)) {
-            SectionTitle(context.getString(R.string.wow_community_title), WowNeon)
+            SectionTitle(context.getString(R.string.wow_community_title), WowNeon, dense = dense)
             Spacer(modifier = Modifier.height(if (dense) 8.dp else 12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 OutlinedButton(
                     onClick = { open("http://classicforever.duckdns.org/") },
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).height(if (dense) 34.dp else 48.dp),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
                     border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
@@ -1379,7 +1364,7 @@ private fun CommunityCard(status: ServerStatus, dense: Boolean = false) {
                 }
                 OutlinedButton(
                     onClick = { open("https://discord.gg/zBmq68jby") },
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).height(if (dense) 34.dp else 48.dp),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
                     border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
@@ -1463,8 +1448,14 @@ private fun Modifier.neonGlow(): Modifier = this.drawBehind {
 }
 
 @Composable
-private fun SectionTitle(text: String, color: Color) {
-    Text(text = text, fontSize = 12.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp, color = color)
+private fun SectionTitle(text: String, color: Color, dense: Boolean = false) {
+    Text(
+        text = text,
+        fontSize = if (dense) 10.sp else 12.sp,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = if (dense) 0.sp else 1.sp,
+        color = color,
+    )
 }
 
 @Composable
@@ -1478,15 +1469,15 @@ private fun PrimaryButton(
     Button(
         onClick = onClick,
         enabled = enabled,
-        modifier = Modifier.fillMaxWidth().height(if (dense) 46.dp else 56.dp).neonGlow(),
+        modifier = Modifier.fillMaxWidth().height(if (dense) 42.dp else 56.dp).neonGlow(),
         colors = ButtonDefaults.buttonColors(containerColor = WowNeon, contentColor = Color.Black),
         shape = RoundedCornerShape(14.dp)
     ) {
-        Icon(icon, contentDescription = null, modifier = Modifier.size(if (dense) 20.dp else 24.dp))
+        Icon(icon, contentDescription = null, modifier = Modifier.size(if (dense) 18.dp else 24.dp))
         Spacer(modifier = Modifier.width(if (dense) 8.dp else 10.dp))
         Text(
             text = text,
-            fontSize = if (dense) 13.sp else 15.sp,
+            fontSize = if (dense) 12.sp else 15.sp,
             fontWeight = FontWeight.Bold,
             letterSpacing = if (dense) 0.sp else 1.sp,
             maxLines = 1,
@@ -1539,12 +1530,12 @@ private fun CheckItem(label: String, ready: Boolean, dense: Boolean = false) {
             imageVector = if (ready) Icons.Default.CheckCircle else Icons.Default.Warning,
             contentDescription = null,
             tint = if (ready) WowNeon else WowSubtle,
-            modifier = Modifier.size(if (dense) 15.dp else 18.dp)
+            modifier = Modifier.size(if (dense) 13.dp else 18.dp)
         )
         Spacer(modifier = Modifier.width(if (dense) 6.dp else 10.dp))
         Text(
             text = label,
-            fontSize = if (dense) 11.sp else 13.sp,
+            fontSize = if (dense) 10.sp else 13.sp,
             color = if (ready) WowNeonDim else WowSubtle,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
