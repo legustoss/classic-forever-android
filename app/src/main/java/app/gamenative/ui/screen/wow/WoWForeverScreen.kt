@@ -992,7 +992,7 @@ private fun prefs(context: Context) = context.getSharedPreferences("wow_forever"
  * resolution/RenderScale, but they get the new defaults exactly once — without touching any later
  * changes the player makes in-game.
  */
-private const val DISPLAY_DEFAULTS_VERSION = 4
+private const val DISPLAY_DEFAULTS_VERSION = 5
 private const val KEY_DISPLAY_DEFAULTS_VERSION = "display_defaults_version"
 
 private fun displayDefaultsNeedMigration(context: Context): Boolean =
@@ -1436,7 +1436,9 @@ private fun containerConfig(gameRoot: File, gpu: GpuProfile, screenSize: String,
         put("graphicsDriverConfig", "version=${gpu.driver},adrenotoolsTurnip=1,resourceType=buffer,bcnEmulation=auto,quality=high")
         put("displayRenderer", "vulkan")
         put("dxwrapper", "dxvk-$DXVK_VERSION-1")
-        put("dxwrapperConfig", "version=$DXVK_VERSION-1")
+        // Async shader compilation keeps first-time zone visits from stuttering; the async pipeline
+        // cache avoids recompiling the same shaders on the next launch.
+        put("dxwrapperConfig", "version=$DXVK_VERSION-1,async=1,asyncCache=1")
         put("wineVersion", "$PROTON_VERSION-1")
         put("containerVariant", "bionic")
         put("fexcoreVersion", "2609-0")
@@ -1457,6 +1459,7 @@ private val CONFIG_DEFAULTS = linkedMapOf(
     "agentUID" to "\"$TARGET_PRODUCT\"",
     "gxApi" to "\"D3D11\"",
     "gxFullscreen" to "\"1\"",
+    "gxVSync" to "\"0\"",
     "textLocale" to "\"enUS\"",
     "audioLocale" to "\"enUS\"",
     "gxMaximize" to "\"1\"",
@@ -1529,10 +1532,10 @@ private val RESOLUTION_KEYS = listOf("gxFullscreenResolution", "gxWindowedResolu
 
 /** Replaces only the display defaults, leaving every other player setting untouched. */
 private fun displayDefaults(lines: List<String>, screenSize: String): List<String> {
-    val keys = RESOLUTION_KEYS + listOf("RenderScale", "gxFullscreen")
+    val keys = RESOLUTION_KEYS + listOf("RenderScale", "gxFullscreen", "gxVSync")
     val kept = lines.filterNot { line -> keys.any { line.startsWith("SET $it ", ignoreCase = true) } }
     return kept + RESOLUTION_KEYS.map { "SET $it \"$screenSize\"" } +
-        "SET RenderScale \"0.5\"" + "SET gxFullscreen \"1\""
+        "SET RenderScale \"0.5\"" + "SET gxFullscreen \"1\"" + "SET gxVSync \"0\""
 }
 
 /** The client actually loads BetaSuspendedTest.wtf, so a one-time migration must update it too. */

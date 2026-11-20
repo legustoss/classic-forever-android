@@ -419,7 +419,7 @@ object ClassicForeverPatcher {
             if (store != null) {
                 when (storeState(current, store!!, cfg.newKey)) {
                     "patched" -> {
-                        Thread.sleep(3000)
+                        Thread.sleep(5000)
                         continue
                     }
                     "original" -> {
@@ -482,7 +482,8 @@ object ClassicForeverPatcher {
                     }
                 }
             }
-            Thread.sleep(if (everPatched) 2000 else 400)
+            // A full heap scan is expensive; do it at most once a second while looking for the store.
+            Thread.sleep(if (everPatched) 5000 else 1000)
         }
     }
 
