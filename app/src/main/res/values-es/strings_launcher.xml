@@ -89,4 +89,9 @@
     <string name="wow_discord">Discord</string>
     <string name="wow_group_setup">Configuración</string>
     <string name="wow_group_account">Cuenta</string>
+    <string name="wow_client_too_old">La compilación del cliente %1$d es anterior al mínimo del servidor (%2$d). Actualiza el juego para continuar.</string>
+    <string name="wow_client_too_new">La compilación del cliente %1$d es posterior al máximo del servidor (%2$d). Puedes lanzar, pero el servidor quizá aún no lo soporte.</string>
+    <string name="wow_skip_update">Omitir esta actualización</string>
+    <string name="wow_client_unknown">La compilación del cliente es desconocida. Puedes lanzar, pero no se garantiza la compatibilidad.</string>
+    <string name="wow_update_game">Actualizar juego</string>
 </resources>

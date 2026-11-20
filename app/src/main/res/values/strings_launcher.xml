@@ -90,4 +90,9 @@
     <string name="wow_discord">Discord</string>
     <string name="wow_group_setup">Setup</string>
     <string name="wow_group_account">Account</string>
+    <string name="wow_client_too_old">Client build %1$d is older than the server minimum (%2$d). Update the game to continue.</string>
+    <string name="wow_client_too_new">Client build %1$d is newer than the server maximum (%2$d). You can launch, but the server may not support it yet.</string>
+    <string name="wow_skip_update">Skip this update</string>
+    <string name="wow_client_unknown">Client build is unknown. You can launch, but compatibility is not guaranteed.</string>
+    <string name="wow_update_game">Update game</string>
 </resources>

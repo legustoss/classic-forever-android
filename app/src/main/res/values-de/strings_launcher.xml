@@ -89,4 +89,9 @@
     <string name="wow_discord">Discord</string>
     <string name="wow_group_setup">Einrichtung</string>
     <string name="wow_group_account">Konto</string>
+    <string name="wow_client_too_old">Client-Build %1$d ist älter als das Server-Minimum (%2$d). Bitte Spiel aktualisieren.</string>
+    <string name="wow_client_too_new">Client-Build %1$d ist neuer als das Server-Maximum (%2$d). Start möglich, aber der Server unterstützt es evtl. noch nicht.</string>
+    <string name="wow_skip_update">Update überspringen</string>
+    <string name="wow_client_unknown">Client-Build unbekannt. Start möglich, aber Kompatibilität nicht garantiert.</string>
+    <string name="wow_update_game">Spiel aktualisieren</string>
 </resources>

@@ -89,4 +89,9 @@
     <string name="wow_discord">Discord</string>
     <string name="wow_group_setup">Configuration</string>
     <string name="wow_group_account">Compte</string>
+    <string name="wow_client_too_old">La version client %1$d est antérieure au minimum du serveur (%2$d). Mettez le jeu à jour pour continuer.</string>
+    <string name="wow_client_too_new">La version client %1$d est postérieure au maximum du serveur (%2$d). Vous pouvez lancer, mais le serveur n\'est peut-être pas encore adapté.</string>
+    <string name="wow_skip_update">Ignorer cette mise à jour</string>
+    <string name="wow_client_unknown">Version du client inconnue. Lancement possible, compatibilité non garantie.</string>
+    <string name="wow_update_game">Mettre à jour le jeu</string>
 </resources>

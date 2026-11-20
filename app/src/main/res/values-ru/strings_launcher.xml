@@ -89,4 +89,9 @@
     <string name="wow_discord">Discord</string>
     <string name="wow_group_setup">Настройка</string>
     <string name="wow_group_account">Аккаунт</string>
+    <string name="wow_client_too_old">Сборка клиента %1$d старше минимальной версии сервера (%2$d). Обновите игру, чтобы продолжить.</string>
+    <string name="wow_client_too_new">Сборка клиента %1$d новее максимальной версии сервера (%2$d). Можно запустить, но сервер может быть ещё не готов.</string>
+    <string name="wow_skip_update">Пропустить обновление</string>
+    <string name="wow_client_unknown">Версия клиента неизвестна. Можно запустить, но совместимость не гарантирована.</string>
+    <string name="wow_update_game">Обновить игру</string>
 </resources>

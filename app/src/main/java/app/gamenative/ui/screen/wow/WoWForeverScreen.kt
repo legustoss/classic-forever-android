@@ -70,7 +70,9 @@ import app.gamenative.ui.theme.WowSubtle
 import app.gamenative.ui.util.ScreenEffectsConfig
 import app.gamenative.ui.util.SnackbarManager
 import app.gamenative.utils.AppUpdater
+import app.gamenative.utils.ClientCompatibility
 import app.gamenative.utils.ClassicForeverPatcher
+import app.gamenative.utils.ClientVersionChecker
 import app.gamenative.utils.LocaleHelper
 import app.gamenative.utils.StorageUtils
 import app.gamenative.utils.renderReleaseNotes
@@ -124,6 +126,7 @@ fun WoWForeverScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var showStoragePermissionDialog by remember { mutableStateOf(false) }
     var versionStatus by remember { mutableStateOf<WowClientDownloader.VersionCheckResult?>(null) }
+    var compatibility by remember { mutableStateOf<ClientCompatibility?>(null) }
     var isCheckingVersion by remember { mutableStateOf(false) }
     var isUpdating by remember { mutableStateOf(false) }
     var updateStatusText by remember { mutableStateOf("") }
@@ -186,10 +189,24 @@ fun WoWForeverScreen(
 
     suspend fun fetchVersionStatus() {
         isCheckingVersion = true
-        versionStatus = withContext(Dispatchers.IO) {
-            WowClientDownloader.checkVersion(File(gamePath), WowClientDownloader.regionFor(File(gamePath)))
+        withContext(Dispatchers.IO) {
+            val root = File(gamePath)
+            val status = WowClientDownloader.checkVersion(root, WowClientDownloader.regionFor(root))
+            // A skipped remote version must not block launches; a newer remote version still will.
+            versionStatus = if (status != null && status.remoteVersion == skippedUpdateVersion(context)) {
+                status.copy(isOutdated = false)
+            } else {
+                status
+            }
+            compatibility = ClientVersionChecker.check(root)
         }
         isCheckingVersion = false
+    }
+
+    fun skipUpdate() {
+        val version = versionStatus?.remoteVersion ?: return
+        skipGameUpdate(context, version)
+        versionStatus = versionStatus?.copy(isOutdated = false)
     }
 
     fun checkVersionStatus() {
@@ -303,6 +320,7 @@ fun WoWForeverScreen(
         gamePath = root.absolutePath
         GamePath.save(context, gamePath)
         versionStatus = null
+        compatibility = null
         val ok = checkFiles()
         if (!files.hasStorageAccess) {
             showStoragePermissionDialog = true
@@ -380,6 +398,7 @@ fun WoWForeverScreen(
             WowClientDownloader.install(root, WowClientDownloader.regionFor(root), onStatus)
         }) {
             versionStatus = null
+            compatibility = null
             if (checkFiles()) {
                 checkVersionStatus()
                 if (hasSavedLogin) launchGame()
@@ -391,7 +410,9 @@ fun WoWForeverScreen(
         val target = versionStatus ?: return
         downloadGameFiles(context.getString(R.string.wow_update_failed), { root, onStatus -> WowClientDownloader.updateGame(root, target, onStatus) }) {
             checkFiles()
+            clearSkippedUpdate(context)
             versionStatus = target.copy(isOutdated = false, localVersion = target.remoteVersion)
+            compatibility = ClientVersionChecker.check(File(gamePath))
             launchGame()
         }
     }
@@ -421,9 +442,12 @@ fun WoWForeverScreen(
                 val updateJob = async { fetchAppUpdate() }
                 fetchVersionStatus()
                 val update = updateJob.await()
-                Timber.i("WoWForeverScreen LaunchedEffect: isOutdated=${versionStatus?.isOutdated}, appUpdate=$update")
+                Timber.i(
+                    "WoWForeverScreen LaunchedEffect: isOutdated=${versionStatus?.isOutdated}, " +
+                        "appUpdate=$update, compatibility=$compatibility",
+                )
                 WoWLauncherState.shouldAutoLaunch = false
-                if (versionStatus?.isOutdated == true || update != null) {
+                if (versionStatus?.isOutdated == true || update != null || compatibility is ClientCompatibility.TooOld) {
                     PluviaApp.events.emit(AndroidEvent.ClearBootingSplash)
                 } else {
                     launchGame()
@@ -582,6 +606,47 @@ fun WoWForeverScreen(
                 )
             }
 
+            compatibility?.let { state ->
+                val message = when (state) {
+                    is ClientCompatibility.TooOld -> context.getString(
+                        R.string.wow_client_too_old,
+                        state.build,
+                        state.requirement.minBuild ?: state.build,
+                    )
+                    is ClientCompatibility.TooNew -> if (state.build == null) {
+                        context.getString(R.string.wow_client_unknown)
+                    } else {
+                        context.getString(
+                            R.string.wow_client_too_new,
+                            state.build,
+                            state.requirement.maxBuild ?: state.build,
+                        )
+                    }
+                    is ClientCompatibility.Compatible -> null
+                }
+                if (message != null) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .neonGlow()
+                            .border(1.dp, WowNeon.copy(alpha = 0.6f), RoundedCornerShape(16.dp)),
+                        colors = CardDefaults.cardColors(containerColor = WowPanelElevated.copy(alpha = 0.85f)),
+                        shape = RoundedCornerShape(16.dp),
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.Warning, contentDescription = null, tint = WowNeon, modifier = Modifier.size(20.dp))
+                                Spacer(modifier = Modifier.width(8.dp))
+                                SectionTitle(context.getString(R.string.wow_game_update_title), WowNeon)
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(message, fontSize = 12.sp, color = WowNeon, lineHeight = 16.sp)
+                        }
+                    }
+                }
+            }
+
             versionStatus?.takeIf { it.isOutdated && !files.needsInstall }?.let { version ->
                 Spacer(modifier = Modifier.height(16.dp))
                 Card(
@@ -704,7 +769,16 @@ fun WoWForeverScreen(
                                 Text(context.getString(R.string.wow_locate_files), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = WowNeon)
                             }
                         }
-                        versionStatus?.isOutdated == true -> {
+                        compatibility is ClientCompatibility.TooOld -> {
+                            // Too old for this server: the only way forward is to update the client.
+                            PrimaryButton(
+                                text = context.getString(R.string.wow_update_game),
+                                icon = Icons.Default.Refresh,
+                                enabled = canPlay && versionStatus != null,
+                                onClick = ::performUpdate,
+                            )
+                        }
+                        versionStatus?.isOutdated == true && compatibility !is ClientCompatibility.TooOld -> {
                             PrimaryButton(
                                 text = context.getString(R.string.wow_update_to, versionStatus?.remoteVersion),
                                 icon = Icons.Default.Refresh,
@@ -719,6 +793,15 @@ fun WoWForeverScreen(
                                 shape = RoundedCornerShape(14.dp)
                             ) {
                                 Text(text = context.getString(R.string.wow_launch_outdated), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = WowNeon)
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            OutlinedButton(
+                                onClick = ::skipUpdate,
+                                enabled = canPlay,
+                                modifier = Modifier.fillMaxWidth(0.85f).height(48.dp),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Text(text = context.getString(R.string.wow_skip_update), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = WowNeonDim)
                             }
                         }
                         else -> PrimaryButton(
@@ -986,6 +1069,19 @@ fun WoWForeverScreen(
 }
 
 private fun prefs(context: Context) = context.getSharedPreferences("wow_forever", Context.MODE_PRIVATE)
+
+private const val KEY_SKIPPED_UPDATE_VERSION = "skipped_game_update_version"
+
+private fun skippedUpdateVersion(context: Context): String? =
+    prefs(context).getString(KEY_SKIPPED_UPDATE_VERSION, null)
+
+private fun skipGameUpdate(context: Context, remoteVersion: String) {
+    prefs(context).edit().putString(KEY_SKIPPED_UPDATE_VERSION, remoteVersion).apply()
+}
+
+private fun clearSkippedUpdate(context: Context) {
+    prefs(context).edit().remove(KEY_SKIPPED_UPDATE_VERSION).apply()
+}
 
 /**
  * Bump when the display defaults change. Installs that were created by an older version keep their

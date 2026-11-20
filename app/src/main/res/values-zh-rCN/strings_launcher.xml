@@ -89,4 +89,9 @@
     <string name="wow_discord">Discord</string>
     <string name="wow_group_setup">设置</string>
     <string name="wow_group_account">账户</string>
+    <string name="wow_client_too_old">客户端版本 %1$d 低于服务器最低要求（%2$d）。请更新游戏后继续。</string>
+    <string name="wow_client_too_new">客户端版本 %1$d 高于服务器最高支持版本（%2$d）。可以继续启动，但服务器可能尚未适配。</string>
+    <string name="wow_skip_update">跳过此次更新</string>
+    <string name="wow_client_unknown">客户端版本未知。可以继续启动，但无法保证兼容性。</string>
+    <string name="wow_update_game">更新游戏</string>
 </resources>

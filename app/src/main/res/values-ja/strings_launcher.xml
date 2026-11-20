@@ -89,4 +89,9 @@
     <string name="wow_discord">Discord</string>
     <string name="wow_group_setup">設定</string>
     <string name="wow_group_account">アカウント</string>
+    <string name="wow_client_too_old">クライアントビルド %1$d はサーバー最小要件（%2$d）より古いです。ゲームを更新してください。</string>
+    <string name="wow_client_too_new">クライアントビルド %1$d はサーバー最大要件（%2$d）より新しいです。起動できますが、サーバーがまだ対応していない可能性があります。</string>
+    <string name="wow_skip_update">この更新をスキップ</string>
+    <string name="wow_client_unknown">クライアントビルドが不明です。起動できますが、互換性は保証されません。</string>
+    <string name="wow_update_game">ゲームを更新</string>
 </resources>
