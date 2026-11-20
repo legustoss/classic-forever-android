@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MotionEvent
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -90,6 +91,7 @@ class MainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(TRANSPARENT),
         )
         super.onCreate(savedInstanceState)
+        applyCutoutMode()
 
         // stale keepAlive from a prior crash/swipe — no container is actually running
         if (PluviaApp.keepAlive && PluviaApp.xEnvironment == null) {
@@ -247,7 +249,22 @@ class MainActivity : ComponentActivity() {
         // Log.d("MainActivity", "Requested orientation: $requestedOrientation => ${Orientation.fromActivityInfoValue(requestedOrientation)}")
     }
 
+    /**
+     * Let the game render under the camera cutout. The default mode keeps the window out of a
+     * landscape cutout, which letterboxes the Activity and shows black bars on the sides even
+     * though the X server is configured for the full display resolution.
+     */
+    private fun applyCutoutMode() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes = window.attributes.apply {
+                layoutInDisplayCutoutMode =
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+            }
+        }
+    }
+
     private fun applyImmersiveMode() {
+        applyCutoutMode()
         if (desiredSystemUiVisible) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 window.setDecorFitsSystemWindows(true)
