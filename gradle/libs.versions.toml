@@ -20,6 +20,7 @@ landscapistCoil = "2.4.6" # https://mvnrepository.com/artifact/com.github.skydov
 media3 = "1.9.1" # https://mvnrepository.com/artifact/androidx.media3/media3-exoplayer
 lifecycleRuntimeKtx = "2.8.7" # https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-runtime-ktx
 material3Version = "1.3.1" # Minimum version for pull-to-refresh support
+windowVersion = "1.0.0" # https://mvnrepository.com/artifact/androidx.window/window
 mockito = "5.14.2" # https://mvnrepository.com/artifact/org.mockito/mockito-core
 mockitoKotlin = "5.3.1" # https://mvnrepository.com/artifact/org.mockito.kotlin/mockito-kotlin
 mockk = "1.13.5" # https://mvnrepository.com/artifact/io.mockk/mockk
@@ -40,6 +41,8 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3Version" }
+androidx-material3-windowsize = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3Version" }
+androidx-window = { group = "androidx.window", name = "window", version.ref = "windowVersion" }
 
 # TODO: Remove 'version' once 1.8.0 is rolled into stable BOM, see https://developer.android.com/jetpack/androidx/releases/compose-ui
 #   This fixes `Placement happened before lookahead` crash when animating lists items.

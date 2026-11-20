@@ -101,4 +101,6 @@
     <string name="wow_section_display">화면</string>
     <string name="wow_section_files">파일</string>
     <string name="wow_section_updates">업데이트</string>
+    <string name="wow_status_patcher">패처</string>
+    <string name="wow_logs_hint">로그: logs/classic-forever.log</string>
 </resources>

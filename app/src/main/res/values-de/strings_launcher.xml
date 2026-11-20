@@ -101,4 +101,6 @@
     <string name="wow_section_display">Anzeige</string>
     <string name="wow_section_files">Dateien</string>
     <string name="wow_section_updates">Aktualisierungen</string>
+    <string name="wow_status_patcher">Patcher</string>
+    <string name="wow_logs_hint">Logs: logs/classic-forever.log</string>
 </resources>

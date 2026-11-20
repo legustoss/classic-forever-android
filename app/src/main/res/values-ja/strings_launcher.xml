@@ -101,4 +101,6 @@
     <string name="wow_section_display">表示</string>
     <string name="wow_section_files">ファイル</string>
     <string name="wow_section_updates">更新</string>
+    <string name="wow_status_patcher">パッチャー</string>
+    <string name="wow_logs_hint">ログ：logs/classic-forever.log</string>
 </resources>

@@ -18,6 +18,8 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -84,6 +86,7 @@ class MainActivity : ComponentActivity() {
         super.attachBaseContext(context)
     }
 
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         // Full immersive mode - transparent system bars for console-like experience
         enableEdgeToEdge(
@@ -113,11 +116,12 @@ class MainActivity : ComponentActivity() {
         PluviaApp.events.on<AndroidEvent.EndProcess, Unit>(onEndProcess)
 
         setContent {
+            val windowSizeClass = calculateWindowSizeClass(this@MainActivity)
             val snackbarController = remember { SnackbarHostController() }
             CompositionLocalProvider(
                 LocalSnackbarHostController provides snackbarController,
             ) {
-                PluviaMain()
+                PluviaMain(windowSizeClass = windowSizeClass)
             }
         }
     }

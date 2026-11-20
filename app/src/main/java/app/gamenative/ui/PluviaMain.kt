@@ -19,12 +19,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -97,8 +99,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
+import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowInfoTracker
 import timber.log.Timber
 
 private const val SNACKBAR_SHOW_TIMEOUT_MS = 15_000L
@@ -107,11 +112,19 @@ private const val SNACKBAR_SHOW_TIMEOUT_MS = 15_000L
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PluviaMain(
+    windowSizeClass: WindowSizeClass,
     viewModel: MainViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     val context = LocalContext.current
+    val activity = context as? Activity
+    val foldingFeature by produceState<FoldingFeature?>(initialValue = null, activity) {
+        if (activity == null) return@produceState
+        WindowInfoTracker.getOrCreate(activity).windowLayoutInfo(activity).collect { info ->
+            value = info.displayFeatures.filterIsInstance<FoldingFeature>().firstOrNull()
+        }
+    }
     val uriHandler = LocalUriHandler.current
     val scope = rememberCoroutineScope()
 
@@ -315,6 +328,8 @@ fun PluviaMain(
             ) {
                 composable(route = PluviaScreen.WoWLauncher.route) {
                     WoWForeverScreen(
+                        windowSizeClass = windowSizeClass,
+                        foldingFeature = foldingFeature,
                         onLaunch = { appId ->
                             viewModel.setLaunchedAppId(appId)
                             viewModel.setOffline(true)

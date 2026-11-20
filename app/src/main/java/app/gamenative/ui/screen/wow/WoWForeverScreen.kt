@@ -34,6 +34,9 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,13 +48,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.window.layout.FoldingFeature
 import app.gamenative.BuildConfig
 import app.gamenative.PluviaApp
 import app.gamenative.events.AndroidEvent
@@ -112,9 +118,11 @@ object WoWLauncherState {
 private const val CONTAINER_ID = "wow_forever"
 
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun WoWForeverScreen(
+    windowSizeClass: WindowSizeClass,
+    foldingFeature: FoldingFeature? = null,
     onLaunch: (appId: String) -> Unit,
 ) {
     val context = LocalContext.current
@@ -479,15 +487,11 @@ fun WoWForeverScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(WowBackgroundGradient))
-            .padding(24.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
+        LauncherLayout(
+            windowSizeClass = windowSizeClass,
+            foldingFeature = foldingFeature,
+            status = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
@@ -496,21 +500,27 @@ fun WoWForeverScreen(
                     fontWeight = FontWeight.Black,
                     fontFamily = FontFamily.Serif,
                     letterSpacing = 3.sp,
-                    color = WowNeon
+                    color = WowNeon,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = context.getString(R.string.wow_subtitle),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 2.sp,
-                    color = WowNeon
+                    color = WowNeon,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Spacer(modifier = Modifier.height(6.dp))
-                Text(text = context.getString(R.string.wow_edition, gpu.edition), fontSize = 11.sp, color = WowSubtle)
+                Text(text = context.getString(R.string.wow_edition, gpu.edition), fontSize = 11.sp, color = WowSubtle, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(
                     text = context.getString(R.string.wow_check_app, BuildConfig.VERSION_NAME),
                     fontSize = 10.sp,
                     color = WowSubtle,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
 
@@ -518,7 +528,7 @@ fun WoWForeverScreen(
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth(0.9f)
+                    .fillMaxWidth()
                     .neonGlow()
                     .border(1.dp, WowBorder, RoundedCornerShape(16.dp)),
                 colors = CardDefaults.cardColors(containerColor = WowPanel.copy(alpha = 0.85f)),
@@ -587,7 +597,8 @@ fun WoWForeverScreen(
                     }
                 }
             }
-
+            },
+            actions = {
             if (files.needsInstall && files.hasStorageAccess) {
                 Spacer(modifier = Modifier.height(16.dp))
                 InstallCard(
@@ -621,7 +632,7 @@ fun WoWForeverScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     Card(
                         modifier = Modifier
-                            .fillMaxWidth(0.9f)
+                            .fillMaxWidth()
                             .neonGlow()
                             .border(1.dp, WowNeon.copy(alpha = 0.6f), RoundedCornerShape(16.dp)),
                         colors = CardDefaults.cardColors(containerColor = WowPanelElevated.copy(alpha = 0.85f)),
@@ -644,7 +655,7 @@ fun WoWForeverScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Card(
                     modifier = Modifier
-                        .fillMaxWidth(0.9f)
+                        .fillMaxWidth()
                         .neonGlow()
                         .border(1.dp, WowNeon.copy(alpha = 0.6f), RoundedCornerShape(16.dp)),
                     colors = CardDefaults.cardColors(containerColor = WowPanelElevated.copy(alpha = 0.85f)),
@@ -677,7 +688,7 @@ fun WoWForeverScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Card(
                     modifier = Modifier
-                        .fillMaxWidth(0.9f)
+                        .fillMaxWidth()
                         .neonGlow()
                         .border(1.dp, WowNeon.copy(alpha = 0.6f), RoundedCornerShape(16.dp)),
                     colors = CardDefaults.cardColors(containerColor = WowPanel.copy(alpha = 0.85f)),
@@ -770,7 +781,7 @@ fun WoWForeverScreen(
                             OutlinedButton(
                                 onClick = ::launchGame,
                                 enabled = canPlay,
-                                modifier = Modifier.fillMaxWidth(0.85f).height(48.dp),
+                                modifier = Modifier.fillMaxWidth().height(48.dp),
                                 shape = RoundedCornerShape(14.dp)
                             ) {
                                 Text(text = context.getString(R.string.wow_launch_outdated), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = WowNeon)
@@ -789,7 +800,7 @@ fun WoWForeverScreen(
                     OutlinedButton(
                         onClick = { showSettings = true },
                         enabled = !isLaunching && !isUpdating,
-                        modifier = Modifier.fillMaxWidth(0.85f).height(48.dp),
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
                         shape = RoundedCornerShape(14.dp),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
                         border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
@@ -800,9 +811,13 @@ fun WoWForeverScreen(
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-        }
+            },
+            details = {
+                CommunityCard(serverStatus)
+                Spacer(modifier = Modifier.height(16.dp))
+                LogPreviewCard()
+            },
+        )
     }
 
     if (showSettings) {
@@ -1226,6 +1241,110 @@ object GamePath {
     private fun productsOf(root: File) = WowClientDownloader.installedProducts(File(root, BUILD_INFO))
 }
 
+/**
+ * Adaptive launcher shell. Breakpoints come from the available window (WindowSizeClass), never from
+ * device type. Foldable hinges are kept clear when the feature is separating.
+ */
+@Composable
+private fun LauncherLayout(
+    windowSizeClass: WindowSizeClass,
+    foldingFeature: FoldingFeature?,
+    status: @Composable () -> Unit,
+    actions: @Composable () -> Unit,
+    details: @Composable () -> Unit,
+) {
+    val hinge = if (foldingFeature?.isSeparating == true) {
+        with(LocalDensity.current) { foldingFeature.bounds.width().toDp().coerceAtMost(64.dp) }
+    } else {
+        0.dp
+    }
+    val gutter = 16.dp + hinge
+
+    when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            status()
+            actions()
+            details()
+        }
+        WindowWidthSizeClass.Medium -> Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+        ) {
+            Column(
+                modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                status()
+                actions()
+            }
+            Spacer(modifier = Modifier.width(gutter))
+            Column(modifier = Modifier.weight(0.8f).verticalScroll(rememberScrollState())) {
+                details()
+            }
+        }
+        WindowWidthSizeClass.Expanded -> Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+        ) {
+            Column(modifier = Modifier.weight(0.9f).verticalScroll(rememberScrollState())) {
+                status()
+            }
+            Spacer(modifier = Modifier.width(gutter))
+            Column(
+                modifier = Modifier.weight(1.1f).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                actions()
+            }
+            Spacer(modifier = Modifier.width(gutter))
+            Column(modifier = Modifier.weight(0.9f).verticalScroll(rememberScrollState())) {
+                details()
+            }
+        }
+    }
+}
+
+@Composable
+private fun LogPreviewCard() {
+    val context = LocalContext.current
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .neonGlow()
+            .border(1.dp, WowBorder, RoundedCornerShape(16.dp)),
+        colors = CardDefaults.cardColors(containerColor = WowPanel.copy(alpha = 0.85f)),
+        shape = RoundedCornerShape(16.dp),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            SectionTitle(context.getString(R.string.wow_status_patcher), WowNeon)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = ClassicForeverPatcher.lastStatus,
+                fontSize = 12.sp,
+                color = WowNeonDim,
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = context.getString(R.string.wow_logs_hint),
+                fontSize = 11.sp,
+                color = WowSubtle,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
 @Composable
 private fun CommunityCard(status: ServerStatus) {
     val context = LocalContext.current
@@ -1234,7 +1353,7 @@ private fun CommunityCard(status: ServerStatus) {
     }
     Card(
         modifier = Modifier
-            .fillMaxWidth(0.9f)
+            .fillMaxWidth()
             .neonGlow()
             .border(1.dp, WowBorder, RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(containerColor = WowPanel.copy(alpha = 0.85f)),
@@ -1286,7 +1405,7 @@ private fun InstallCard(isUpgrade: Boolean, gamePath: String, freeSpaceBytes: Lo
     val context = LocalContext.current
     Card(
         modifier = Modifier
-            .fillMaxWidth(0.9f)
+            .fillMaxWidth()
             .neonGlow()
             .border(1.dp, WowNeon.copy(alpha = 0.6f), RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(containerColor = WowPanel.copy(alpha = 0.85f)),
@@ -1350,7 +1469,7 @@ private fun PrimaryButton(text: String, icon: ImageVector, enabled: Boolean, onC
     Button(
         onClick = onClick,
         enabled = enabled,
-        modifier = Modifier.fillMaxWidth(0.85f).height(56.dp).neonGlow(),
+        modifier = Modifier.fillMaxWidth().height(56.dp).neonGlow(),
         colors = ButtonDefaults.buttonColors(containerColor = WowNeon, contentColor = Color.Black),
         shape = RoundedCornerShape(14.dp)
     ) {

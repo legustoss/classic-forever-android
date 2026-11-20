@@ -101,4 +101,6 @@
     <string name="wow_section_display">Tela</string>
     <string name="wow_section_files">Arquivos</string>
     <string name="wow_section_updates">Atualizações</string>
+    <string name="wow_status_patcher">Patch</string>
+    <string name="wow_logs_hint">Logs: logs/classic-forever.log</string>
 </resources>
