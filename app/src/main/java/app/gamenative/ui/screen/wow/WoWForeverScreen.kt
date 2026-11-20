@@ -742,7 +742,7 @@ fun WoWForeverScreen(
                             lineHeight = 16.sp,
                         )
                         Spacer(modifier = Modifier.height(10.dp))
-                        PrimaryButton(dense = wide, 
+                        PrimaryButton(dense = wide,
                             text = when {
                                 isDownloadingAppUpdate -> context.getString(R.string.wow_downloading_update)
                                 downloadedApk?.exists() == true -> context.getString(R.string.wow_install_update, update.version)
@@ -783,13 +783,13 @@ fun WoWForeverScreen(
                     )
                 } else {
                     when {
-                        !files.hasStorageAccess -> PrimaryButton(dense = wide, 
+                        !files.hasStorageAccess -> PrimaryButton(dense = wide,
                             text = context.getString(R.string.wow_grant_storage),
                             icon = Icons.Default.FolderOpen,
                             enabled = !isLaunching && !isUpdating,
                             onClick = { StorageUtils.requestManageExternalStoragePermission(context) },
                         )
-                        files.needsInstall -> PrimaryButton(dense = wide, 
+                        files.needsInstall -> PrimaryButton(dense = wide,
                             text = if (files.isLegacyBeta) context.getString(R.string.wow_upgrade_release) else context.getString(R.string.wow_download_install),
                             icon = Icons.Default.Download,
                             enabled = !isLaunching && !isUpdating,
@@ -797,7 +797,7 @@ fun WoWForeverScreen(
                         )
                         compatibility is ClientCompatibility.TooOld -> {
                             // Too old for this server: the only way forward is to update the client.
-                            PrimaryButton(dense = wide, 
+                            PrimaryButton(dense = wide,
                                 text = context.getString(R.string.wow_update_game),
                                 icon = Icons.Default.Refresh,
                                 enabled = canPlay && versionStatus != null,
@@ -805,7 +805,7 @@ fun WoWForeverScreen(
                             )
                         }
                         versionStatus?.isOutdated == true && compatibility !is ClientCompatibility.TooOld -> {
-                            PrimaryButton(dense = wide, 
+                            PrimaryButton(dense = wide,
                                 text = context.getString(R.string.wow_update_to, versionStatus?.remoteVersion),
                                 icon = Icons.Default.Refresh,
                                 enabled = canPlay,
@@ -821,7 +821,7 @@ fun WoWForeverScreen(
                                 Text(text = context.getString(R.string.wow_launch_outdated), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = WowNeon)
                             }
                         }
-                        else -> PrimaryButton(dense = wide, 
+                        else -> PrimaryButton(dense = wide,
                             text = if (files.isWrongGame) {
                                 context.getString(R.string.wow_wrong_game)
                             } else if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
