@@ -97,4 +97,8 @@
     <string name="wow_status_discord_online">Discord 在线</string>
     <string name="wow_status_ingame_online">游戏内在线</string>
     <string name="wow_status_unknown">在线：—</string>
+    <string name="wow_settings">设置</string>
+    <string name="wow_section_display">显示</string>
+    <string name="wow_section_files">文件</string>
+    <string name="wow_section_updates">更新</string>
 </resources>

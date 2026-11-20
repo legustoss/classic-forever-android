@@ -98,4 +98,8 @@
     <string name="wow_status_discord_online">Discord online</string>
     <string name="wow_status_ingame_online">In-game online</string>
     <string name="wow_status_unknown">Online: —</string>
+    <string name="wow_settings">Settings</string>
+    <string name="wow_section_display">Display</string>
+    <string name="wow_section_files">Files</string>
+    <string name="wow_section_updates">Updates</string>
 </resources>

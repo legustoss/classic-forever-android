@@ -97,4 +97,8 @@
     <string name="wow_status_discord_online">Discord オンライン</string>
     <string name="wow_status_ingame_online">ゲーム内オンライン</string>
     <string name="wow_status_unknown">オンライン：—</string>
+    <string name="wow_settings">設定</string>
+    <string name="wow_section_display">表示</string>
+    <string name="wow_section_files">ファイル</string>
+    <string name="wow_section_updates">更新</string>
 </resources>

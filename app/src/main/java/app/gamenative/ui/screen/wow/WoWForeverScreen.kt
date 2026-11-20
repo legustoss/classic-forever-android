@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -127,6 +128,7 @@ fun WoWForeverScreen(
     var hasSavedLogin by remember { mutableStateOf(BattleNetSignIn.load(context) != null) }
     var resolution by remember { mutableStateOf(RenderResolution.current(context)) }
     var showLoginDialog by remember { mutableStateOf(false) }
+    var showSettings by remember { mutableStateOf(false) }
     var statusText by remember { mutableStateOf(context.getString(R.string.wow_ready)) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var showStoragePermissionDialog by remember { mutableStateOf(false) }
@@ -507,7 +509,7 @@ fun WoWForeverScreen(
                 Text(text = context.getString(R.string.wow_edition, gpu.edition), fontSize = 11.sp, color = WowSubtle)
                 Text(
                     text = context.getString(R.string.wow_check_app, BuildConfig.VERSION_NAME),
-                    fontSize = 11.sp,
+                    fontSize = 10.sp,
                     color = WowSubtle,
                 )
             }
@@ -569,29 +571,6 @@ fun WoWForeverScreen(
 
                     Text(text = context.getString(R.string.wow_target_path, gamePath), fontSize = 11.sp, color = WowSubtle, maxLines = 2)
 
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        OptionMenu(context.getString(R.string.wow_resolution, resolution.label(context)), Icons.Default.AspectRatio, RenderResolution.entries, resolution, { it.label(context) }, !isLaunching) {
-                            RenderResolution.save(context, it)
-                            resolution = it
-                        }
-                        val languageCodes = LocaleHelper.getSupportedLanguageCodes()
-                        val savedLanguage = PrefManager.appLanguage
-                        OptionMenu(
-                            context.getString(R.string.wow_language, LocaleHelper.getLanguageDisplayName(savedLanguage)),
-                            Icons.Default.Public,
-                            languageCodes,
-                            savedLanguage,
-                            { LocaleHelper.getLanguageDisplayName(it) },
-                            !isLaunching && !isUpdating,
-                        ) { code ->
-                            PrefManager.appLanguage = code
-                            generateSequence(context) { (it as? android.content.ContextWrapper)?.baseContext }
-                                .filterIsInstance<Activity>()
-                                .firstOrNull()
-                                ?.recreate()
-                        }
-                    }
-
                     longUptimeDays()?.let { days ->
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
@@ -608,9 +587,6 @@ fun WoWForeverScreen(
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-            CommunityCard(serverStatus)
 
             if (files.needsInstall && files.hasStorageAccess) {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -768,24 +744,12 @@ fun WoWForeverScreen(
                             enabled = !isLaunching && !isUpdating,
                             onClick = { StorageUtils.requestManageExternalStoragePermission(context) },
                         )
-                        files.needsInstall -> {
-                            PrimaryButton(
-                                text = if (files.isLegacyBeta) context.getString(R.string.wow_upgrade_release) else context.getString(R.string.wow_download_install),
-                                icon = Icons.Default.Download,
-                                enabled = !isLaunching && !isUpdating,
-                                onClick = ::performInstall,
-                            )
-                            Spacer(modifier = Modifier.height(10.dp))
-                            OutlinedButton(
-                                onClick = { folderPicker.launch(null) },
-                                modifier = Modifier.fillMaxWidth(0.85f).height(48.dp),
-                                shape = RoundedCornerShape(14.dp),
-                            ) {
-                                Icon(Icons.Default.FolderOpen, contentDescription = null, modifier = Modifier.size(20.dp), tint = WowNeon)
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Text(context.getString(R.string.wow_locate_files), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = WowNeon)
-                            }
-                        }
+                        files.needsInstall -> PrimaryButton(
+                            text = if (files.isLegacyBeta) context.getString(R.string.wow_upgrade_release) else context.getString(R.string.wow_download_install),
+                            icon = Icons.Default.Download,
+                            enabled = !isLaunching && !isUpdating,
+                            onClick = ::performInstall,
+                        )
                         compatibility is ClientCompatibility.TooOld -> {
                             // Too old for this server: the only way forward is to update the client.
                             PrimaryButton(
@@ -811,15 +775,6 @@ fun WoWForeverScreen(
                             ) {
                                 Text(text = context.getString(R.string.wow_launch_outdated), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = WowNeon)
                             }
-                            Spacer(modifier = Modifier.height(10.dp))
-                            OutlinedButton(
-                                onClick = ::skipUpdate,
-                                enabled = canPlay,
-                                modifier = Modifier.fillMaxWidth(0.85f).height(48.dp),
-                                shape = RoundedCornerShape(14.dp)
-                            ) {
-                                Text(text = context.getString(R.string.wow_skip_update), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = WowNeonDim)
-                            }
                         }
                         else -> PrimaryButton(
                             text = if (files.isWrongGame) context.getString(R.string.wow_wrong_game) else context.getString(R.string.wow_play),
@@ -831,56 +786,115 @@ fun WoWForeverScreen(
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // Grouped so the common file actions and account actions are easy to find on a handheld screen.
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        SectionTitle(context.getString(R.string.wow_group_setup), WowSubtle)
-                        Spacer(modifier = Modifier.height(4.dp))
-                        FlowRow(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
-                        ) {
-                            LinkButton(context.getString(R.string.wow_refresh), Icons.Default.Refresh) {
-                                checkFiles()
-                                checkVersionStatus()
-                                checkAppUpdate()
-                            }
-                            if (!files.needsInstall) {
-                                LinkButton(context.getString(R.string.wow_location), Icons.Default.FolderOpen) { folderPicker.launch(null) }
-                                // Some file managers label zips as generic binary files, so both types are offered.
-                                LinkButton(context.getString(R.string.wow_addon), Icons.Default.Extension, enabled = !isLaunching && !isUpdating) {
-                                    addonPicker.launch(arrayOf("application/zip", "application/x-zip-compressed", "application/octet-stream"))
-                                }
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        SectionTitle(context.getString(R.string.wow_group_account), WowSubtle)
-                        Spacer(modifier = Modifier.height(4.dp))
-                        FlowRow(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
-                        ) {
-                            LinkButton(
-                                text = context.getString(R.string.wow_password_login),
-                                icon = Icons.Default.Key,
-                            ) {
-                                showLoginDialog = true
-                            }
-                            if (hasSavedLogin) {
-                                LinkButton(context.getString(R.string.wow_forget_login), Icons.Default.Delete) {
-                                    BattleNetSignIn.forget(context)
-                                    BattleNetSignIn.removeLoginFile(File(gamePath))
-                                    hasSavedLogin = false
-                                }
-                            }
-                        }
+                    OutlinedButton(
+                        onClick = { showSettings = true },
+                        enabled = !isLaunching && !isUpdating,
+                        modifier = Modifier.fillMaxWidth(0.85f).height(48.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
+                        border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
+                    ) {
+                        Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(context.getString(R.string.wow_settings), fontSize = 13.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
         }
+    }
+
+    if (showSettings) {
+        AlertDialog(
+            onDismissRequest = { showSettings = false },
+            title = { Text(text = context.getString(R.string.wow_settings), fontWeight = FontWeight.Bold, fontSize = 17.sp, color = WowNeon) },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    SectionTitle(context.getString(R.string.wow_section_display), WowNeon)
+                    OptionMenu(
+                        context.getString(R.string.wow_resolution, resolution.label(context)),
+                        Icons.Default.AspectRatio,
+                        RenderResolution.entries,
+                        resolution,
+                        { it.label(context) },
+                        !isLaunching && !isUpdating,
+                    ) {
+                        RenderResolution.save(context, it)
+                        resolution = it
+                    }
+
+                    val savedLanguage = PrefManager.appLanguage
+                    OptionMenu(
+                        context.getString(R.string.wow_language, LocaleHelper.getLanguageDisplayName(savedLanguage)),
+                        Icons.Default.Public,
+                        LocaleHelper.getSupportedLanguageCodes(),
+                        savedLanguage,
+                        { LocaleHelper.getLanguageDisplayName(it) },
+                        !isLaunching && !isUpdating,
+                    ) { code ->
+                        PrefManager.appLanguage = code
+                        generateSequence(context) { (it as? android.content.ContextWrapper)?.baseContext }
+                            .filterIsInstance<Activity>()
+                            .firstOrNull()
+                            ?.recreate()
+                    }
+
+                    SectionTitle(context.getString(R.string.wow_section_files), WowNeon)
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)) {
+                        LinkButton(context.getString(R.string.wow_refresh), Icons.Default.Refresh) {
+                            checkFiles()
+                            checkVersionStatus()
+                            checkAppUpdate()
+                        }
+                        LinkButton(context.getString(R.string.wow_location), Icons.Default.FolderOpen) { folderPicker.launch(null) }
+                        LinkButton(context.getString(R.string.wow_addon), Icons.Default.Extension, enabled = !isLaunching && !isUpdating) {
+                            addonPicker.launch(arrayOf("application/zip", "application/x-zip-compressed", "application/octet-stream"))
+                        }
+                    }
+
+                    SectionTitle(context.getString(R.string.wow_group_account), WowSubtle)
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)) {
+                        LinkButton(context.getString(R.string.wow_password_login), Icons.Default.Key) {
+                            showSettings = false
+                            showLoginDialog = true
+                        }
+                        if (hasSavedLogin) {
+                            LinkButton(context.getString(R.string.wow_forget_login), Icons.Default.Delete) {
+                                BattleNetSignIn.forget(context)
+                                BattleNetSignIn.removeLoginFile(File(gamePath))
+                                hasSavedLogin = false
+                            }
+                        }
+                    }
+
+                    if (versionStatus?.isOutdated == true && compatibility !is ClientCompatibility.TooOld) {
+                        SectionTitle(context.getString(R.string.wow_section_updates), WowSubtle)
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)) {
+                            LinkButton(context.getString(R.string.wow_launch_outdated), Icons.Default.PlayArrow) {
+                                showSettings = false
+                                launchGame()
+                            }
+                            LinkButton(context.getString(R.string.wow_skip_update), Icons.Default.Refresh) { skipUpdate() }
+                        }
+                    }
+
+                    CommunityCard(serverStatus)
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showSettings = false }) {
+                    Text(context.getString(R.string.wow_cancel), color = WowNeon)
+                }
+            },
+            containerColor = WowPanelElevated,
+            shape = RoundedCornerShape(16.dp),
+        )
     }
 
     if (showLoginDialog) {

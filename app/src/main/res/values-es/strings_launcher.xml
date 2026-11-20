@@ -97,4 +97,8 @@
     <string name="wow_status_discord_online">En Discord</string>
     <string name="wow_status_ingame_online">En el juego</string>
     <string name="wow_status_unknown">En línea: —</string>
+    <string name="wow_settings">Ajustes</string>
+    <string name="wow_section_display">Pantalla</string>
+    <string name="wow_section_files">Archivos</string>
+    <string name="wow_section_updates">Actualizaciones</string>
 </resources>

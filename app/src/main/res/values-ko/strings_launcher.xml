@@ -97,4 +97,8 @@
     <string name="wow_status_discord_online">Discord 접속 중</string>
     <string name="wow_status_ingame_online">게임 접속 중</string>
     <string name="wow_status_unknown">온라인: —</string>
+    <string name="wow_settings">설정</string>
+    <string name="wow_section_display">화면</string>
+    <string name="wow_section_files">파일</string>
+    <string name="wow_section_updates">업데이트</string>
 </resources>
