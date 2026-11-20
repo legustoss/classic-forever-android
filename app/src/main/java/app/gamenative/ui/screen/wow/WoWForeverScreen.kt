@@ -67,6 +67,7 @@ import app.gamenative.ui.theme.WowNeonDim
 import app.gamenative.ui.theme.WowPanel
 import app.gamenative.ui.theme.WowPanelElevated
 import app.gamenative.ui.theme.WowSubtle
+import app.gamenative.ui.util.ScreenEffectsConfig
 import app.gamenative.ui.util.SnackbarManager
 import app.gamenative.utils.AppUpdater
 import app.gamenative.utils.ClassicForeverPatcher
@@ -991,7 +992,7 @@ private fun prefs(context: Context) = context.getSharedPreferences("wow_forever"
  * resolution/RenderScale, but they get the new defaults exactly once — without touching any later
  * changes the player makes in-game.
  */
-private const val DISPLAY_DEFAULTS_VERSION = 2
+private const val DISPLAY_DEFAULTS_VERSION = 3
 private const val KEY_DISPLAY_DEFAULTS_VERSION = "display_defaults_version"
 
 private fun displayDefaultsNeedMigration(context: Context): Boolean =
@@ -1333,16 +1334,22 @@ private fun resolveScreenSize(context: Context, resolution: RenderResolution): S
     if (resolution == RenderResolution.NATIVE) nativeScreenSize(context)
     else fitScreenSizeToWindow(context, resolution.size)
 
-/** The whole display, independent of the current window orientation, insets or multi-window mode. */
+/**
+ * Physical display pixels. `getRealMetrics()` includes the cutout area, unlike window metrics,
+ * which can report a smaller safe area and make the renderer letterbox the game.
+ */
 private fun windowSize(context: Context): Pair<Int, Int> {
     val wm = context.getSystemService(WindowManager::class.java)
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    @Suppress("DEPRECATION")
+    val metrics = android.util.DisplayMetrics()
+    wm.defaultDisplay.getRealMetrics(metrics)
+    if (metrics.widthPixels > 0 && metrics.heightPixels > 0) {
+        return metrics.widthPixels to metrics.heightPixels
+    }
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         wm.maximumWindowMetrics.bounds.let { it.width() to it.height() }
     } else {
-        @Suppress("DEPRECATION")
-        val metrics = android.util.DisplayMetrics()
-        wm.defaultDisplay.getRealMetrics(metrics)
-        metrics.widthPixels to metrics.heightPixels
+        context.resources.displayMetrics.let { it.widthPixels to it.heightPixels }
     }
 }
 
@@ -1394,6 +1401,11 @@ private fun prepareLaunch(context: Context, gameRoot: File, gpu: GpuProfile, scr
         container.saveData()
     }
     check(containerManager.hasContainer(CONTAINER_ID)) { "Container creation failed. Check system storage and logs." }
+    // Fill the whole surface even if the display reports a slightly different aspect than the X server.
+    containerManager.getContainerById(CONTAINER_ID)?.let { active ->
+        active.putExtra(ScreenEffectsConfig.KEY_SCALING_MODE, ScreenEffectsConfig.SCALING_MODE_STRETCH.toString())
+        active.saveData()
+    }
     // Written last, so the password isn't on disk during the client download or container setup.
     BattleNetSignIn.load(context)?.let { login ->
         BattleNetSignIn.writeLoginFile(gameRoot, login)
