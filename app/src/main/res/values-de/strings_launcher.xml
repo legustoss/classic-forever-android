@@ -1,0 +1,92 @@
+<resources>
+    <string name="wow_ready">Bereit zum Starten</string>
+    <string name="wow_preparing">Komponenten werden vorbereitet...</string>
+    <string name="wow_booting">World of Warcraft wird gestartet...</string>
+    <string name="wow_launch_failed">Start fehlgeschlagen</string>
+    <string name="wow_connecting_cdn">Verbindung zum Blizzard-CDN wird hergestellt...</string>
+    <string name="wow_checking_updates">Spielaktualisierungen werden geprüft...</string>
+    <string name="wow_install_failed">Installation fehlgeschlagen</string>
+    <string name="wow_update_failed">Aktualisierung fehlgeschlagen</string>
+    <string name="wow_error_download">App-Aktualisierung konnte nicht heruntergeladen werden: %1$s</string>
+    <string name="wow_error_incompatible">Inkompatibles Spiel (%1$s). WoW Forever benötigt World of Warcraft Forever (%2$s).</string>
+    <string name="wow_addon_installed">Installiert: %1$s</string>
+    <string name="wow_addon_failed">Add-on-Import fehlgeschlagen: %1$s</string>
+
+    <string name="wow_title">WORLD OF WARCRAFT</string>
+    <string name="wow_subtitle">FOREVER (ARM64 NATIVE)</string>
+    <string name="wow_edition">%1$s-Edition</string>
+    <string name="wow_readiness">UMGEBUNG BEREIT</string>
+    <string name="wow_check_arm64">ARM64-Binary (%1$s)</string>
+    <string name="wow_check_arm64_download">ARM64-Binary (wird beim Start geladen)</string>
+    <string name="wow_check_data">Spielarchive (Data/)</string>
+    <string name="wow_check_info">Installationsinfo (%1$s)</string>
+    <string name="wow_check_info_wrong">Installationsinfo (%1$s - benötigt %2$s)</string>
+    <string name="wow_check_info_beta">Installationsinfo (%1$s - Beta, Aktualisierung nötig)</string>
+    <string name="wow_check_storage">Zugriff auf alle Dateien</string>
+    <string name="wow_check_login_configured">Battle.net-Anmeldung (konfiguriert)</string>
+    <string name="wow_check_login_missing">Battle.net-Anmeldung (unter der Play-Taste konfigurieren)</string>
+    <string name="wow_check_app">App-Version: v%1$s</string>
+    <string name="wow_check_app_update">App-Version: v%1$s (v%2$s verfügbar)</string>
+    <string name="wow_check_client">Client-Version: %1$s (aktuell)</string>
+    <string name="wow_check_client_update">Client-Version: %1$s (Update %2$s verfügbar)</string>
+    <string name="wow_target_path">Pfad: %1$s</string>
+    <string name="wow_resolution">Auflösung: %1$s</string>
+    <string name="wow_language">Sprache: %1$s</string>
+    <string name="wow_error_prefix">Fehler: %1$s</string>
+    <string name="wow_uptime">Dein Gerät ist seit %1$d Tagen eingeschaltet. Nach etwa 49 Tagen bleibt die WoW-Uhr stehen, der Anmeldebildschirm bleibt leer und nichts lädt. Starte das Gerät vor dem Spielen neu.</string>
+
+    <string name="wow_game_update_title">SPIELUPDATE ERFORDERLICH</string>
+    <string name="wow_game_update_body">Die Server benötigen Build %1$s, die lokalen Dateien sind aber Build %2$s. Die Anmeldung kann fehlschlagen oder bei der Realm-Auswahl getrennt werden.</string>
+    <string name="wow_game_update_hint">Tippe unten auf Aktualisieren, um die neuesten Dateien direkt über WLAN vom Blizzard-CDN zu laden.</string>
+    <string name="wow_app_update_title">APP-UPDATE VERFÜGBAR (v%1$s)</string>
+    <string name="wow_app_update_body">Eine neue Version ist auf GitHub verfügbar. Tippe unten, um die Hinweise zu sehen und zu aktualisieren.</string>
+    <string name="wow_downloading_update">UPDATE WIRD HERUNTERGELADEN...</string>
+    <string name="wow_downloading_percent">Download: %1$d%%</string>
+    <string name="wow_downloading">WIRD HERUNTERGELADEN...</string>
+    <string name="wow_install_update">UPDATE INSTALLIEREN (v%1$s)</string>
+    <string name="wow_update_app">APP AKTUALISIEREN (v%1$s)</string>
+    <string name="wow_install_now">JETZT INSTALLIEREN</string>
+    <string name="wow_update_now">JETZT AKTUALISIEREN</string>
+
+    <string name="wow_grant_storage">DATEIZUGRIFF GEWÄHREN</string>
+    <string name="wow_upgrade_release">AUF VOLLVERSION AKTUALISIEREN</string>
+    <string name="wow_download_install">HERUNTERLADEN &amp; INSTALLIEREN</string>
+    <string name="wow_locate_files">VORHANDENE DATEIEN FINDEN</string>
+    <string name="wow_update_to">AUF %1$s AKTUALISIEREN</string>
+    <string name="wow_launch_outdated">TROTZDEM STARTEN (VERALTET)</string>
+    <string name="wow_wrong_game">WOW FOREVER ERFORDERLICH</string>
+    <string name="wow_play">WORLD OF WARCRAFT SPIELEN</string>
+    <string name="wow_refresh">Aktualisieren</string>
+    <string name="wow_location">Speicherort</string>
+    <string name="wow_addon">Add-on</string>
+    <string name="wow_password_login">Anmeldung mit Passwort</string>
+    <string name="wow_forget_login">Anmeldung vergessen</string>
+
+    <string name="wow_upgrade_dialog_title">WoW Forever ist erschienen</string>
+    <string name="wow_upgrade_dialog_body">Blizzard hat WoW Forever von der Beta auf die Vollversion umgestellt, und der Beta-Client in diesem Ordner wird eingestellt.\n\nDie Vollversion liegt in einem neuen Ordner %1$s neben Data/. Beim Upgrade werden deine Spieldaten weiterverwendet, daher wird nur der neue ARM64-Client geladen (ca. 100 MB).\n\nDu hast die Vollversion schon vom PC kopiert? Wähle dann diesen Ordner.</string>
+    <string name="wow_upgrade_now">JETZT AKTUALISIEREN</string>
+    <string name="wow_choose_folder">ORDNER WÄHLEN</string>
+    <string name="wow_later">SPÄTER</string>
+    <string name="wow_cancel">ABBRECHEN</string>
+    <string name="wow_storage_title">Speicherberechtigung erforderlich</string>
+    <string name="wow_storage_body">Android benötigt „Zugriff auf alle Dateien“, damit WoW Forever die Spieldateien in diesem Ordner lesen und aktualisieren kann.\n\nAktiviere auf dem nächsten Bildschirm „Zugriff auf alle Dateien verwalten lassen“.</string>
+    <string name="wow_open_settings">EINSTELLUNGEN ÖFFNEN</string>
+    <string name="wow_app_update_dialog_title">App-Update verfügbar (v%1$s)</string>
+    <string name="wow_install_perm_title">Installationsberechtigung erforderlich</string>
+    <string name="wow_install_perm_body">Android benötigt die Berechtigung, Apps von WoW Forever zu installieren.\n\nAktiviere auf dem nächsten Bildschirm „Aus dieser Quelle zulassen“.</string>
+
+    <string name="wow_install_card_upgrade">WOW FOREVER IST ERSCHIENEN</string>
+    <string name="wow_install_card_install">WORLD OF WARCRAFT INSTALLIEREN</string>
+    <string name="wow_install_card_upgrade_body">Dieser Ordner enthält die Forever-Beta, die Blizzard einstellt. Das Upgrade installiert die Vollversion in %1$s/. Deine Daten werden weiterverwendet, es wird nur der neue Client geladen (ca. 100 MB).</string>
+    <string name="wow_install_card_body">Lädt den ARM64-Client und die Archivindizes (ca. 250 MB) vom Blizzard-CDN. Der Rest des Spiels wird beim Spielen geladen und kann über 50 GB wachsen – wähle also einen Ort mit genug Platz.</string>
+    <string name="wow_install_location">Installationsort: %1$s (%2$s GB frei)</string>
+    <string name="wow_change_location">Installationsort ändern</string>
+    <string name="wow_pc_hint">Du hast das Spiel schon vom PC kopiert? Nutze unten „Vorhandene Dateien finden“.</string>
+
+    <string name="wow_resolution_native">Nativ</string>
+    <string name="wow_community_title">CLASSIC FOREVER COMMUNITY</string>
+    <string name="wow_website">Webseite</string>
+    <string name="wow_discord">Discord</string>
+    <string name="wow_group_setup">Einrichtung</string>
+    <string name="wow_group_account">Konto</string>
+</resources>

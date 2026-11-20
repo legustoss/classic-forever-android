@@ -16,10 +16,10 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Release tag to create, e.g. v2.4.2 or v2.4.1-test1
+        description: Release tag to create, e.g. v0.1.0 or v0.1.1-test1
         required: true
       title:
-        description: Release title (defaults to "WoW Forever for Android <tag>")
+        description: Release title (defaults to "Classic Forever <tag>")
         required: false
       notes:
         description: Release notes (Markdown)
@@ -77,22 +77,6 @@ jobs:
           command -v zstd > /dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq zstd > /dev/null; }
           python3 tools/trim_proton_i386.py app/src/main/assets/bundled_components/proton-11.0-90624-arm64ec.wcp
 
-      # The browser-login helper ships only as built here from the reviewed source, never as a committed binary.
-      - name: Build the browser-login helper
-        if: hashFiles('tools/wow-session-bridge/build.sh') != ''
-        env:
-          LLVM_MINGW: llvm-mingw-20261104-ucrt-ubuntu-22.04-x86_64
-          LLVM_MINGW_SHA256: 919380403de87dca3c581c2053230cd298af5e891286628ba0613b7fed370926
-        run: |
-          # The helper runs next to the ARM64 game, so it is an ARM64 Windows program; GCC's MinGW can't target that.
-          curl -fsSL -o "$RUNNER_TEMP/llvm-mingw.tar.xz" \
-            "https://github.com/mstorsjo/llvm-mingw/releases/download/20261104/$LLVM_MINGW.tar.xz"
-          echo "$LLVM_MINGW_SHA256  $RUNNER_TEMP/llvm-mingw.tar.xz" | sha256sum -c -
-          tar -xJf "$RUNNER_TEMP/llvm-mingw.tar.xz" -C "$RUNNER_TEMP"
-          sh tools/wow-session-bridge/build.sh "$RUNNER_TEMP/$LLVM_MINGW/bin/aarch64-w64-mingw32-clang" \
-            app/src/main/assets/wow-session-bridge.exe
-          sha256sum app/src/main/assets/wow-session-bridge.exe
-
       # The Secrets Gradle plugin refuses to configure the project without local.properties.
       - name: Write local.properties
         run: echo "sdk.dir=$ANDROID_HOME" > local.properties
@@ -122,7 +106,7 @@ jobs:
           apk=app/build/outputs/apk/modern/release/app-modern-release.apk
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --print-certs "$apk" | tee certs.txt
           if grep -q "CN=Android Debug" certs.txt; then echo "::error::APK is debug-signed"; exit 1; fi
-          cp "$apk" WoW-Forever.apk
+          cp "$apk" Classic-Forever.apk
 
       - name: Remove signing files
         if: always()
@@ -145,8 +129,8 @@ jobs:
           sha=$(git rev-parse HEAD)
           flags=()
           if [ "$PRERELEASE" = "true" ]; then flags+=(--prerelease); else flags+=(--latest); fi
-          gh release create "$TAG" WoW-Forever.apk \
+          gh release create "$TAG" Classic-Forever.apk \
             --target "$sha" \
-            --title "${TITLE:-WoW Forever for Android $TAG}" \
-            --notes "${NOTES:-}" \
+            --title "${TITLE:-Classic Forever $TAG}" \
+            --notes "${NOTES:-Classic Forever — игра на приватном сервере. Discord: https://discord.gg/zBmq68jby · Сайт: http://classicforever.duckdns.org/}" \
             "${flags[@]}"

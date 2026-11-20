@@ -10,7 +10,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import app.gamenative.events.EventDispatcher
+import app.gamenative.ui.screen.wow.GamePath
 import app.gamenative.ui.screen.xserver.RadialMenuCoordinator
+import app.gamenative.utils.FileLogTree
+import app.gamenative.utils.FileLogger
 import android.app.Application
 import com.winlator.container.Container
 import com.winlator.inputcontrols.InputControlsManager
@@ -20,6 +23,7 @@ import com.winlator.widget.XServerRendererView
 import com.winlator.xenvironment.XEnvironment
 import timber.log.Timber
 import dagger.hilt.android.HiltAndroidApp
+import java.io.File
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +45,9 @@ class PluviaApp : Application() {
         } else {
             Timber.plant(ReleaseTree())
         }
+        // Also write logs to <game root>/logs/ so they can be read without adb.
+        Timber.plant(FileLogTree())
+        FileLogger.init(File(GamePath.load(this)))
 
         CrashHandler.initialize(this)
         PrefManager.init(this)

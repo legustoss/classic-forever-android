@@ -1,6 +1,7 @@
 package app.gamenative.ui.screen.wow
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -13,8 +14,6 @@ class GameConfigTest {
 
     private fun configWtf(root: File) = File(root, "${WowClientDownloader.FLAVOR_DIR}/WTF/Config.wtf")
 
-    private fun portals(root: File) = configWtf(root).readLines().filter { it.startsWith("SET portal ") }
-
     private fun install(branch: String, config: String? = null): File {
         val root = tempFolder.newFolder()
         File(root, WowClientDownloader.BUILD_INFO).writeText(
@@ -25,33 +24,36 @@ class GameConfigTest {
     }
 
     @Test
-    fun noRegionPicked_newConfig_usesInstallRegion() {
-        val root = install("eu")
-        ensureGameConfig(root, "1920x1080", null)
-        assertEquals(listOf("SET portal \"EU\""), portals(root))
+    fun regionFor_usesInstallBranch() {
+        assertEquals("eu", WowClientDownloader.regionFor(install("eu")))
+        assertEquals("kr", WowClientDownloader.regionFor(install("kr")))
     }
 
     @Test
-    fun noRegionPicked_keepsExistingPortal() {
-        val root = install("us", "SET portal \"EU\"\n")
-        ensureGameConfig(root, "1920x1080", null)
-        assertEquals(listOf("SET portal \"EU\""), portals(root))
-    }
-
-    @Test
-    fun pickedRegion_replacesExistingPortal() {
+    fun config_keepsExistingPortalUntouched() {
         val root = install("us", "SET portal \"US\"\nSET gxApi \"D3D11\"\n")
-        ensureGameConfig(root, "1920x1080", GameRegion.EU)
-        assertEquals(listOf("SET portal \"EU\""), portals(root))
+        ensureGameConfig(root, "1920x1080")
+        assertTrue(configWtf(root).readLines().contains("SET portal \"US\""))
     }
 
     @Test
-    fun resolution_alwaysMatchesContainer() {
-        val root = install("us", "SET gxFullscreenResolution \"1280x720\"\nSET gxWindowedResolution \"953x720\"\n")
-        ensureGameConfig(root, "1920x1080", null)
+    fun firstRun_nativeResolutionAndHalfRenderScale() {
+        val root = install("us")
+        ensureGameConfig(root, "2772x1280")
         assertEquals(
-            listOf("SET gxFullscreenResolution \"1920x1080\"", "SET gxWindowedResolution \"1920x1080\""),
+            listOf("SET gxFullscreenResolution \"2772x1280\"", "SET gxWindowedResolution \"2772x1280\""),
             configWtf(root).readLines().filter { it.contains("Resolution ") },
         )
+        assertTrue(configWtf(root).readLines().contains("SET RenderScale \"0.5\""))
+    }
+
+    @Test
+    fun laterRuns_keepPlayerChangedResolutionAndRenderScale() {
+        val root = install("us", "SET gxFullscreenResolution \"1280x720\"\nSET gxWindowedResolution \"1280x720\"\nSET RenderScale \"0.8\"\n")
+        ensureGameConfig(root, "2772x1280")
+        val lines = configWtf(root).readLines()
+        assertTrue(lines.contains("SET gxFullscreenResolution \"1280x720\""))
+        assertTrue(lines.contains("SET gxWindowedResolution \"1280x720\""))
+        assertTrue(lines.contains("SET RenderScale \"0.8\""))
     }
 }

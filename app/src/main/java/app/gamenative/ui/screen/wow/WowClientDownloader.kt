@@ -71,6 +71,15 @@ object WowClientDownloader {
     fun installedProducts(buildInfo: File): Set<String> =
         runCatching { parsePsv(buildInfo.readText()).mapNotNull { it["Product"] }.toSet() }.getOrDefault(emptySet())
 
+    /**
+     * The patch-server region for this install, derived from the active `.build.info` row. The private
+     * server uses the same client binaries as the retail region the install came from.
+     */
+    fun regionFor(gameRoot: File): String =
+        readBuildInfo(File(gameRoot, BUILD_INFO))?.get("Branch")?.takeIf { it.isNotBlank() }
+            ?.lowercase(Locale.ROOT)
+            ?: defaultBranch()
+
     /** Compares the install against the live build for [region] (e.g. "us"), since regions can be on different builds. */
     fun checkVersion(gameRoot: File, region: String): VersionCheckResult? {
         val row = runCatching { activeBuild(File(gameRoot, BUILD_INFO)) }.getOrElse {

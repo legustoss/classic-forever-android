@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "wow-forever-android"
+rootProject.name = "classic-forever-android"
 include(":app")

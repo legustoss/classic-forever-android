@@ -1,7 +1,5 @@
 package app.gamenative.ui.screen.xserver
 
-import app.gamenative.ui.screen.wow.auth.BattleNetBrowserLogin
-
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
@@ -118,6 +116,7 @@ import app.gamenative.utils.LsfgVkManager
 import app.gamenative.utils.downloader.DXWrapperDownloader
 import app.gamenative.utils.downloader.GraphicsDriverDownloader
 import app.gamenative.utils.BrightnessManager
+import app.gamenative.utils.ClassicForeverPatcher
 import app.gamenative.utils.downloader.WinComponentDownloader
 import app.gamenative.utils.WineProcessSnapshotHelper
 import com.winlator.alsaserver.ALSAClient
@@ -3662,13 +3661,7 @@ private fun setupXEnvironment(
         guestProgramLauncherComponent.setWineInfo(xServerState.value.wineInfo)
         val directCommand = getWineStartCommand(context, appId, container, envVars, guestProgramLauncherComponent) +
             (if (container.execArgs.isNotEmpty()) " " + container.execArgs else "")
-        val browserLogin = if (BattleNetBrowserLogin.enabled(context)) {
-            BattleNetBrowserLogin.start(context, container)
-        } else {
-            null
-        }
-        val launchCommand = browserLogin?.command ?: directCommand
-        val gameExecutable = "wine explorer /desktop=shell," + xServer.screenInfo + " " + launchCommand
+        val gameExecutable = "wine explorer /desktop=shell," + xServer.screenInfo + " " + directCommand
         guestProgramLauncherComponent.guestExecutable = gameExecutable
         guestProgramLauncherComponent.isWoW64Mode = wow64Mode
         // Set steam type for selecting appropriate box64rc
@@ -3791,8 +3784,8 @@ private fun setupXEnvironment(
     guestProgramLauncherComponent.envVars = EnvVars().apply { putAll(envVars) }
 
     val gameTerminationCallback = Callback<Int> { status ->
-        // Record the status for this launch before error handling or screen cleanup cancels sign-in.
-        browserLogin?.onExit?.invoke(status)
+        // The launcher composable is gone by now, so stop its memory watcher here.
+        ClassicForeverPatcher.stop()
         if (status != 0) {
             Timber.e("Guest program terminated with status: $status")
             onGameLaunchError?.invoke("Game terminated with error status: $status")
@@ -3832,7 +3825,6 @@ private fun setupXEnvironment(
     try {
         environment.startEnvironmentComponents()
     } catch (e: Exception) {
-        BattleNetBrowserLogin.cancel()
         Timber.e(e, "Failed to start environment components, cleaning up")
         try {
             environment.stopEnvironmentComponents()

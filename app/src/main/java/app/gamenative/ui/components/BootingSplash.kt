@@ -48,10 +48,10 @@ import androidx.compose.ui.unit.sp
 import app.gamenative.PluviaApp
 import app.gamenative.R
 import app.gamenative.events.AndroidEvent
-import app.gamenative.ui.theme.BrandGradient
 import app.gamenative.ui.theme.PluviaTheme
 import app.gamenative.ui.theme.WowBackgroundGradient
-import app.gamenative.ui.theme.WowGold
+import app.gamenative.ui.theme.WowNeon
+import app.gamenative.ui.theme.WowNeonGradient
 
 @Composable
 fun BootingSplash(
@@ -139,13 +139,11 @@ fun BootingSplash(
                         fontSize = 32.sp,
                         letterSpacing = 2.sp,
                         shadow = Shadow(
-                            color = Color(0xFFC7AF8E).copy(alpha = 0.6f),
+                            color = WowNeon.copy(alpha = 0.6f),
                             offset = Offset(0f, 0f),
                             blurRadius = 20f,
                         ),
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(Color(0xFFF5E296), Color(0xFFE5C158), Color(0xFFC7AF8E)),
-                        ),
+                        brush = Brush.horizontalGradient(colors = WowNeonGradient),
                     ),
                 )
 
@@ -179,7 +177,7 @@ fun BootingSplash(
                         fontSize = 11.sp,
                         letterSpacing = 1.sp,
                     ),
-                    color = WowGold.copy(alpha = 0.8f),
+                    color = WowNeon.copy(alpha = 0.8f),
                     textAlign = TextAlign.Center,
                 )
 
@@ -226,9 +224,7 @@ private fun ProgressBar(
                 .fillMaxWidth(actualProgress)
                 .clip(RoundedCornerShape(2.dp))
                 .background(
-                    Brush.horizontalGradient(
-                        colors = BrandGradient,
-                    ),
+                    Brush.horizontalGradient(colors = WowNeonGradient),
                 ),
         )
 

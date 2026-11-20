@@ -5,21 +5,21 @@ import com.alorma.compose.settings.ui.base.internal.SettingsTileColors
 import com.alorma.compose.settings.ui.base.internal.SettingsTileDefaults
 
 // Your custom color scheme
-val customBackground = Color(0xFF09090B)
+val customBackground = Color(0xFF000000)
 val customForeground = Color(0xFFFAFAFA)
-val customCard = Color(0xFF09090B)
+val customCard = Color(0xFF000000)
 val customCardForeground = Color(0xFFFAFAFA)
-val customPrimary = Color(0xFFA21CAF)
+val customPrimary = Color(0xFFFFFFFF)
 val customPrimaryForeground = Color(0xFFFAFAFA)
-val customSecondary = Color(0xFF27272A)
+val customSecondary = Color(0xFF272727)
 val customSecondaryForeground = Color(0xFFFAFAFA)
-val customMuted = Color(0xFF27272A)
+val customMuted = Color(0xFF272727)
 val customMutedForeground = Color(0xFF94969C)
-val customAccent = Color(0xFF06B6D4)
+val customAccent = Color(0xFFFFFFFF)
 val customAccentForeground = Color(0xFFFAFAFA)
 val customDestructive = Color(0xFF7F1D1D)
 
-val pluviaSeedColor = Color(0x284561FF)
+val pluviaSeedColor = Color(0xFFFFFFFF)
 
 /**
  * Raw color primitives for the Pluvia app.
@@ -27,26 +27,26 @@ val pluviaSeedColor = Color(0x284561FF)
  */
 
 // Brand
-val PluviaPrimary = Color(0xFFA21CAF)
-val PluviaSeed = Color(0x284561FF)
+val PluviaPrimary = Color(0xFFFFFFFF)
+val PluviaSeed = Color(0xFFFFFFFF)
 
 // Backgrounds
-val PluviaBackground = Color(0xFF09090B)
-val PluviaSurface = Color(0xFF12121A)
-val PluviaSurfaceElevated = Color(0xFF1A1A24)
-val PluviaCard = Color(0xFF09090B)
+val PluviaBackground = Color(0xFF000000)
+val PluviaSurface = Color(0xFF111111)
+val PluviaSurfaceElevated = Color(0xFF1A1A1A)
+val PluviaCard = Color(0xFF000000)
 
 // Foregrounds
 val PluviaForeground = Color(0xFFFAFAFA)
 val PluviaForegroundMuted = Color(0xFF94969C)
 
 // Secondary
-val PluviaSecondary = Color(0xFF27272A)
+val PluviaSecondary = Color(0xFF272727)
 
-// Accents
-val PluviaCyan = Color(0xFF00D4FF)
-val PluviaPurple = Color(0xFF8B5CF6)
-val PluviaPink = Color(0xFFEC4899)
+// Accents — monochrome neon (names kept for source compatibility)
+val PluviaCyan = Color(0xFFFFFFFF)
+val PluviaPurple = Color(0xFFD4D4D4)
+val PluviaPink = Color(0xFFA3A3A3)
 
 // Semantic
 val PluviaSuccess = Color(0xFF10B981)
@@ -55,7 +55,7 @@ val PluviaDanger = Color(0xFFEF4444)
 val PluviaDestructive = Color(0xFF7F1D1D)
 
 // Border
-val PluviaBorder = Color(0xFF3A3A4A)
+val PluviaBorder = Color(0xFF3A3A3A)
 
 // Status - Installed/Download states
 val StatusInstalled = Color(0xFF4CAF50)
@@ -72,13 +72,15 @@ val FriendAwayOrSnooze = Color(0x806DCFF6)
 val FriendInGameAwayOrSnooze = Color(0x8090BA3C)
 val FriendBlocked = Color(0xFF983D3D)
 
-// WoW Forever
-val WowBackgroundGradient = listOf(Color(0xFF0A0E17), Color(0xFF10192A), Color(0xFF080C14))
-val WowGold = Color(0xFFC79C6E)
-val WowBronze = Color(0xFF9E7138)
-val WowMuted = Color(0xFF88A0C0)
-val WowSubtle = Color(0xFF7A92B0)
-val WowError = Color(0xFFFC8181)
+// WoW Forever — monochrome neon: white light on black, no other hues.
+val WowBackgroundGradient = listOf(Color(0xFF000000), Color(0xFF0B0B0B), Color(0xFF000000))
+val WowNeon = Color(0xFFFFFFFF)
+val WowNeonDim = Color(0xFFB4B4B4)
+val WowSubtle = Color(0xFF7A7A7A)
+val WowPanel = Color(0xFF0D0D0D)
+val WowPanelElevated = Color(0xFF171717)
+val WowBorder = Color(0xFF3A3A3A)
+val WowNeonGradient = listOf(Color(0xFF7A7A7A), Color(0xFFFFFFFF), Color(0xFF9A9A9A))
 
 // Compatibility
 val CompatibilityGood = Color(0xFF4CAF50)

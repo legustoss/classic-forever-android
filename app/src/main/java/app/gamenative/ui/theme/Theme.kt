@@ -102,8 +102,6 @@ private val DarkPluviaColors = PluviaColors(
     compatibilityBadBackground = CompatibilityBadBg,
 )
 
-val BrandGradient = listOf(PluviaCyan, PluviaPurple, PluviaPink)
-
 // Light theme placeholder - customize when adding light theme support
 // private val LightPluviaColors = PluviaColors(...)
 
@@ -114,7 +112,7 @@ private val LocalPluviaColors = staticCompositionLocalOf { DarkPluviaColors }
  */
 private val DarkColorScheme = darkColorScheme(
     primary = PluviaPrimary,
-    onPrimary = PluviaForeground,
+    onPrimary = Color.Black,
     primaryContainer = PluviaPrimary.copy(alpha = 0.2f),
     onPrimaryContainer = PluviaForeground,
 
@@ -124,7 +122,7 @@ private val DarkColorScheme = darkColorScheme(
     onSecondaryContainer = PluviaForeground,
 
     tertiary = PluviaCyan,
-    onTertiary = PluviaForeground,
+    onTertiary = Color.Black,
     tertiaryContainer = PluviaCyan.copy(alpha = 0.2f),
     onTertiaryContainer = PluviaForeground,
 

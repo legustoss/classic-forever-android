@@ -1,0 +1,92 @@
+<resources>
+    <string name="wow_ready">起動準備完了</string>
+    <string name="wow_preparing">コンポーネントを準備中...</string>
+    <string name="wow_booting">World of Warcraft を起動中...</string>
+    <string name="wow_launch_failed">起動に失敗しました</string>
+    <string name="wow_connecting_cdn">Blizzard CDN に接続中...</string>
+    <string name="wow_checking_updates">ゲームの更新を確認中...</string>
+    <string name="wow_install_failed">インストールに失敗しました</string>
+    <string name="wow_update_failed">更新に失敗しました</string>
+    <string name="wow_error_download">アプリの更新ダウンロードに失敗しました：%1$s</string>
+    <string name="wow_error_incompatible">互換性のないゲームです（%1$s）。WoW Forever には World of Warcraft Forever（%2$s）が必要です。</string>
+    <string name="wow_addon_installed">インストール済み：%1$s</string>
+    <string name="wow_addon_failed">アドオンの読み込みに失敗しました：%1$s</string>
+
+    <string name="wow_title">WORLD OF WARCRAFT</string>
+    <string name="wow_subtitle">FOREVER (ARM64 NATIVE)</string>
+    <string name="wow_edition">%1$s エディション</string>
+    <string name="wow_readiness">環境の準備状況</string>
+    <string name="wow_check_arm64">ARM64 実行ファイル（%1$s）</string>
+    <string name="wow_check_arm64_download">ARM64 実行ファイル（起動時にダウンロード）</string>
+    <string name="wow_check_data">ゲームアーカイブ（Data/）</string>
+    <string name="wow_check_info">インストール情報（%1$s）</string>
+    <string name="wow_check_info_wrong">インストール情報（%1$s - %2$s が必要）</string>
+    <string name="wow_check_info_beta">インストール情報（%1$s - ベータ版、更新が必要）</string>
+    <string name="wow_check_storage">すべてのファイルへのアクセス</string>
+    <string name="wow_check_login_configured">Battle.net ログイン（設定済み）</string>
+    <string name="wow_check_login_missing">Battle.net ログイン（再生ボタン下で設定）</string>
+    <string name="wow_check_app">アプリバージョン：v%1$s</string>
+    <string name="wow_check_app_update">アプリバージョン：v%1$s（v%2$s が利用可能）</string>
+    <string name="wow_check_client">クライアントバージョン：%1$s（最新）</string>
+    <string name="wow_check_client_update">クライアントバージョン：%1$s（更新 %2$s が利用可能）</string>
+    <string name="wow_target_path">パス：%1$s</string>
+    <string name="wow_resolution">解像度：%1$s</string>
+    <string name="wow_language">言語：%1$s</string>
+    <string name="wow_error_prefix">エラー：%1$s</string>
+    <string name="wow_uptime">このデバイスは %1$d 日間稼働しています。約 49 日経つと WoW の時計が止まり、ログイン画面が空白になって何も読み込めません。プレイ前にデバイスを再起動してください。</string>
+
+    <string name="wow_game_update_title">ゲームの更新が必要です</string>
+    <string name="wow_game_update_body">サーバーはビルド %1$s を要求しますが、ローカルファイルはビルド %2$s です。ログインに失敗するか、 realm 選択時に切断される可能性があります。</string>
+    <string name="wow_game_update_hint">下の「更新」をタップすると、Wi-Fi 経由で Blizzard の CDN から最新ファイルを直接ダウンロードします。</string>
+    <string name="wow_app_update_title">アプリの更新があります（v%1$s）</string>
+    <string name="wow_app_update_body">GitHub に新しいリリースがあります。下をタップして変更内容を確認し、更新してください。</string>
+    <string name="wow_downloading_update">更新をダウンロード中...</string>
+    <string name="wow_downloading_percent">ダウンロード中：%1$d%%</string>
+    <string name="wow_downloading">ダウンロード中...</string>
+    <string name="wow_install_update">更新をインストール（v%1$s）</string>
+    <string name="wow_update_app">アプリを更新（v%1$s）</string>
+    <string name="wow_install_now">今すぐインストール</string>
+    <string name="wow_update_now">今すぐ更新</string>
+
+    <string name="wow_grant_storage">ファイルアクセスを許可</string>
+    <string name="wow_upgrade_release">完全版にアップグレード</string>
+    <string name="wow_download_install">ダウンロードとインストール</string>
+    <string name="wow_locate_files">既存ファイルを探す</string>
+    <string name="wow_update_to">%1$s に更新</string>
+    <string name="wow_launch_outdated">そのまま起動（古いバージョン）</string>
+    <string name="wow_wrong_game">WOW FOREVER が必要です</string>
+    <string name="wow_play">WORLD OF WARCRAFT をプレイ</string>
+    <string name="wow_refresh">更新</string>
+    <string name="wow_location">場所</string>
+    <string name="wow_addon">アドオン</string>
+    <string name="wow_password_login">パスワードでログイン</string>
+    <string name="wow_forget_login">ログイン情報を消去</string>
+
+    <string name="wow_upgrade_dialog_title">WoW Forever が正式リリースされました</string>
+    <string name="wow_upgrade_dialog_body">Blizzard が WoW Forever をベータから正式版へ移行したため、このフォルダーのベータ版クライアントは終了します。\n\n正式版は Data/ の隣の新しいフォルダー %1$s にあります。アップグレードでは既存のゲームデータが再利用されるため、新しい ARM64 クライアント（約 100 MB）のみダウンロードされます。\n\nPC から正式版をすでにコピーしている場合は、そのフォルダーを選択してください。</string>
+    <string name="wow_upgrade_now">今すぐアップグレード</string>
+    <string name="wow_choose_folder">フォルダーを選択</string>
+    <string name="wow_later">後で</string>
+    <string name="wow_cancel">キャンセル</string>
+    <string name="wow_storage_title">ストレージ権限が必要です</string>
+    <string name="wow_storage_body">WoW Forever がこのディレクトリのゲームファイルを読み書きするには、「すべてのファイルへのアクセス」が必要です。\n\n次の画面で「すべてのファイルを管理できるようにする」を有効にしてください。</string>
+    <string name="wow_open_settings">設定を開く</string>
+    <string name="wow_app_update_dialog_title">アプリの更新があります（v%1$s）</string>
+    <string name="wow_install_perm_title">インストール権限が必要です</string>
+    <string name="wow_install_perm_body">Android では WoW Forever からのアプリインストールを許可する必要があります。\n\n次の画面で「このソースから許可する」を有効にしてください。</string>
+
+    <string name="wow_install_card_upgrade">WOW FOREVER が正式リリースされました</string>
+    <string name="wow_install_card_install">WORLD OF WARCRAFT をインストール</string>
+    <string name="wow_install_card_upgrade_body">このフォルダーには終了する Forever ベータ版があります。アップグレードすると正式版が %1$s/ にインストールされます。既存データは再利用されるため、新しいクライアント（約 100 MB）のみダウンロードされます。</string>
+    <string name="wow_install_card_body">Blizzard の CDN から ARM64 クライアントとアーカイブ索引（約 250 MB）をダウンロードします。残りのデータはプレイ中に流式で読み込まれ、50 GB を超える場合があります。十分な空き容量のある場所を選んでください。</string>
+    <string name="wow_install_location">インストール先：%1$s（空き %2$s GB）</string>
+    <string name="wow_change_location">インストール先を変更</string>
+    <string name="wow_pc_hint">PC からゲームをすでにコピーした場合は、下の「既存ファイルを探す」を使用してください。</string>
+
+    <string name="wow_resolution_native">ネイティブ</string>
+    <string name="wow_community_title">CLASSIC FOREVER コミュニティ</string>
+    <string name="wow_website">ウェブサイト</string>
+    <string name="wow_discord">Discord</string>
+    <string name="wow_group_setup">設定</string>
+    <string name="wow_group_account">アカウント</string>
+</resources>

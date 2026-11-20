@@ -1,0 +1,92 @@
+<resources>
+    <string name="wow_ready">Готово к запуску</string>
+    <string name="wow_preparing">Подготовка компонентов...</string>
+    <string name="wow_booting">Запуск World of Warcraft...</string>
+    <string name="wow_launch_failed">Не удалось запустить</string>
+    <string name="wow_connecting_cdn">Подключение к CDN Blizzard...</string>
+    <string name="wow_checking_updates">Проверка обновлений игры...</string>
+    <string name="wow_install_failed">Ошибка установки</string>
+    <string name="wow_update_failed">Ошибка обновления</string>
+    <string name="wow_error_download">Не удалось скачать обновление приложения: %1$s</string>
+    <string name="wow_error_incompatible">Несовместимая игра (%1$s). Для WoW Forever требуется World of Warcraft Forever (%2$s).</string>
+    <string name="wow_addon_installed">Установлено: %1$s</string>
+    <string name="wow_addon_failed">Ошибка импорта аддона: %1$s</string>
+
+    <string name="wow_title">WORLD OF WARCRAFT</string>
+    <string name="wow_subtitle">FOREVER (ARM64 NATIVE)</string>
+    <string name="wow_edition">Издание %1$s</string>
+    <string name="wow_readiness">ГОТОВНОСТЬ СРЕДЫ</string>
+    <string name="wow_check_arm64">ARM64-клиент (%1$s)</string>
+    <string name="wow_check_arm64_download">ARM64-клиент (скачается при запуске)</string>
+    <string name="wow_check_data">Архивы игры (Data/)</string>
+    <string name="wow_check_info">Информация об установке (%1$s)</string>
+    <string name="wow_check_info_wrong">Информация об установке (%1$s — требуется %2$s)</string>
+    <string name="wow_check_info_beta">Информация об установке (%1$s — бета, требуется обновление)</string>
+    <string name="wow_check_storage">Доступ ко всем файлам</string>
+    <string name="wow_check_login_configured">Вход Battle.net (настроен)</string>
+    <string name="wow_check_login_missing">Вход Battle.net (настройте под кнопкой Play)</string>
+    <string name="wow_check_app">Версия приложения: v%1$s</string>
+    <string name="wow_check_app_update">Версия приложения: v%1$s (доступна v%2$s)</string>
+    <string name="wow_check_client">Версия клиента: %1$s (актуальная)</string>
+    <string name="wow_check_client_update">Версия клиента: %1$s (доступно обновление %2$s)</string>
+    <string name="wow_target_path">Путь: %1$s</string>
+    <string name="wow_resolution">Разрешение: %1$s</string>
+    <string name="wow_language">Язык: %1$s</string>
+    <string name="wow_error_prefix">Ошибка: %1$s</string>
+    <string name="wow_uptime">Устройство включено %1$d дней. Примерно через 49 дней часы WoW останавливаются, экран входа становится пустым и игра не загружается. Перезагрузите устройство перед игрой.</string>
+
+    <string name="wow_game_update_title">ТРЕБУЕТСЯ ОБНОВЛЕНИЕ ИГРЫ</string>
+    <string name="wow_game_update_body">Серверам требуется сборка %1$s, но локальные файлы имеют сборку %2$s. Вход может завершиться ошибкой или отключением при выборе мира.</string>
+    <string name="wow_game_update_hint">Нажмите «Обновить», чтобы скачать новые файлы напрямую с CDN Blizzard через Wi-Fi.</string>
+    <string name="wow_app_update_title">ДОСТУПНО ОБНОВЛЕНИЕ ПРИЛОЖЕНИЯ (v%1$s)</string>
+    <string name="wow_app_update_body">На GitHub доступна новая версия. Нажмите ниже, чтобы посмотреть изменения и обновиться.</string>
+    <string name="wow_downloading_update">ЗАГРУЗКА ОБНОВЛЕНИЯ...</string>
+    <string name="wow_downloading_percent">Загрузка: %1$d%%</string>
+    <string name="wow_downloading">ЗАГРУЗКА...</string>
+    <string name="wow_install_update">УСТАНОВИТЬ ОБНОВЛЕНИЕ (v%1$s)</string>
+    <string name="wow_update_app">ОБНОВИТЬ ПРИЛОЖЕНИЕ (v%1$s)</string>
+    <string name="wow_install_now">УСТАНОВИТЬ</string>
+    <string name="wow_update_now">ОБНОВИТЬ</string>
+
+    <string name="wow_grant_storage">ПРЕДОСТАВИТЬ ДОСТУП К ФАЙЛАМ</string>
+    <string name="wow_upgrade_release">ОБНОВИТЬ ДО ПОЛНОЙ ВЕРСИИ</string>
+    <string name="wow_download_install">СКАЧАТЬ И УСТАНОВИТЬ</string>
+    <string name="wow_locate_files">УКАЗАТЬ СУЩЕСТВУЮЩИЕ ФАЙЛЫ</string>
+    <string name="wow_update_to">ОБНОВИТЬ ДО %1$s</string>
+    <string name="wow_launch_outdated">ЗАПУСТИТЬ ВСЁ РАВНО (УСТАРЕВШЕЕ)</string>
+    <string name="wow_wrong_game">ТРЕБУЕТСЯ WOW FOREVER</string>
+    <string name="wow_play">ИГРАТЬ В WORLD OF WARCRAFT</string>
+    <string name="wow_refresh">Обновить</string>
+    <string name="wow_location">Расположение</string>
+    <string name="wow_addon">Аддон</string>
+    <string name="wow_password_login">Вход по паролю</string>
+    <string name="wow_forget_login">Забыть вход</string>
+
+    <string name="wow_upgrade_dialog_title">WoW Forever запущен</string>
+    <string name="wow_upgrade_dialog_body">Blizzard перевела WoW Forever из беты в полную версию, и бета-клиент в этой папке больше не поддерживается.\n\nПолная версия находится в новой папке %1$s рядом с Data/. При обновлении ваши файлы игры используются повторно, поэтому скачивается только новый ARM64-клиент (около 100 МБ).\n\nУже скопировали полную версию с ПК? Выберите эту папку.</string>
+    <string name="wow_upgrade_now">ОБНОВИТЬ СЕЙЧАС</string>
+    <string name="wow_choose_folder">ВЫБРАТЬ ПАПКУ</string>
+    <string name="wow_later">ПОЗЖЕ</string>
+    <string name="wow_cancel">ОТМЕНА</string>
+    <string name="wow_storage_title">Требуется доступ к хранилищу</string>
+    <string name="wow_storage_body">Android требует разрешения «Доступ ко всем файлам», чтобы WoW Forever мог читать и обновлять файлы игры в этой папке.\n\nВключите «Разрешить доступ к управлению всеми файлами» на следующем экране.</string>
+    <string name="wow_open_settings">ОТКРЫТЬ НАСТРОЙКИ</string>
+    <string name="wow_app_update_dialog_title">Доступно обновление (v%1$s)</string>
+    <string name="wow_install_perm_title">Требуется разрешение на установку</string>
+    <string name="wow_install_perm_body">Android требует разрешения на установку приложений из WoW Forever.\n\nВключите «Разрешить из этого источника» на следующем экране.</string>
+
+    <string name="wow_install_card_upgrade">WOW FOREVER ЗАПУЩЕН</string>
+    <string name="wow_install_card_install">УСТАНОВИТЬ WORLD OF WARCRAFT</string>
+    <string name="wow_install_card_upgrade_body">В этой папке находится бета, которую Blizzard прекращает поддерживать. Обновление установит полную версию в папку %1$s/. Существующие файлы игры будут использованы повторно, скачается только новый клиент (около 100 МБ).</string>
+    <string name="wow_install_card_body">Скачивает ARM64-клиент и индексы архивов (около 250 МБ) с CDN Blizzard. Остальные данные загружаются по мере игры и могут превысить 50 ГБ, поэтому выберите папку с достаточным местом.</string>
+    <string name="wow_install_location">Папка установки: %1$s (свободно %2$s ГБ)</string>
+    <string name="wow_change_location">Изменить папку установки</string>
+    <string name="wow_pc_hint">Уже скопировали игру с ПК? Используйте «Указать существующие файлы» ниже.</string>
+
+    <string name="wow_resolution_native">Родное</string>
+    <string name="wow_community_title">СООБЩЕСТВО CLASSIC FOREVER</string>
+    <string name="wow_website">Сайт</string>
+    <string name="wow_discord">Discord</string>
+    <string name="wow_group_setup">Настройка</string>
+    <string name="wow_group_account">Аккаунт</string>
+</resources>
