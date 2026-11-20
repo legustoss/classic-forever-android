@@ -57,8 +57,8 @@ class AppUpdaterTest {
                 "body": "Bug fixes and improvements",
                 "assets": [
                     {
-                        "name": "WoW-Forever.apk",
-                        "browser_download_url": "https://github.com/jaredgei/wow-forever-android/releases/download/v2.1.3/WoW-Forever.apk",
+                        "name": "Classic-Forever.apk",
+                        "browser_download_url": "https://github.com/legustoss/classic-forever-android/releases/download/v2.1.3/Classic-Forever.apk",
                         "size": 160000000
                     }
                 ]
@@ -71,7 +71,7 @@ class AppUpdaterTest {
         assertEquals("2.1.3", release?.version)
         assertEquals("WoW Forever v2.1.3", release?.name)
         assertEquals("Bug fixes and improvements", release?.notes)
-        assertEquals("https://github.com/jaredgei/wow-forever-android/releases/download/v2.1.3/WoW-Forever.apk", release?.downloadUrl)
+        assertEquals("https://github.com/legustoss/classic-forever-android/releases/download/v2.1.3/Classic-Forever.apk", release?.downloadUrl)
         assertEquals(160000000L, release?.sizeBytes)
     }
 
@@ -84,8 +84,8 @@ class AppUpdaterTest {
                 "body": "Existing release",
                 "assets": [
                     {
-                        "name": "WoW-Forever.apk",
-                        "browser_download_url": "https://github.com/jaredgei/wow-forever-android/releases/download/v2.1.2/WoW-Forever.apk",
+                        "name": "Classic-Forever.apk",
+                        "browser_download_url": "https://github.com/legustoss/classic-forever-android/releases/download/v2.1.2/Classic-Forever.apk",
                         "size": 160000000
                     }
                 ]
