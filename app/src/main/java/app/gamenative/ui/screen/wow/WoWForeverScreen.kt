@@ -1374,6 +1374,15 @@ private fun prepareLaunch(context: Context, gameRoot: File, gpu: GpuProfile, scr
             applyDisplayDefaultsToActiveConfig(gameRoot, screenSize)
             markDisplayDefaultsMigrated(context)
         }
+        val activeConfig = File(gameRoot, "$FLAVOR_DIR/WTF/${ClassicForeverPatcher.CONFIG_NAME}")
+        if (activeConfig.isFile) {
+            Timber.i(
+                "Active game display config: " + activeConfig.readLines()
+                    .filter { it.startsWith("SET gxFullscreen ") || it.startsWith("SET gxFullscreenResolution ") ||
+                        it.startsWith("SET gxWindowedResolution ") || it.startsWith("SET RenderScale ") }
+                    .joinToString(" | "),
+            )
+        }
     } catch (e: Exception) {
         if (e.isPermissionDenied()) throw StorageAccessDeniedException(e)
         throw e

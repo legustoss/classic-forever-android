@@ -76,6 +76,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import app.gamenative.R
+import app.gamenative.ui.util.ScreenEffectsConfig
 import app.gamenative.ui.util.SnackbarManager
 import app.gamenative.ui.util.applyScreenEffectsConfig
 import app.gamenative.ui.util.loadScreenEffectsConfig
@@ -665,7 +666,15 @@ fun XServerScreen(
     }
 
     LaunchedEffect(xServerView?.renderer) {
-        val screenEffectsConfig = loadScreenEffectsConfig(container)
+        val loaded = loadScreenEffectsConfig(container)
+        // WoW must fill the whole surface: FIT leaves black bars whenever Android reports a slightly
+        // different aspect than the Wine desktop. Force STRETCH regardless of saved screen effects.
+        val screenEffectsConfig = if (container.id == "wow_forever") {
+            loaded.copy(scalingMode = ScreenEffectsConfig.SCALING_MODE_STRETCH)
+        } else {
+            loaded
+        }
+        Timber.i("Screen effects: scalingMode=${screenEffectsConfig.scalingMode}, container=${container.id}")
         when (val renderer = xServerView?.renderer) {
             is VulkanRenderer -> {
                 applyScreenEffectsConfig(renderer, screenEffectsConfig)
