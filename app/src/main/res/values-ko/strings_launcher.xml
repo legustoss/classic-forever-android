@@ -105,4 +105,5 @@
     <string name="wow_logs_hint">로그: logs/classic-forever.log</string>
     <string name="wow_driver_pending">GPU 미검증</string>
     <string name="wow_driver_unknown">GPU 모델 알 수 없음</string>
+    <string name="wow_play_short">플레이</string>
 </resources>

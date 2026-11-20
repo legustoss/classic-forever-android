@@ -493,7 +493,7 @@ fun WoWForeverScreen(
         LauncherLayout(
             windowSizeClass = windowSizeClass,
             foldingFeature = foldingFeature,
-            status = {
+            header = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
@@ -544,8 +544,9 @@ fun WoWForeverScreen(
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.height(20.dp))
+            },
+            status = {
+            Spacer(modifier = Modifier.height(8.dp))
 
             Card(
                 modifier = Modifier
@@ -809,7 +810,13 @@ fun WoWForeverScreen(
                             }
                         }
                         else -> PrimaryButton(
-                            text = if (files.isWrongGame) context.getString(R.string.wow_wrong_game) else context.getString(R.string.wow_play),
+                            text = if (files.isWrongGame) {
+                                context.getString(R.string.wow_wrong_game)
+                            } else if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
+                                context.getString(R.string.wow_play)
+                            } else {
+                                context.getString(R.string.wow_play_short)
+                            },
                             icon = Icons.Default.PlayArrow,
                             enabled = canPlay,
                             onClick = ::launchGame,
@@ -1270,6 +1277,7 @@ object GamePath {
 private fun LauncherLayout(
     windowSizeClass: WindowSizeClass,
     foldingFeature: FoldingFeature?,
+    header: @Composable () -> Unit,
     status: @Composable () -> Unit,
     actions: @Composable () -> Unit,
     details: @Composable () -> Unit,
@@ -1289,45 +1297,54 @@ private fun LauncherLayout(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            header()
             status()
             actions()
             details()
         }
-        WindowWidthSizeClass.Medium -> Row(
+        WindowWidthSizeClass.Medium -> Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
         ) {
-            Column(
-                modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                status()
-                actions()
-            }
-            Spacer(modifier = Modifier.width(gutter))
-            Column(modifier = Modifier.weight(0.8f).verticalScroll(rememberScrollState())) {
-                details()
+            header()
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
+                Column(
+                    modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    status()
+                    actions()
+                }
+                Spacer(modifier = Modifier.width(gutter))
+                Column(modifier = Modifier.weight(0.9f).verticalScroll(rememberScrollState())) {
+                    details()
+                }
             }
         }
-        WindowWidthSizeClass.Expanded -> Row(
+        WindowWidthSizeClass.Expanded -> Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
         ) {
-            Column(modifier = Modifier.weight(0.9f).verticalScroll(rememberScrollState())) {
-                status()
-            }
-            Spacer(modifier = Modifier.width(gutter))
-            Column(
-                modifier = Modifier.weight(1.1f).verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                actions()
-            }
-            Spacer(modifier = Modifier.width(gutter))
-            Column(modifier = Modifier.weight(0.9f).verticalScroll(rememberScrollState())) {
-                details()
+            header()
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
+                Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+                    status()
+                }
+                Spacer(modifier = Modifier.width(gutter))
+                Column(
+                    modifier = Modifier.weight(1.25f).verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    actions()
+                }
+                Spacer(modifier = Modifier.width(gutter))
+                Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+                    details()
+                }
             }
         }
     }

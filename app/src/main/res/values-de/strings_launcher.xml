@@ -105,4 +105,5 @@
     <string name="wow_logs_hint">Logs: logs/classic-forever.log</string>
     <string name="wow_driver_pending">GPU noch nicht validiert</string>
     <string name="wow_driver_unknown">GPU-Modell unbekannt</string>
+    <string name="wow_play_short">Spielen</string>
 </resources>

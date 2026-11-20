@@ -105,4 +105,5 @@
     <string name="wow_logs_hint">ログ：logs/classic-forever.log</string>
     <string name="wow_driver_pending">GPU は未検証</string>
     <string name="wow_driver_unknown">GPU モデル不明</string>
+    <string name="wow_play_short">プレイ</string>
 </resources>
