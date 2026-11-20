@@ -496,10 +496,10 @@ fun WoWForeverScreen(
             foldingFeature = foldingFeature,
             header = {
             Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(if (wide) 2.dp else 8.dp))
+                Spacer(modifier = Modifier.height(if (wide) 0.dp else 8.dp))
                 Text(
                     text = context.getString(R.string.wow_title),
-                    fontSize = if (wide) 16.sp else 24.sp,
+                    fontSize = if (wide) 14.sp else 24.sp,
                     fontWeight = FontWeight.Black,
                     fontFamily = FontFamily.Serif,
                     letterSpacing = if (wide) 2.sp else 3.sp,
@@ -509,24 +509,24 @@ fun WoWForeverScreen(
                 )
                 Text(
                     text = context.getString(R.string.wow_subtitle),
-                    fontSize = if (wide) 9.sp else 12.sp,
+                    fontSize = if (wide) 8.sp else 12.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = if (wide) 1.sp else 2.sp,
                     color = WowNeon,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Spacer(modifier = Modifier.height(if (wide) 2.dp else 6.dp))
+                Spacer(modifier = Modifier.height(if (wide) 0.dp else 6.dp))
                 Text(
                     text = context.getString(R.string.wow_edition, gpu.edition),
-                    fontSize = if (wide) 8.sp else 11.sp,
+                    fontSize = if (wide) 7.sp else 11.sp,
                     color = WowSubtle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = context.getString(R.string.wow_check_app, BuildConfig.VERSION_NAME),
-                    fontSize = if (wide) 8.sp else 10.sp,
+                    fontSize = if (wide) 7.sp else 10.sp,
                     color = WowSubtle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -542,7 +542,7 @@ fun WoWForeverScreen(
                     )
                     Text(
                         text = "${gpu.compatibility.gpuModel}: $warning",
-                        fontSize = if (wide) 8.sp else 11.sp,
+                        fontSize = if (wide) 7.sp else 11.sp,
                         color = WowNeon,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.Center,
@@ -553,7 +553,7 @@ fun WoWForeverScreen(
             }
             },
             status = {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(if (wide) 0.dp else 8.dp))
 
             Card(
                 modifier = Modifier
@@ -563,11 +563,11 @@ fun WoWForeverScreen(
                 colors = CardDefaults.cardColors(containerColor = WowPanel.copy(alpha = 0.85f)),
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Column(modifier = Modifier.padding(if (wide) 12.dp else 20.dp)) {
+                Column(modifier = Modifier.padding(if (wide) 8.dp else 20.dp)) {
                     SectionTitle(context.getString(R.string.wow_readiness), WowNeon, dense = wide)
-                    Spacer(modifier = Modifier.height(if (wide) 8.dp else 14.dp))
+                    Spacer(modifier = Modifier.height(if (wide) 4.dp else 14.dp))
 
-                    Column(verticalArrangement = Arrangement.spacedBy(if (wide) 5.dp else 8.dp)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(if (wide) 3.dp else 8.dp)) {
                         CheckItem(label = if (files.exeExists) context.getString(R.string.wow_check_arm64, EXE_NAME) else context.getString(R.string.wow_check_arm64_download), ready = files.exeExists, dense = wide)
                         CheckItem(label = context.getString(R.string.wow_check_data), ready = files.dataExists, dense = wide)
                         CheckItem(
@@ -593,11 +593,11 @@ fun WoWForeverScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(if (wide) 6.dp else 16.dp))
                     HorizontalDivider(color = WowBorder)
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(if (wide) 4.dp else 12.dp))
 
-                    Text(text = context.getString(R.string.wow_target_path, gamePath), fontSize = 11.sp, color = WowSubtle, maxLines = 2)
+                    Text(text = context.getString(R.string.wow_target_path, gamePath), fontSize = if (wide) 9.sp else 11.sp, color = WowSubtle, maxLines = 2)
 
                     longUptimeDays()?.let { days ->
                         Spacer(modifier = Modifier.height(10.dp))
@@ -1308,14 +1308,14 @@ private fun LauncherLayout(
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.safeDrawing)
-                .padding(16.dp),
+                .padding(10.dp),
         ) {
             header()
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 Column(
-                    modifier = Modifier.weight(1.15f).verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.weight(1.15f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     status()
                     notices()
@@ -1530,12 +1530,12 @@ private fun CheckItem(label: String, ready: Boolean, dense: Boolean = false) {
             imageVector = if (ready) Icons.Default.CheckCircle else Icons.Default.Warning,
             contentDescription = null,
             tint = if (ready) WowNeon else WowSubtle,
-            modifier = Modifier.size(if (dense) 13.dp else 18.dp)
+            modifier = Modifier.size(if (dense) 11.dp else 18.dp)
         )
         Spacer(modifier = Modifier.width(if (dense) 6.dp else 10.dp))
         Text(
             text = label,
-            fontSize = if (dense) 10.sp else 13.sp,
+            fontSize = if (dense) 9.sp else 13.sp,
             color = if (ready) WowNeonDim else WowSubtle,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
