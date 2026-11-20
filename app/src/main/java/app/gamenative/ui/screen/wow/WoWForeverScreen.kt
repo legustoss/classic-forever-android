@@ -234,6 +234,7 @@ fun WoWForeverScreen(
         launchJob = scope.launch {
             try {
                 val screenSize = resolveScreenSize(context, resolution)
+                Timber.i("WoW screen size: $screenSize (resolution option: ${resolution.name})")
                 val containerId = withContext(Dispatchers.IO) {
                     prepareLaunch(context, File(gamePath), gpu, screenSize) { msg ->
                         scope.launch(Dispatchers.Main) { statusText = msg }
@@ -986,6 +987,21 @@ fun WoWForeverScreen(
 private fun prefs(context: Context) = context.getSharedPreferences("wow_forever", Context.MODE_PRIVATE)
 
 /**
+ * Bump when the display defaults change. Installs that were created by an older version keep their
+ * resolution/RenderScale, but they get the new defaults exactly once — without touching any later
+ * changes the player makes in-game.
+ */
+private const val DISPLAY_DEFAULTS_VERSION = 2
+private const val KEY_DISPLAY_DEFAULTS_VERSION = "display_defaults_version"
+
+private fun displayDefaultsNeedMigration(context: Context): Boolean =
+    prefs(context).getInt(KEY_DISPLAY_DEFAULTS_VERSION, 0) != DISPLAY_DEFAULTS_VERSION
+
+private fun markDisplayDefaultsMigrated(context: Context) {
+    prefs(context).edit().putInt(KEY_DISPLAY_DEFAULTS_VERSION, DISPLAY_DEFAULTS_VERSION).apply()
+}
+
+/**
  * Wine's tick count follows the device's uptime, and once it passes 2^32 ms (about 49.7 days) WoW's frame time stops
  * advancing: the login UI never fades in and auto-login never starts (#36). A restart fixes it, so the launcher says so.
  */
@@ -1294,24 +1310,41 @@ private fun fitScreenSizeToWindow(context: Context, baseSize: String): String {
     return fitScreenSize(baseSize, windowWidth, windowHeight)
 }
 
-/** Full device/window resolution in pixels, rounded to an even size for the container. */
+/**
+ * Full display resolution in landscape orientation, rounded to an even size.
+ *
+ * `currentWindowMetrics` can report the launcher's portrait window (or a letterboxed window), which
+ * used to give the game a portrait desktop like 1280x2772. The game always runs in landscape, so
+ * take the maximum display metrics and put the long edge first.
+ */
+internal fun nativeScreenSize(pixelWidth: Int, pixelHeight: Int): String {
+    if (pixelWidth <= 0 || pixelHeight <= 0) return "1920x1080"
+    val width = maxOf(pixelWidth, pixelHeight)
+    val height = minOf(pixelWidth, pixelHeight)
+    return "${(width / 2f).roundToInt() * 2}x${(height / 2f).roundToInt() * 2}"
+}
+
 private fun nativeScreenSize(context: Context): String {
     val (width, height) = windowSize(context)
-    if (width <= 0 || height <= 0) return "1920x1080"
-    return "${(width / 2f).roundToInt() * 2}x${(height / 2f).roundToInt() * 2}"
+    return nativeScreenSize(width, height)
 }
 
 private fun resolveScreenSize(context: Context, resolution: RenderResolution): String =
     if (resolution == RenderResolution.NATIVE) nativeScreenSize(context)
     else fitScreenSizeToWindow(context, resolution.size)
 
-private fun windowSize(context: Context): Pair<Int, Int> =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        context.getSystemService(WindowManager::class.java).currentWindowMetrics.bounds.let { it.width() to it.height() }
+/** The whole display, independent of the current window orientation, insets or multi-window mode. */
+private fun windowSize(context: Context): Pair<Int, Int> {
+    val wm = context.getSystemService(WindowManager::class.java)
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        wm.maximumWindowMetrics.bounds.let { it.width() to it.height() }
     } else {
         @Suppress("DEPRECATION")
-        context.resources.displayMetrics.let { it.widthPixels to it.heightPixels }
+        val metrics = android.util.DisplayMetrics()
+        wm.defaultDisplay.getRealMetrics(metrics)
+        metrics.widthPixels to metrics.heightPixels
     }
+}
 
 internal fun fitScreenSize(baseSize: String, windowWidth: Int, windowHeight: Int): String {
     if (windowWidth <= 0 || windowHeight <= 0) return baseSize
@@ -1326,9 +1359,14 @@ private fun prepareLaunch(context: Context, gameRoot: File, gpu: GpuProfile, scr
     installBundledComponents(context, onStatus)
 
     check(File(gameRoot, BUILD_INFO).exists()) { "Missing $BUILD_INFO in $gameRoot. Copy it from your WoW install." }
+    val migrateDisplay = displayDefaultsNeedMigration(context)
     try {
-        ensureGameConfig(gameRoot, screenSize)
+        ensureGameConfig(gameRoot, screenSize, forceDisplayDefaults = migrateDisplay)
         ClassicForeverPatcher.configure(gameRoot)
+        if (migrateDisplay) {
+            applyDisplayDefaultsToActiveConfig(gameRoot, screenSize)
+            markDisplayDefaultsMigrated(context)
+        }
     } catch (e: Exception) {
         if (e.isPermissionDenied()) throw StorageAccessDeniedException(e)
         throw e
@@ -1426,7 +1464,7 @@ private val CONFIG_DEFAULTS = linkedMapOf(
     "accessibilityScreenNarrationEnabled" to "\"0\"",
 )
 
-internal fun ensureGameConfig(root: File, screenSize: String) {
+internal fun ensureGameConfig(root: File, screenSize: String, forceDisplayDefaults: Boolean = false) {
     val flavorDir = File(root, FLAVOR_DIR)
     flavorDir.mkdirs()
     val flavorInfo = File(flavorDir, ".flavor.info")
@@ -1452,13 +1490,8 @@ internal fun ensureGameConfig(root: File, screenSize: String) {
         configWtf.writeText(CONFIG_DEFAULTS.entries.joinToString("\n") { "SET ${it.key} ${it.value}" } + "\n")
     }
 
-    if (firstRun) {
-        val lines = configWtf.readLines().toMutableList()
-        RESOLUTION_KEYS.forEach { key ->
-            lines.removeAll { it.startsWith("SET $key ", ignoreCase = true) }
-            lines += "SET $key \"$screenSize\""
-        }
-        configWtf.writeText(lines.joinToString("\n") + "\n")
+    if (firstRun || forceDisplayDefaults) {
+        configWtf.writeText(displayDefaults(configWtf.readLines(), screenSize).joinToString("\n") + "\n")
     }
 
     val forced = mapOf("gxApi" to CONFIG_DEFAULTS.getValue("gxApi"))
@@ -1471,6 +1504,20 @@ internal fun ensureGameConfig(root: File, screenSize: String) {
 }
 
 private val RESOLUTION_KEYS = listOf("gxFullscreenResolution", "gxWindowedResolution")
+
+/** Replaces only the display defaults, leaving every other player setting untouched. */
+private fun displayDefaults(lines: List<String>, screenSize: String): List<String> {
+    val keys = RESOLUTION_KEYS + "RenderScale"
+    val kept = lines.filterNot { line -> keys.any { line.startsWith("SET $it ", ignoreCase = true) } }
+    return kept + RESOLUTION_KEYS.map { "SET $it \"$screenSize\"" } + "SET RenderScale \"0.5\""
+}
+
+/** The client actually loads BetaSuspendedTest.wtf, so a one-time migration must update it too. */
+private fun applyDisplayDefaultsToActiveConfig(root: File, screenSize: String) {
+    val active = File(root, "$FLAVOR_DIR/WTF/${ClassicForeverPatcher.CONFIG_NAME}")
+    if (!active.isFile) return
+    active.writeText(displayDefaults(active.readLines(), screenSize).joinToString("\n") + "\n")
+}
 
 private const val CONFIG_WTF = "$FLAVOR_DIR/WTF/Config.wtf"
 

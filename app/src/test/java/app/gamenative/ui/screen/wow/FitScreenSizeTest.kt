@@ -34,4 +34,11 @@ class FitScreenSizeTest {
     fun unknownWindow_keepsBaseSize() {
         assertEquals("1280x720", fitScreenSize("1280x720", 0, 0))
     }
+
+    @Test
+    fun nativeResolution_isLandscapeAndEven() {
+        assertEquals("2772x1280", nativeScreenSize(1280, 2772))
+        assertEquals("2772x1280", nativeScreenSize(2772, 1280))
+        assertEquals("1920x1080", nativeScreenSize(0, 0))
+    }
 }

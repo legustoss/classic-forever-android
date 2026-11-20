@@ -56,4 +56,15 @@ class GameConfigTest {
         assertTrue(lines.contains("SET gxWindowedResolution \"1280x720\""))
         assertTrue(lines.contains("SET RenderScale \"0.8\""))
     }
+
+    @Test
+    fun forcedMigration_reseedsDisplayOnly() {
+        val root = install("us", "SET gxFullscreenResolution \"2120x978\"\nSET gxWindowedResolution \"2120x978\"\nSET RenderScale \"1\"\nSET gxApi \"D3D11\"\n")
+        ensureGameConfig(root, "2772x1280", forceDisplayDefaults = true)
+        val lines = configWtf(root).readLines()
+        assertTrue(lines.contains("SET gxFullscreenResolution \"2772x1280\""))
+        assertTrue(lines.contains("SET gxWindowedResolution \"2772x1280\""))
+        assertTrue(lines.contains("SET RenderScale \"0.5\""))
+        assertTrue(lines.contains("SET gxApi \"D3D11\""))
+    }
 }
