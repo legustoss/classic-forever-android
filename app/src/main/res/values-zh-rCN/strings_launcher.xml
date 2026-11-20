@@ -103,4 +103,6 @@
     <string name="wow_section_updates">更新</string>
     <string name="wow_status_patcher">补丁器</string>
     <string name="wow_logs_hint">日志：logs/classic-forever.log</string>
+    <string name="wow_driver_pending">GPU 尚未验证</string>
+    <string name="wow_driver_unknown">GPU 型号未知</string>
 </resources>

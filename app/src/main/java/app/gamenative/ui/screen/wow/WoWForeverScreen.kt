@@ -80,6 +80,9 @@ import app.gamenative.utils.AppUpdater
 import app.gamenative.utils.ClientCompatibility
 import app.gamenative.utils.ClassicForeverPatcher
 import app.gamenative.utils.ClientVersionChecker
+import app.gamenative.utils.DeviceCompatibility
+import app.gamenative.utils.DeviceCompatibilityResult
+import app.gamenative.utils.DeviceStatus
 import app.gamenative.utils.LocaleHelper
 import app.gamenative.utils.Net
 import app.gamenative.utils.ServerStatus
@@ -127,9 +130,8 @@ fun WoWForeverScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val gpu = remember { GpuProfile.detect(context) }
-
     var gamePath by remember { mutableStateOf(GamePath.load(context)) }
+    val gpu = remember(gamePath) { GpuProfile.detect(context, File(gamePath)) }
     var files by remember { mutableStateOf(GamePath.Status()) }
     var isLaunching by remember { mutableStateOf(false) }
     var launchJob by remember { mutableStateOf<Job?>(null) }
@@ -522,6 +524,25 @@ fun WoWForeverScreen(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
+                if (gpu.compatibility.status != DeviceStatus.VALIDATED) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    val warning = context.getString(
+                        if (gpu.compatibility.status == DeviceStatus.UNKNOWN) {
+                            R.string.wow_driver_unknown
+                        } else {
+                            R.string.wow_driver_pending
+                        },
+                    )
+                    Text(
+                        text = "${gpu.compatibility.gpuModel}: $warning",
+                        fontSize = 11.sp,
+                        color = WowNeon,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -1535,26 +1556,31 @@ private class StorageAccessDeniedException(cause: Throwable) : Exception(cause)
 private fun Throwable.isPermissionDenied() =
     message?.let { "EPERM" in it || "Operation not permitted" in it } == true
 
-private const val DEFAULT_DRIVER = "Turnip-WoW-scheduler-test"
-private const val ADRENO_8XX_DRIVER = "Turnip-V32-RP6sched"
+private const val DEFAULT_DRIVER = DeviceCompatibility.DRIVER_740
+private const val ADRENO_8XX_DRIVER = DeviceCompatibility.DRIVER_8XX
 private const val PROTON_VERSION = "proton-11.0-90624-arm64ec"
 private const val DXVK_VERSION = "2.4.1-wow-aarch64-test"
 
-private data class GpuProfile(val driver: String, val tuDebug: String, val screenSize: String, val label: String, val edition: String) {
+private data class GpuProfile(
+    val driver: String,
+    val tuDebug: String,
+    val screenSize: String,
+    val label: String,
+    val edition: String,
+    val compatibility: DeviceCompatibilityResult,
+) {
     companion object {
-        fun detect(context: Context) = if (isAdreno8xxDevice(context)) {
-            GpuProfile(ADRENO_8XX_DRIVER, "noconform,sysmem", "1280x720", "Adreno 8xx", "Snapdragon 8 Elite / Adreno 8xx")
-        } else {
-            GpuProfile(DEFAULT_DRIVER, "noconform", "1920x1080", "Adreno 740", "Snapdragon 8 Series / Adreno 740")
-        }
-
-        private fun isAdreno8xxDevice(context: Context): Boolean {
-            if (GPUInformation.isAdreno8Elite(context)) return true
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                val soc = Build.SOC_MODEL
-                if (listOf("SM8735", "SM8750", "SM8845", "SM8850").any { soc.contains(it, ignoreCase = true) }) return true
-            }
-            return Build.HARDWARE.contains("sun", ignoreCase = true)
+        fun detect(context: Context, gameRoot: File): GpuProfile {
+            val result = DeviceCompatibility.detect(context, gameRoot)
+            val is8xx = result.driverId == DeviceCompatibility.DRIVER_8XX
+            return GpuProfile(
+                driver = result.driverId,
+                tuDebug = if (is8xx) "noconform,sysmem" else "noconform",
+                screenSize = if (is8xx) "1280x720" else "1920x1080",
+                label = result.gpuModel,
+                edition = if (is8xx) "Snapdragon 8 Elite / Adreno 8xx" else "Snapdragon 8 Series / Adreno 7xx",
+                compatibility = result,
+            )
         }
     }
 }

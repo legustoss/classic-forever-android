@@ -103,4 +103,6 @@
     <string name="wow_section_updates">업데이트</string>
     <string name="wow_status_patcher">패처</string>
     <string name="wow_logs_hint">로그: logs/classic-forever.log</string>
+    <string name="wow_driver_pending">GPU 미검증</string>
+    <string name="wow_driver_unknown">GPU 모델 알 수 없음</string>
 </resources>

@@ -103,4 +103,6 @@
     <string name="wow_section_updates">Atualizações</string>
     <string name="wow_status_patcher">Patch</string>
     <string name="wow_logs_hint">Logs: logs/classic-forever.log</string>
+    <string name="wow_driver_pending">GPU ainda não validado</string>
+    <string name="wow_driver_unknown">Modelo de GPU desconhecido</string>
 </resources>
