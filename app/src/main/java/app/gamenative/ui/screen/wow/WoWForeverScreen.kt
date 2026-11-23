@@ -1296,6 +1296,7 @@ private fun LauncherLayout(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 header()
@@ -1314,14 +1315,14 @@ private fun LauncherLayout(
             Spacer(modifier = Modifier.height(4.dp))
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 Column(
-                    modifier = Modifier.weight(1.15f),
+                    modifier = Modifier.weight(1.15f).fillMaxHeight(),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     status()
                     notices()
                 }
                 Spacer(modifier = Modifier.width(gutter))
-                Column(modifier = Modifier.weight(0.85f)) {
+                Column(modifier = Modifier.weight(0.85f).fillMaxHeight()) {
                     Spacer(modifier = Modifier.weight(1f))
                     details()
                     Spacer(modifier = Modifier.height(16.dp))
