@@ -1,0 +1,44 @@
+name: Device report
+description: Report validation or problems on a specific device/GPU
+title: "[Device]: "
+labels: ["device"]
+body:
+  - type: input
+    id: device
+    attributes:
+      label: Device and SoC
+      placeholder: "Poco F7 / Snapdragon 8s Gen 4"
+    validations:
+      required: true
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU model
+      placeholder: "Adreno 825"
+    validations:
+      required: true
+  - type: input
+    id: android
+    attributes:
+      label: Android version
+    validations:
+      required: true
+  - type: input
+    id: driver
+    attributes:
+      label: Driver from Device compatibility log
+      placeholder: "Turnip-V32-RP6sched, PENDING_VALIDATION"
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: In-game result
+      description: "Did it reach the game world? Any visual artifacts or low FPS?"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      render: shell
