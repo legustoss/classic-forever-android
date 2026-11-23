@@ -106,4 +106,5 @@
     <string name="wow_driver_pending">GPU non encore validé</string>
     <string name="wow_driver_unknown">Modèle GPU inconnu</string>
     <string name="wow_play_short">Jouer</string>
+    <string name="wow_back">Retour</string>
 </resources>

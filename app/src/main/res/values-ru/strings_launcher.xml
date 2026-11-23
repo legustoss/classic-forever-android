@@ -106,4 +106,5 @@
     <string name="wow_driver_pending">GPU ещё не проверен</string>
     <string name="wow_driver_unknown">Модель GPU неизвестна</string>
     <string name="wow_play_short">Играть</string>
+    <string name="wow_back">Назад</string>
 </resources>

@@ -106,4 +106,5 @@
     <string name="wow_driver_pending">GPU は未検証</string>
     <string name="wow_driver_unknown">GPU モデル不明</string>
     <string name="wow_play_short">プレイ</string>
+    <string name="wow_back">戻る</string>
 </resources>
