@@ -1,7 +1,7 @@
 <resources>
     <string name="wow_ready">Готово к запуску</string>
     <string name="wow_preparing">Подготовка компонентов...</string>
-    <string name="wow_booting">Запуск World of Warcraft...</string>
+    <string name="wow_booting">Запуск</string>
     <string name="wow_launch_failed">Не удалось запустить</string>
     <string name="wow_connecting_cdn">Подключение к CDN Blizzard...</string>
     <string name="wow_checking_updates">Проверка обновлений игры...</string>
@@ -15,7 +15,7 @@
     <string name="wow_title">WORLD OF WARCRAFT</string>
     <string name="wow_subtitle">FOREVER (ARM64 NATIVE)</string>
     <string name="wow_edition">Издание %1$s</string>
-    <string name="wow_readiness">ГОТОВНОСТЬ СРЕДЫ</string>
+    <string name="wow_readiness">ГОТОВНОСТЬ ЗАПУСКА</string>
     <string name="wow_check_arm64">ARM64-клиент (%1$s)</string>
     <string name="wow_check_arm64_download">ARM64-клиент (скачается при запуске)</string>
     <string name="wow_check_data">Архивы игры (Data/)</string>
@@ -23,8 +23,8 @@
     <string name="wow_check_info_wrong">Информация об установке (%1$s — требуется %2$s)</string>
     <string name="wow_check_info_beta">Информация об установке (%1$s — бета, требуется обновление)</string>
     <string name="wow_check_storage">Доступ ко всем файлам</string>
-    <string name="wow_check_login_configured">Вход Battle.net (настроен)</string>
-    <string name="wow_check_login_missing">Вход Battle.net (настройте под кнопкой Play)</string>
+    <string name="wow_check_login_configured">Вход (Настроен)</string>
+    <string name="wow_check_login_missing">Вход (настройте под кнопкой Play)</string>
     <string name="wow_check_app">Версия приложения: v%1$s</string>
     <string name="wow_check_app_update">Версия приложения: v%1$s (доступна v%2$s)</string>
     <string name="wow_check_client">Версия клиента: %1$s (актуальная)</string>
@@ -55,7 +55,7 @@
     <string name="wow_update_to">ОБНОВИТЬ ДО %1$s</string>
     <string name="wow_launch_outdated">ЗАПУСТИТЬ ВСЁ РАВНО (УСТАРЕВШЕЕ)</string>
     <string name="wow_wrong_game">ТРЕБУЕТСЯ WOW FOREVER</string>
-    <string name="wow_play">ИГРАТЬ В WORLD OF WARCRAFT</string>
+    <string name="wow_play">ИГРАТЬ</string>
     <string name="wow_refresh">Обновить</string>
     <string name="wow_location">Расположение</string>
     <string name="wow_addon">Аддон</string>
@@ -76,7 +76,7 @@
     <string name="wow_install_perm_body">Android требует разрешения на установку приложений из WoW Forever.\n\nВключите «Разрешить из этого источника» на следующем экране.</string>
 
     <string name="wow_install_card_upgrade">WOW FOREVER ЗАПУЩЕН</string>
-    <string name="wow_install_card_install">УСТАНОВИТЬ WORLD OF WARCRAFT</string>
+    <string name="wow_install_card_install">УСТАНОВИТЬ</string>
     <string name="wow_install_card_upgrade_body">В этой папке находится бета, которую Blizzard прекращает поддерживать. Обновление установит полную версию в папку %1$s/. Существующие файлы игры будут использованы повторно, скачается только новый клиент (около 100 МБ).</string>
     <string name="wow_install_card_body">Скачивает ARM64-клиент и индексы архивов (около 250 МБ) с CDN Blizzard. Остальные данные загружаются по мере игры и могут превысить 50 ГБ, поэтому выберите папку с достаточным местом.</string>
     <string name="wow_install_location">Папка установки: %1$s (свободно %2$s ГБ)</string>
@@ -103,7 +103,7 @@
     <string name="wow_section_updates">Обновления</string>
     <string name="wow_status_patcher">Патчер</string>
     <string name="wow_logs_hint">Логи: logs/classic-forever.log</string>
-    <string name="wow_driver_pending">GPU ещё не проверен</string>
+    <string name="wow_driver_pending">GPU ещё не протестирован</string>
     <string name="wow_driver_unknown">Модель GPU неизвестна</string>
     <string name="wow_play_short">Играть</string>
     <string name="wow_back">Назад</string>

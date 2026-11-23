@@ -24,8 +24,8 @@
     <string name="wow_check_info_wrong">Install Info (%1$s - requires %2$s)</string>
     <string name="wow_check_info_beta">Install Info (%1$s - beta, upgrade required)</string>
     <string name="wow_check_storage">All Files Access Permission</string>
-    <string name="wow_check_login_configured">Battle.net Login (Configured)</string>
-    <string name="wow_check_login_missing">Battle.net Login (Configure below play button)</string>
+    <string name="wow_check_login_configured">Login (Configured)</string>
+    <string name="wow_check_login_missing">Login (Configure below play button)</string>
     <string name="wow_check_app">App Build: v%1$s</string>
     <string name="wow_check_app_update">App Build: v%1$s (v%2$s available)</string>
     <string name="wow_check_client">Client Build: %1$s (Up to date)</string>
