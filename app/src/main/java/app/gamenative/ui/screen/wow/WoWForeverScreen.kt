@@ -505,123 +505,120 @@ fun WoWForeverScreen(
         windowSizeClass = windowSizeClass,
         foldingFeature = foldingFeature,
         scrollState = scrollState,
+        fullBleed = wide && screen == LauncherScreen.MAIN,
     ) {
         when (screen) {
             LauncherScreen.MAIN -> {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Spacer(modifier = Modifier.height(if (wide) 0.dp else 8.dp))
-                    Text(
-                        text = context.getString(R.string.wow_title),
-                        fontSize = if (wide) 16.sp else 24.sp,
-                        fontWeight = FontWeight.Black,
-                        fontFamily = FontFamily.Serif,
-                        letterSpacing = if (wide) 2.sp else 3.sp,
-                        color = WowNeon,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Text(
-                        text = context.getString(R.string.wow_subtitle),
-                        fontSize = if (wide) 8.sp else 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = if (wide) 1.sp else 2.sp,
-                        color = WowNeon,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Spacer(modifier = Modifier.height(if (wide) 0.dp else 6.dp))
-                    Text(
-                        text = context.getString(R.string.wow_edition, gpu.edition),
-                        fontSize = if (wide) 8.sp else 11.sp,
-                        color = WowSubtle,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    if (gpu.compatibility.status != DeviceStatus.VALIDATED) {
-                        Spacer(modifier = Modifier.height(4.dp))
-                        val warning = context.getString(
-                            if (gpu.compatibility.status == DeviceStatus.UNKNOWN) {
-                                R.string.wow_driver_unknown
-                            } else {
-                                R.string.wow_driver_pending
-                            },
-                        )
+                val clientVersion = versionStatus?.let { version ->
+                    if (version.isOutdated) {
+                        context.getString(R.string.wow_check_client_update, version.localVersion, version.remoteVersion)
+                    } else {
+                        context.getString(R.string.wow_check_client, version.localVersion)
+                    }
+                } ?: context.getString(R.string.wow_client_unknown)
+                val appVersion = appUpdate?.let { context.getString(R.string.wow_check_app_update, BuildConfig.VERSION_NAME, it.version) }
+                    ?: context.getString(R.string.wow_check_app, BuildConfig.VERSION_NAME)
+
+                val actionControls: @Composable () -> Unit = {
+                    if (isLaunching || isUpdating || (isCheckingVersion && WoWLauncherState.shouldAutoLaunch)) {
+                        CircularProgressIndicator(color = WowNeon, modifier = Modifier.size(32.dp))
                         Text(
-                            text = "${gpu.compatibility.gpuModel}: $warning",
-                            fontSize = if (wide) 8.sp else 11.sp,
-                            color = WowNeon,
-                            fontWeight = FontWeight.Medium,
+                            text = when {
+                                isUpdating -> updateStatusText
+                                isLaunching -> statusText
+                                else -> context.getString(R.string.wow_checking_updates)
+                            },
+                            fontSize = 12.sp,
+                            color = WowNeonDim,
                             textAlign = TextAlign.Center,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
                         )
+                    } else {
+                        PrimaryButton(
+                            text = context.getString(R.string.wow_play),
+                            icon = Icons.Default.PlayArrow,
+                            enabled = canPlay,
+                            onClick = ::launchGame,
+                        )
+                        OutlinedButton(
+                            onClick = { screen = LauncherScreen.SETTINGS },
+                            enabled = !isLaunching && !isUpdating,
+                            modifier = Modifier.fillMaxWidth().height(42.dp),
+                            shape = RoundedCornerShape(14.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
+                            border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
+                        ) {
+                            Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(context.getString(R.string.wow_settings), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
 
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .neonGlow()
-                        .border(1.dp, WowBorder, RoundedCornerShape(16.dp)),
-                    colors = CardDefaults.cardColors(containerColor = WowPanel.copy(alpha = 0.85f)),
-                    shape = RoundedCornerShape(16.dp),
-                ) {
+                if (wide) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.align(Alignment.CenterStart).widthIn(max = 360.dp),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
+                        Text(
+                            text = context.getString(R.string.wow_title),
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Black,
+                            fontFamily = FontFamily.Serif,
+                            letterSpacing = 2.sp,
+                            color = WowNeon,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(
+                            text = context.getString(R.string.wow_subtitle),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 2.sp,
+                            color = WowNeon,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    Box(modifier = Modifier.align(Alignment.TopEnd)) {
+                        CommunityCard(serverStatus, compact = true)
+                    }
+                    Column(
+                        modifier = Modifier.align(Alignment.BottomEnd).widthIn(max = 280.dp),
+                        horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
-                        val clientVersion = versionStatus?.let { version ->
-                            if (version.isOutdated) {
-                                context.getString(R.string.wow_check_client_update, version.localVersion, version.remoteVersion)
-                            } else {
-                                context.getString(R.string.wow_check_client, version.localVersion)
-                            }
-                        } ?: context.getString(R.string.wow_client_unknown)
-                        val appVersion = appUpdate?.let { context.getString(R.string.wow_check_app_update, BuildConfig.VERSION_NAME, it.version) }
-                            ?: context.getString(R.string.wow_check_app, BuildConfig.VERSION_NAME)
-                        Text(clientVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Text(appVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.End, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Text(clientVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.End, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        actionControls()
+                    }
+                } else {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Text(
+                            text = context.getString(R.string.wow_title),
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Black,
+                            fontFamily = FontFamily.Serif,
+                            letterSpacing = 3.sp,
+                            color = WowNeon,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(
+                            text = context.getString(R.string.wow_subtitle),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 2.sp,
+                            color = WowNeon,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                         Text(appVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis)
-
-                        if (isLaunching || isUpdating || (isCheckingVersion && WoWLauncherState.shouldAutoLaunch)) {
-                            CircularProgressIndicator(color = WowNeon, modifier = Modifier.size(32.dp))
-                            Text(
-                                text = when {
-                                    isUpdating -> updateStatusText
-                                    isLaunching -> statusText
-                                    else -> context.getString(R.string.wow_checking_updates)
-                                },
-                                fontSize = 12.sp,
-                                color = WowNeonDim,
-                                textAlign = TextAlign.Center,
-                            )
-                        } else {
-                            PrimaryButton(
-                                text = context.getString(R.string.wow_play),
-                                icon = Icons.Default.PlayArrow,
-                                enabled = canPlay,
-                                onClick = ::launchGame,
-                            )
-                            OutlinedButton(
-                                onClick = { screen = LauncherScreen.SETTINGS },
-                                enabled = !isLaunching && !isUpdating,
-                                modifier = Modifier.fillMaxWidth().height(42.dp),
-                                shape = RoundedCornerShape(14.dp),
-                                colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
-                                border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
-                            ) {
-                                Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(18.dp))
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(context.getString(R.string.wow_settings), fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                            }
-                        }
-
-                        HorizontalDivider(color = WowBorder)
+                        Text(clientVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        actionControls()
                         CommunityCard(serverStatus, compact = true)
                     }
                 }
@@ -1188,7 +1185,8 @@ private fun LauncherLayout(
     windowSizeClass: WindowSizeClass,
     foldingFeature: FoldingFeature?,
     scrollState: androidx.compose.foundation.ScrollState,
-    content: @Composable () -> Unit,
+    fullBleed: Boolean = false,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     // One narrow, centred column at every size: the old two-column layout could not fit
     // the update controls on a landscape handheld. Breakpoints only tune the max width.
@@ -1207,24 +1205,26 @@ private fun LauncherLayout(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(WowBackgroundGradient)),
+            .background(Brush.verticalGradient(WowBackgroundGradient))
+            .windowInsetsPadding(WindowInsets.safeDrawing),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.safeDrawing)
-                .widthIn(max = maxWidth)
-                .verticalScroll(scrollState)
-                .padding(horizontal = 16.dp + hinge / 2, vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
+        if (fullBleed) {
+            Box(modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp + hinge / 2, vertical = 16.dp)) {
                 content()
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .widthIn(max = maxWidth)
+                    .verticalScroll(scrollState)
+                    .padding(horizontal = 16.dp + hinge / 2, vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    content()
+                }
             }
         }
     }
@@ -1311,59 +1311,49 @@ private fun CommunityCard(status: ServerStatus, compact: Boolean = false) {
     fun open(url: String) {
         runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
     }
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, WowBorder, RoundedCornerShape(16.dp)),
-        colors = CardDefaults.cardColors(containerColor = WowPanel.copy(alpha = 0.85f)),
-        shape = RoundedCornerShape(16.dp),
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(
-            modifier = Modifier.padding(if (compact) 10.dp else 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        if (!compact) SectionTitle(context.getString(R.string.wow_community_title), WowNeon)
+        Spacer(modifier = Modifier.height(if (compact) 0.dp else 12.dp))
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (!compact) SectionTitle(context.getString(R.string.wow_community_title), WowNeon)
-            Spacer(modifier = Modifier.height(if (compact) 0.dp else 12.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
+            OutlinedButton(
+                onClick = { open("http://classicforever.duckdns.org/") },
+                modifier = Modifier.size(44.dp),
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(0.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
+                border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
             ) {
-                OutlinedButton(
-                    onClick = { open("http://classicforever.duckdns.org/") },
-                    modifier = Modifier.size(44.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
-                    border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
-                ) {
-                    Icon(Icons.Default.Public, contentDescription = context.getString(R.string.wow_website), modifier = Modifier.size(20.dp))
-                }
-                Spacer(modifier = Modifier.width(12.dp))
-                OutlinedButton(
-                    onClick = { open("https://discord.gg/zBmq68jby") },
-                    modifier = Modifier.size(44.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
-                    border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
-                ) {
-                    Icon(Icons.Default.Forum, contentDescription = context.getString(R.string.wow_discord), modifier = Modifier.size(20.dp))
-                }
+                Icon(Icons.Default.Public, contentDescription = context.getString(R.string.wow_website), modifier = Modifier.size(20.dp))
             }
-            Spacer(modifier = Modifier.height(6.dp))
-            val label = when (status.kind) {
-                ServerStatusKind.DISCORD_ONLINE -> context.getString(R.string.wow_status_discord_online)
-                ServerStatusKind.IN_GAME_ONLINE -> context.getString(R.string.wow_status_ingame_online)
-                ServerStatusKind.UNKNOWN -> context.getString(R.string.wow_status_unknown)
+            Spacer(modifier = Modifier.width(12.dp))
+            OutlinedButton(
+                onClick = { open("https://discord.gg/zBmq68jby") },
+                modifier = Modifier.size(44.dp),
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(0.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
+                border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
+            ) {
+                Icon(Icons.Default.Forum, contentDescription = context.getString(R.string.wow_discord), modifier = Modifier.size(20.dp))
             }
-            val text = if (status.kind != ServerStatusKind.UNKNOWN && status.count != null) {
-                "$label: ${status.count}"
-            } else {
-                label
-            }
-            Text(text = text, fontSize = 11.sp, color = WowSubtle, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
+        Spacer(modifier = Modifier.height(6.dp))
+        val label = when (status.kind) {
+            ServerStatusKind.DISCORD_ONLINE -> context.getString(R.string.wow_status_discord_online)
+            ServerStatusKind.IN_GAME_ONLINE -> context.getString(R.string.wow_status_ingame_online)
+            ServerStatusKind.UNKNOWN -> context.getString(R.string.wow_status_unknown)
+        }
+        val text = if (status.kind != ServerStatusKind.UNKNOWN && status.count != null) {
+            "$label: ${status.count}"
+        } else {
+            label
+        }
+        Text(text = text, fontSize = 11.sp, color = WowSubtle, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 
