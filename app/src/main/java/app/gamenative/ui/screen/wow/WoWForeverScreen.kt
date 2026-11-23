@@ -583,12 +583,12 @@ fun WoWForeverScreen(
                         CommunityCard(serverStatus, compact = true)
                     }
                     Column(
-                        modifier = Modifier.align(Alignment.BottomEnd).widthIn(max = 280.dp),
+                        modifier = Modifier.align(Alignment.BottomEnd).widthIn(max = 300.dp),
                         horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
-                        Text(appVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.End, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                        Text(clientVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.End, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Text(appVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.Left, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(clientVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.Left, maxLines = 2, overflow = TextOverflow.Ellipsis)
                         actionControls()
                     }
                 } else {
