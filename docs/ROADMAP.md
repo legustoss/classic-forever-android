@@ -64,7 +64,8 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | 5.9 | Password login dialog | **DONE** | Removed hardcoded "Battle.net" English text; dialog uses launcher strings and Wow theme |
 | 5.10 | Launcher gamepad navigation | **DONE** | `rememberGamepadConnected()` observes hot-plug without touching game input; hints with icons shown when connected; BUTTON_A confirms and BUTTON_B goes back in launcher only |
 | 5.11 | Launcher component manager | **DONE** | Settings → Components lists built-in recommended components, downloadable v16 test Proton with SHA-256 check, SAF import for custom files, and reset-to-bundled. Overrides live in app-private `files/components/`; `tools/` untouched |
-| 5.12 | 32-bit Wine trim experiment | **PLANNED** | Repack components-v1 without unused i386 files as a test APK; no adoption until device comparison |
+| 5.12 | 32-bit Wine trim experiment | **DONE (APK ready)** | `test-apks/Classic-Forever-Proton-stripped-TEST.apk` (192,297,043 bytes vs 221,423,749 baseline). 1013 i386/lib32 entries removed; archive still has `profile.json`, `bin/wine`, `prefixPack.txz`. No adoption until device comparison |
+| 5.13 | Component catalog / mapping tests | **DONE** | `ComponentCatalogTest`: 4 tests, all green |
 
 ## Decision requests / blockers
 

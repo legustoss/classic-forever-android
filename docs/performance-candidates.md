@@ -48,8 +48,9 @@ Parent `v2.4.4` removed 32-bit Windows files from its bundled Wine (APK −50 MB
 
 ## Test build prepared 2026-11-24 (not committed as a source change)
 
-- `test-apks/Classic-Forever-Proton-v16-TEST.apk` — **corrected** debug APK (213,908,154 bytes, rebuilt 2026-11-24 after the `WineInfo` suffix fix). Inside it the candidate is stored as `assets/bundled_components/proton-11.0-12.8-arm64ec.wcp` with SHA-256 `a5e05e35214f34603f8cf9a362bb6b4bce9f18d773ee689ecfaff6136a1e9003`.
-- `test-apks/Classic-Forever-baseline.apk` — the previous, already tested debug APK (220,695,153 bytes, rebuilt with the container-directory fix, `WineInfo` fix and back-navigation logging).
+- `test-apks/Classic-Forefer-v16-TEST.apk` — typo in earlier notes; actual file: `test-apks/Classic-Forever-Proton-v16-TEST.apk` (213,929,878 bytes, rebuilt 2026-11-24 after the `WineInfo` suffix fix and component manager). Inside it the candidate is stored as `assets/bundled_components/proton-11.0-12.8-arm64ec.wcp` with SHA-256 `a5e05e35214f34603f8cf9a362bb6b4bce9f18d773ee689ecfaff6136a1e9003`.
+- `test-apks/Classic-Forever-baseline.apk` — the previous, already tested debug APK (221,423,749 bytes, rebuilt with the container-directory fix, `WineInfo` fix, back-navigation logging and component manager).
+- `test-apks/Classic-Forever-Proton-stripped-TEST.apk` — 192,297,043 bytes. Same proven Proton as `components-v1` with all 1013 `i386`/`lib32` entries removed from the top-level archive (1,261 entries kept, 205,548,134 uncompressed bytes removed). Archive SHA-256 `91e6c24c45cbe720e2a4de24d1973606bd42212c01adce0ab5bfbf87c1a3e16e`. `profile.json`, `bin/wine` and `prefixPack.txz` are still present; `prefixPack.txz` itself had no i386 entries, so repacking it gave no saving. This is a size/startup experiment only, not a new runtime version.
 - The temporary test build used `PROTON_VERSION = "proton-11.0-12.8-arm64ec"`, `PROTON_VERSION_CODE = 16`, so `wineVersion` became `proton-11.0-12.8-arm64ec-16`, matching the candidate's `profile.json` (`versionCode: 16`). These source constants were reverted afterwards; only the APK carries them.
 - The first attempt kept the old asset name and `wineVersion ...-1`; the device log showed `Container creation failed` because `WineInfo.fromIdentifier()` could not find a profile with versionCode 1. That build is discarded.
 - A second attempt used `...-16` but still failed: `WineInfo.fromIdentifier()` removed exactly two trailing characters, turning `proton-11.0-12.8-arm64ec-16` into `proton-11.0-12.8-arm64ec-` (trailing dash), so WineInfo fell back to the main wine version with an empty path. Fixed by stripping the whole `-<versionCode>` suffix at the last dash; this also supports multi-digit codes generally.
@@ -57,7 +58,7 @@ Parent `v2.4.4` removed 32-bit Windows files from its bundled Wine (APK −50 MB
 
 **Important:** `installBundledComponents()` only extracts Proton when the app-private prefix is missing `profile.json` or `bin/wine`. Installing the test APK over an existing install will keep the old extracted Proton. Clear app data (or uninstall first) when switching to the test build; game files in `/storage/emulated/0/WoW Forever/` stay on shared storage, but the saved login in app-private storage will be lost.
 
-Rollback: install `Classic-Forever-baseline.apk` and clear app data again so the original archive is extracted. Both APKs live only in `app/build/outputs/` (gitignored).
+Rollback: install `Classic-Forever-baseline.apk` and clear app data again so the original archive is extracted. All three APKs live in `test-apks/` (gitignored).
 
 ## Decision
 
