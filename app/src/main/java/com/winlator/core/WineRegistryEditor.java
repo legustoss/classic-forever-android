@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -74,6 +76,15 @@ public class WineRegistryEditor implements Closeable {
         else FileUtils.copy(file, cloneFile);
     }
 
+    /** File.renameTo fails when the target already exists on Windows; Files.move replaces it on every platform. */
+    private static void replaceFile(File source, File target) {
+        try {
+            Files.move(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            Log.e("WineRegistryEditor", "Failed to replace " + target + ": " + e);
+        }
+    }
+
     private static String escape(String str) {
         return str.replace("\\", "\\\\").replace("\"", "\\\"");
     }
@@ -92,7 +103,7 @@ public class WineRegistryEditor implements Closeable {
     @Override
     public void close() {
         if (modified && cloneFile.exists()) {
-            cloneFile.renameTo(file);
+            replaceFile(cloneFile, file);
         }
         else cloneFile.delete();
     }
@@ -152,7 +163,7 @@ public class WineRegistryEditor implements Closeable {
 
         if (success) {
             modified = true;
-            tempFile.renameTo(cloneFile);
+            replaceFile(tempFile, cloneFile);
             return new Location(offset, totalLength, totalLength);
         }
         else {
@@ -292,7 +303,7 @@ public class WineRegistryEditor implements Closeable {
 
         if (success) {
             modified = true;
-            tempFile.renameTo(cloneFile);
+            replaceFile(tempFile, cloneFile);
         }
         else tempFile.delete();
     }
@@ -408,7 +419,7 @@ public class WineRegistryEditor implements Closeable {
         }
         if (success) {
             this.modified = true;
-            tempFile.renameTo(this.cloneFile);
+            replaceFile(tempFile, this.cloneFile);
         } else {
             tempFile.delete();
         }
@@ -471,7 +482,7 @@ public class WineRegistryEditor implements Closeable {
 
         if (success) {
             modified = true;
-            tempFile.renameTo(cloneFile);
+            replaceFile(tempFile, cloneFile);
         }
         else tempFile.delete();
         return success;
