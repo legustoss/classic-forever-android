@@ -107,4 +107,8 @@
     <string name="wow_driver_unknown">GPU 모델 알 수 없음</string>
     <string name="wow_play_short">플레이</string>
     <string name="wow_back">뒤로</string>
+    <string name="wow_lsfg_import">Lossless.dll 가져오기</string>
+    <string name="wow_lsfg_ready">Lossless.dll 설치됨</string>
+    <string name="wow_lsfg_missing">Lossless.dll 없음</string>
+    <string name="wow_lsfg_enable">프레임 생성 활성화</string>
 </resources>

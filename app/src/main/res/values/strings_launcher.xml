@@ -108,4 +108,8 @@
     <string name="wow_driver_unknown">GPU model unknown</string>
     <string name="wow_play_short">Play</string>
     <string name="wow_back">Back</string>
+    <string name="wow_lsfg_import">Import Lossless.dll</string>
+    <string name="wow_lsfg_ready">Lossless.dll installed</string>
+    <string name="wow_lsfg_missing">Lossless.dll missing</string>
+    <string name="wow_lsfg_enable">Enable frame generation</string>
 </resources>

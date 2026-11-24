@@ -107,4 +107,8 @@
     <string name="wow_driver_unknown">Modelo de GPU desconocido</string>
     <string name="wow_play_short">Jugar</string>
     <string name="wow_back">Atrás</string>
+    <string name="wow_lsfg_import">Importar Lossless.dll</string>
+    <string name="wow_lsfg_ready">Lossless.dll instalado</string>
+    <string name="wow_lsfg_missing">Lossless.dll no encontrado</string>
+    <string name="wow_lsfg_enable">Activar generación de fotogramas</string>
 </resources>

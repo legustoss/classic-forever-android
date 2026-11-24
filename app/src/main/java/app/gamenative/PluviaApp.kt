@@ -14,6 +14,7 @@ import app.gamenative.ui.screen.wow.GamePath
 import app.gamenative.ui.screen.xserver.RadialMenuCoordinator
 import app.gamenative.utils.FileLogTree
 import app.gamenative.utils.FileLogger
+import app.gamenative.utils.LsfgVkManager
 import android.app.Application
 import com.winlator.container.Container
 import com.winlator.inputcontrols.InputControlsManager
@@ -51,6 +52,7 @@ class PluviaApp : Application() {
 
         CrashHandler.initialize(this)
         PrefManager.init(this)
+        LsfgVkManager.init(this)
     }
 
     companion object {
