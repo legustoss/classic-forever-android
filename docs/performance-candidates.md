@@ -46,6 +46,17 @@ Parent `v2.4.4` removed 32-bit Windows files from its bundled Wine (APK −50 MB
 4. If the candidate fails to boot or shows artifacts, revert and record the failure. Device compatibility wins over being current.
 5. No FPS numbers are claimed here — all scenarios require a real device.
 
+## Test build prepared 2026-11-24 (not committed as a source change)
+
+- `app/build/outputs/apk/modern/debug/Classic-Forever-Proton-v16-TEST.apk` — debug APK with the DroidDeck-Proton 11.0-12.8 arm64ec `.wcp` embedded under the **existing** asset name `proton-11.0-90624-arm64ec.wcp`, so no code/container-config change was needed.
+- `app/build/outputs/apk/modern/debug/Classic-Forever-baseline.apk` — the previous, already tested debug APK.
+- Verified inside the test APK: embedded asset SHA-256 `a5e05e35214f34603f8cf9a362bb6b4bce9f18d773ee689ecfaff6136a1e9003`, size 119,875,054 bytes.
+- After the build, the working asset was restored to `137807f4145b1b440075f83b2b1b3501d19c4eb618784b1a28418652cae3db03`, matching `tools/components.sha256`. `tools/` and `tools/components.sha256` were not modified.
+
+**Important:** `installBundledComponents()` only extracts Proton when the app-private prefix is missing `profile.json` or `bin/wine`. Installing the test APK over an existing install will keep the old extracted Proton. Clear app data (or uninstall first) when switching to the test build; game files in `/storage/emulated/0/WoW Forever/` stay on shared storage, but the saved login in app-private storage will be lost.
+
+Rollback: install `Classic-Forever-baseline.apk` and clear app data again so the original archive is extracted. Both APKs live only in `app/build/outputs/` (gitignored).
+
 ## Decision
 
-Do not adopt anything yet. Ask for explicit approval before touching `tools/` or `tools/components.sha256`, and do not mark any candidate as "better" without measurements.
+Do not adopt anything into the repo yet. The test build is for measurement only; do not mark any candidate as "better" without device results.
