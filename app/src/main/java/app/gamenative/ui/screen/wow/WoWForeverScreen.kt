@@ -1378,18 +1378,17 @@ private fun CommunityCard(status: ServerStatus, compact: Boolean = false) {
                 Icon(Icons.Default.Forum, contentDescription = context.getString(R.string.wow_discord), modifier = Modifier.size(20.dp))
             }
         }
-        Spacer(modifier = Modifier.height(6.dp))
-        val label = when (status.kind) {
-            ServerStatusKind.DISCORD_ONLINE -> context.getString(R.string.wow_status_discord_online)
-            ServerStatusKind.IN_GAME_ONLINE -> context.getString(R.string.wow_status_ingame_online)
-            ServerStatusKind.UNKNOWN -> context.getString(R.string.wow_status_unknown)
+        // Hidden until a real data source is configured; never show a fabricated or placeholder count.
+        if (status.kind != ServerStatusKind.UNKNOWN) {
+            Spacer(modifier = Modifier.height(6.dp))
+            val label = when (status.kind) {
+                ServerStatusKind.DISCORD_ONLINE -> context.getString(R.string.wow_status_discord_online)
+                ServerStatusKind.IN_GAME_ONLINE -> context.getString(R.string.wow_status_ingame_online)
+                ServerStatusKind.UNKNOWN -> ""
+            }
+            val text = if (status.count != null) "$label: ${status.count}" else label
+            Text(text = text, fontSize = 11.sp, color = WowSubtle, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        val text = if (status.kind != ServerStatusKind.UNKNOWN && status.count != null) {
-            "$label: ${status.count}"
-        } else {
-            label
-        }
-        Text(text = text, fontSize = 11.sp, color = WowSubtle, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 
