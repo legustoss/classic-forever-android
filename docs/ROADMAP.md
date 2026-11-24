@@ -17,7 +17,7 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 
 | # | Item | State | Acceptance criteria | Blocked by |
 |---|---|---|---|---|
-| 1.1 | Online count from a real source | **WAITING** | `server.status.source=http` + URL returning `{"online": 12, ...}`; UI shows "In-game online: 12" or "—" | Server developer has not provided data access; wait for a response. Meanwhile the counter stays "—" |
+| 1.1 | Online count from a real source | **HIDDEN / WAITING** | Counter is hidden until a source returns real data; no placeholder is shown. Server developer still has not provided access | Discord `/status` is ephemeral and cannot be read by the launcher; an HTTP endpoint or bot-side proxy is required |
 | 1.2 | Dynamic supported client build from that endpoint | **PLANNED** | `client_build` parsed and used as compatibility requirement; unit tests for parse/boundaries; download logic untouched | Same endpoint as 1.1 |
 | 1.3 | Step 6 sign-off | **BLOCKED** | Same as 0.2 | Device/screenshots |
 | 1.4 | Step 7 device validation | **BLOCKED** | `device report` issues with GPU, driver id, in-world result; then flip Adreno 750/735/825/850 from "pending validation" | Real devices |
@@ -42,6 +42,7 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | 3.3 | SBOM / component inventory | **DONE** | `docs/sbom.md` — manually maintained inventory of toolchain, Gradle deps, runtime archives and proprietary components; no binaries added |
 | 3.4 | Component update automation | **PLANNED** | Script checks upstream releases and opens a PR proposal; never auto-merges |
 | 3.5 | Versioning policy | **DONE** | Patch = fixes, Minor = new features/major UI, Major = stable 1.0; next release planned as `v0.2.0` because of LSFG. Documented in `docs/release-checklist.md` |
+| 3.6 | Component provenance / update watchlist | **REVIEWED** | `components-v1` is from 2026-09-30; no components-v2 tag. Newer Proton-Wine v15 + locale fix and a ~50 MB Wine size reduction exist upstream, but adopting them needs explicit approval and device validation. Details in `docs/runtime.md` |
 
 ## Phase 4 — Optional (P4)
 

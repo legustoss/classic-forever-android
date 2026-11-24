@@ -20,6 +20,23 @@ f660b5c6422b3f93cec65664f309718942e58581b5b96fa2902d55d63ce1db8a  dxvk-2.4.1-wow
 
 `COMPONENTS_URL` overrides the release base URL for the first three files. The Adreno 8xx driver is fetched from the raw GitHub URL in the script.
 
+## Provenance and update watchlist
+
+`components-v1` was published 2026-09-30 by the `jaredgei/wow-forever-android` community bundle. Its README records the exact upstream revisions:
+
+- Proton/Wine ARM64EC: [The412Banner/proton-wine](https://github.com/The412Banner/proton-wine/tree/e5fa703ed7f7329e20d7ede481ab185cf8b1a8b2) with an ARM64 copied-syscall fix and an NLS fallback allocation patch.
+- DXVK 2.4.1 aarch64: [doitsujin/dxvk](https://github.com/doitsujin/dxvk/tree/0cf05780abd7250c2cd713b7749cf32180157cf5).
+- Turnip (Adreno 740): Mesa [`fe067b17d9`](https://github.com/mirror/mesa/tree/fe067b17d9) with a patch limiting barycentric waits to the current block (fixes a shader-scheduler assertion on Adreno 740).
+
+Observed 2026-11-24 (read-only research):
+
+- No `components-v2` tag or newer component release exists in that repository; the latest app release is `v2.4.6`.
+- Upstream Proton-Wine has moved since `e5fa703`: v15 (2026-10-23) adds GameNative fixes and WinRT registry registration; a 2026-10-24 fix treats `C.<charset>` like `C` for locale mapping. Both are relevant to Android but are **not** in our archive.
+- The parent project's `v2.4.4` removed 32-bit Windows files from its bundled Wine (APK shrank ~50 MB). Our `components-v1` archive predates that change, so a repack could reduce size — but only after device validation.
+- Newer generic Turnip/DXVK builds exist in the wider GameNative ecosystem. They are not necessarily patched for WoW Forever's aarch64/D3D11 path.
+
+Adoption rule: watch the component release tag and upstream revisions, compare hashes and patch lists, then propose a diff in `tools/components.sha256` for explicit approval. Never swap a binary component without an in-world device test; device compatibility takes priority over being current.
+
 ## Runtime env vars
 
 Set in `WoWForeverScreen.containerConfig()` and `XServerScreen`:
