@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -61,6 +62,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -666,6 +668,7 @@ fun WoWForeverScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
+                        Spacer(Modifier.height(launcherTopPadding(true, false)))
                         Text(
                             text = context.getString(R.string.wow_title),
                             fontSize = 24.sp,
@@ -1333,6 +1336,10 @@ object GamePath {
     private fun productsOf(root: File) = WowClientDownloader.installedProducts(File(root, BUILD_INFO))
 }
 
+/** Extra breathing room above the portrait Main screen so it does not sit glued to the top bar. */
+internal fun launcherTopPadding(isMain: Boolean, isWide: Boolean): Dp =
+    if (isMain && !isWide) 64.dp else 0.dp
+
 /**
  * Adaptive launcher shell. Breakpoints come from the available window (WindowSizeClass), never from
  * device type. Foldable hinges are kept clear when the feature is separating.
@@ -1426,7 +1433,9 @@ private fun GamepadHint() {
 private fun ScreenTopBar(title: String, onBack: () -> Unit) {
     val context = LocalContext.current
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onBack),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         SectionTitle(title, WowNeon)
