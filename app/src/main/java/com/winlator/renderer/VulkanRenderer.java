@@ -212,37 +212,33 @@ public class VulkanRenderer implements WindowManager.OnWindowModificationListene
                     if (nativeMode && !effectsRequireCompositor) {
                         xServerView.post(() -> {
                             releaseScanoutSurfaces();
-                            if (android.os.Build.VERSION.SDK_INT >= 29) {
-                                try {
-                                    android.view.SurfaceControl xsc = xServerView.getSurfaceControl();
-                                    scanoutGameSC = new android.view.SurfaceControl.Builder()
-                                        .setParent(xsc).setName("winlator_game").setOpaque(true).build();
-                                    scanoutGameSurface = new android.view.Surface(scanoutGameSC);
-                                    scanoutCursorSC = new android.view.SurfaceControl.Builder()
-                                        .setParent(xsc).setName("winlator_cursor").setFormat(android.graphics.PixelFormat.RGBA_8888).build();
-                                    scanoutCursorSurface = new android.view.Surface(scanoutCursorSC);
-                                    new android.view.SurfaceControl.Transaction()
-                                        .setLayer(scanoutGameSC,   1)
-                                        .setLayer(scanoutCursorSC, 2)
-                                        .setVisibility(scanoutGameSC,   true)
-                                        .setVisibility(scanoutCursorSC, true)
-                                        .apply();
-                                    applyScanoutFrameRateHint();
-                                    applyScanoutSwapTransform();
-                                    synchronized (lock) {
-                                        if (nativeHandle != 0) {
-                                            nativeSetScanoutWindow(nativeHandle, scanoutGameSurface, scanoutCursorSurface);
-                                            updateTransform();
-                                        }
-                                    }
-                                } catch (Exception e) {
-                                    android.util.Log.w("VulkanRenderer", "SC recreate failed on surface restore: " + e);
-                                    synchronized (lock) {
-                                        if (nativeHandle != 0) nativeInitScanout(nativeHandle);
+                            try {
+                                android.view.SurfaceControl xsc = xServerView.getSurfaceControl();
+                                scanoutGameSC = new android.view.SurfaceControl.Builder()
+                                    .setParent(xsc).setName("winlator_game").setOpaque(true).build();
+                                scanoutGameSurface = new android.view.Surface(scanoutGameSC);
+                                scanoutCursorSC = new android.view.SurfaceControl.Builder()
+                                    .setParent(xsc).setName("winlator_cursor").setFormat(android.graphics.PixelFormat.RGBA_8888).build();
+                                scanoutCursorSurface = new android.view.Surface(scanoutCursorSC);
+                                new android.view.SurfaceControl.Transaction()
+                                    .setLayer(scanoutGameSC,   1)
+                                    .setLayer(scanoutCursorSC, 2)
+                                    .setVisibility(scanoutGameSC,   true)
+                                    .setVisibility(scanoutCursorSC, true)
+                                    .apply();
+                                applyScanoutFrameRateHint();
+                                applyScanoutSwapTransform();
+                                synchronized (lock) {
+                                    if (nativeHandle != 0) {
+                                        nativeSetScanoutWindow(nativeHandle, scanoutGameSurface, scanoutCursorSurface);
+                                        updateTransform();
                                     }
                                 }
-                            } else {
-                                synchronized (lock) { if (nativeHandle != 0) nativeInitScanout(nativeHandle); }
+                            } catch (Exception e) {
+                                android.util.Log.w("VulkanRenderer", "SC recreate failed on surface restore: " + e);
+                                synchronized (lock) {
+                                    if (nativeHandle != 0) nativeInitScanout(nativeHandle);
+                                }
                             }
                         });
                     }
@@ -300,7 +296,7 @@ public class VulkanRenderer implements WindowManager.OnWindowModificationListene
     }
 
     private void applyScanoutSwapTransform() {
-        if (scanoutGameSC == null || android.os.Build.VERSION.SDK_INT < 29) return;
+        if (scanoutGameSC == null) return;
         try {
             android.view.SurfaceControl.Transaction txn = new android.view.SurfaceControl.Transaction();
             float[] matrix = pendingSwapRB
@@ -678,39 +674,35 @@ public class VulkanRenderer implements WindowManager.OnWindowModificationListene
         xRenderingPausedForScanout = false;
         xServer.setRenderingEnabled(true);
         xServerView.post(() -> {
-            if (android.os.Build.VERSION.SDK_INT >= 29) {
-                try {
-                    android.view.SurfaceControl xsc = xServerView.getSurfaceControl();
-                    scanoutGameSC = new android.view.SurfaceControl.Builder()
-                        .setParent(xsc).setName("winlator_game").setOpaque(true).build();
-                    scanoutGameSurface = new android.view.Surface(scanoutGameSC);
-                    scanoutCursorSC = new android.view.SurfaceControl.Builder()
-                        .setParent(xsc).setName("winlator_cursor").setFormat(android.graphics.PixelFormat.RGBA_8888).build();
-                    scanoutCursorSurface = new android.view.Surface(scanoutCursorSC);
-                    android.view.SurfaceControl.Transaction scTxn =
-                        new android.view.SurfaceControl.Transaction()
-                        .setLayer(scanoutGameSC,   1)
-                        .setLayer(scanoutCursorSC, 2)
-                        .setVisibility(scanoutGameSC,   true)
-                        .setVisibility(scanoutCursorSC, true);
-                    scTxn.apply();
-                    applyScanoutFrameRateHint();
-                    applyScanoutSwapTransform();
-                    synchronized (lock) {
-                        if (nativeHandle != 0) {
-                            nativeSetScanoutWindow(nativeHandle,
-                                scanoutGameSurface, scanoutCursorSurface);
-                            updateTransform();
-                        }
-                    }
-                } catch (Exception e) {
-                    android.util.Log.w("VulkanRenderer", "Sibling SC failed, using child SC: " + e);
-                    synchronized (lock) {
-                        if (nativeHandle != 0) nativeInitScanout(nativeHandle);
+            try {
+                android.view.SurfaceControl xsc = xServerView.getSurfaceControl();
+                scanoutGameSC = new android.view.SurfaceControl.Builder()
+                    .setParent(xsc).setName("winlator_game").setOpaque(true).build();
+                scanoutGameSurface = new android.view.Surface(scanoutGameSC);
+                scanoutCursorSC = new android.view.SurfaceControl.Builder()
+                    .setParent(xsc).setName("winlator_cursor").setFormat(android.graphics.PixelFormat.RGBA_8888).build();
+                scanoutCursorSurface = new android.view.Surface(scanoutCursorSC);
+                android.view.SurfaceControl.Transaction scTxn =
+                    new android.view.SurfaceControl.Transaction()
+                    .setLayer(scanoutGameSC,   1)
+                    .setLayer(scanoutCursorSC, 2)
+                    .setVisibility(scanoutGameSC,   true)
+                    .setVisibility(scanoutCursorSC, true);
+                scTxn.apply();
+                applyScanoutFrameRateHint();
+                applyScanoutSwapTransform();
+                synchronized (lock) {
+                    if (nativeHandle != 0) {
+                        nativeSetScanoutWindow(nativeHandle,
+                            scanoutGameSurface, scanoutCursorSurface);
+                        updateTransform();
                     }
                 }
-            } else {
-                synchronized (lock) { if (nativeHandle != 0) nativeInitScanout(nativeHandle); }
+            } catch (Exception e) {
+                android.util.Log.w("VulkanRenderer", "Sibling SC failed, using child SC: " + e);
+                synchronized (lock) {
+                    if (nativeHandle != 0) nativeInitScanout(nativeHandle);
+                }
             }
         });
     }

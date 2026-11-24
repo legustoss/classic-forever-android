@@ -237,11 +237,7 @@ public class ControllerManager {
             }
         }
         // The descriptor is the most reliable unique ID for a device.
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            return device.getDescriptor();
-        }
-        // Fallback for older Android versions
-        return "vendor_" + device.getVendorId() + "_product_" + device.getProductId();
+        return device.getDescriptor();
     }
 
     /**
@@ -549,8 +545,7 @@ public class ControllerManager {
         String identifier = getDeviceIdentifierForDeviceId(deviceId);
         if (identifier == null || !sessionActiveIdentifiers.add(identifier)) return;
         InputDevice device = inputManager.getInputDevice(deviceId);
-        if (device != null &&
-                (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q || device.isExternal())) {
+        if (device != null && device.isExternal()) {
             sessionUsedExternalController = true;
         }
     }

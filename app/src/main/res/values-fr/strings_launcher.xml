@@ -111,7 +111,7 @@
     <string name="wow_lsfg_ready">Lossless.dll installé</string>
     <string name="wow_lsfg_missing">Lossless.dll absent</string>
     <string name="wow_lsfg_enable">Activer la génération d\'images</string>
-    <string name="wow_launch_configuring">Configuration du conteneur %1...</string>
+    <string name="wow_launch_configuring">Configuration du conteneur %1$s...</string>
     <string name="wow_launch_first_boot">Création de l\'environnement du préfixe (premier lancement)...</string>
     <string name="wow_launch_extracting_proton">Extraction de Proton 11 ARM64EC (environ 10 s)...</string>
     <string name="wow_launch_extracting_dxvk">Extraction de DXVK ARM64...</string>

@@ -40,20 +40,18 @@ class GameSessionService : Service() {
 
     private fun buildNotification(): Notification {
         val manager = getSystemService(NotificationManager::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(CHANNEL_ID, "Game running", NotificationManager.IMPORTANCE_LOW).apply {
-                description = "Shown while World of Warcraft is running, so it keeps running when you switch apps."
-                setShowBadge(false)
-            }
-            manager.createNotificationChannel(channel)
+        val channel = NotificationChannel(CHANNEL_ID, "Game running", NotificationManager.IMPORTANCE_LOW).apply {
+            description = "Shown while World of Warcraft is running, so it keeps running when you switch apps."
+            setShowBadge(false)
         }
+        manager.createNotificationChannel(channel)
         val openApp = PendingIntent.getActivity(
             this,
             0,
             Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
-        val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Notification.Builder(this, CHANNEL_ID) else @Suppress("DEPRECATION") Notification.Builder(this)
+        val builder = Notification.Builder(this, CHANNEL_ID)
         return builder
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle("World of Warcraft is running")
@@ -76,7 +74,7 @@ class GameSessionService : Service() {
             if (running) return
             try {
                 val intent = Intent(context, GameSessionService::class.java)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) context.startForegroundService(intent) else context.startService(intent)
+                context.startForegroundService(intent)
                 running = true
             } catch (e: Exception) {
                 // Android 12+ refuses to start a foreground service from the background; MainActivity.onResume retries.

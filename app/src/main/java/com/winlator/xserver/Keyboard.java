@@ -115,7 +115,7 @@ public class Keyboard {
      */
     public static boolean isExternalKeySource(InputDevice device) {
         if (device == null || device.isVirtual() || !device.supportsSource(InputDevice.SOURCE_KEYBOARD)) return false;
-        return android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q || device.isExternal();
+        return device.isExternal();
     }
 
     public boolean onVirtualKeyEvent(KeyEvent event) {

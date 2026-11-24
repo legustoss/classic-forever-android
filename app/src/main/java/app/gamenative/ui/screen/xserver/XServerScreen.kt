@@ -246,11 +246,10 @@ private fun detectMaxRefreshRateHz(context: Context, attachedView: View?): Int {
 
     val refreshRate = when {
         display == null -> DEFAULT_FPS_LIMITER_MAX_HZ.toFloat()
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+        else -> {
             val supportedMax = display.supportedModes.maxOfOrNull { it.refreshRate } ?: display.refreshRate
             if (supportedMax.isFinite() && supportedMax > 0f) supportedMax else display.refreshRate
         }
-        else -> display.refreshRate
     }
 
     return refreshRate
@@ -1004,14 +1003,14 @@ fun XServerScreen(
         val deviceIds = InputDevice.getDeviceIds()
         hasPhysicalKeyboard = deviceIds.any { id ->
             val device = InputDevice.getDevice(id) ?: return@any false
-            val isExternal = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) device.isExternal else true
+            val isExternal = device.isExternal
             Keyboard.isKeyboardDevice(device) && !device.isVirtual && isExternal
         }
         hasPhysicalMouse = deviceIds.any { id ->
             val device = InputDevice.getDevice(id) ?: return@any false
             val isMouse = device.supportsSource(InputDevice.SOURCE_MOUSE) || device.supportsSource(InputDevice.SOURCE_MOUSE_RELATIVE) ||
                           device.supportsSource(InputDevice.SOURCE_TOUCHPAD)
-            val isExternal = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) device.isExternal else true
+            val isExternal = device.isExternal
             isMouse && !device.isVirtual && isExternal
         }
         val controllerManager = ControllerManager.getInstance()
@@ -1061,7 +1060,7 @@ fun XServerScreen(
     fun evaluateDevice(device: InputDevice) {
         // Some devices advertise all its capabilities on onInputDeviceAdded callback
         // but some can also do basic advertise on onInputDeviceAdded and only expand on onInputDeviceChanged
-        val isExternal = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) device.isExternal else true
+        val isExternal = device.isExternal
         if (!device.isVirtual && isExternal) {
             if (Keyboard.isKeyboardDevice(device)) {
                 hasPhysicalKeyboard = true
@@ -1603,7 +1602,7 @@ fun XServerScreen(
             if (PluviaApp.touchpadView?.hasPointerCapture() != true && !PluviaApp.isOverlayPaused) {
                 if ((it.event != null) && (it.event.device != null)) {
                     val device = it.event.device
-                    val isExternal = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) device.isExternal else true
+                    val isExternal = device.isExternal
                     if (device.supportsSource(InputDevice.SOURCE_TOUCHPAD) &&
                         !isExternal) {
                         // Samsung DeX Touchpad app
