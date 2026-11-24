@@ -111,4 +111,9 @@
     <string name="wow_lsfg_ready">Lossless.dll установлен</string>
     <string name="wow_lsfg_missing">Lossless.dll не найден</string>
     <string name="wow_lsfg_enable">Включить генерацию кадров</string>
+    <string name="wow_launch_configuring">Настройка контейнера %1$s...</string>
+    <string name="wow_launch_first_boot">Создание окружения префикса (первый запуск)...</string>
+    <string name="wow_launch_extracting_proton">Извлечение Proton 11 ARM64EC (около 10 с)...</string>
+    <string name="wow_launch_extracting_dxvk">Извлечение DXVK ARM64...</string>
+    <string name="wow_launch_installing_driver">Установка драйвера %1$s...</string>
 </resources>

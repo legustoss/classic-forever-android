@@ -112,4 +112,9 @@
     <string name="wow_lsfg_ready">Lossless.dll installed</string>
     <string name="wow_lsfg_missing">Lossless.dll missing</string>
     <string name="wow_lsfg_enable">Enable frame generation</string>
+    <string name="wow_launch_configuring">Configuring %1$s container...</string>
+    <string name="wow_launch_first_boot">Creating prefix environment (first boot)...</string>
+    <string name="wow_launch_extracting_proton">Extracting Proton 11 ARM64EC (about 10 s)...</string>
+    <string name="wow_launch_extracting_dxvk">Extracting DXVK ARM64...</string>
+    <string name="wow_launch_installing_driver">Installing %1$s driver...</string>
 </resources>

@@ -58,6 +58,8 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | 5.3 | Whole Quick Menu categorisation | **DONE** | Shared `QuickMenuCategoryHeader` with divider across HUD, LSFG, Tools and Controller tabs; Controller split into Input / Touch / Motion; LSFG flow scale and performance mode grouped; Effects already had category headers. No state, focus or QuickMenu() signature changes |
 | 5.4 | On-device check: no auto-launch + LSFG + categorised Quick Menu | **IN PROGRESS** | User confirmed everything works except a hitch when switching the LSFG multiplier; device log now shows `Launcher back: FIRST_INSTALL -> MAIN`, so the back button path is exercised. Re-test after 5.5 | Awaiting user re-test |
 | 5.5 | LSFG multiplier hitch | **DONE** | `LsfgQuickMenuHelper.applySettings` now persists and hot-reloads on a background executor; UI state updates immediately | — |
+| 5.6 | Back button on tall launcher screens | **DONE** | Scrollable launcher content is top-aligned instead of centered, so the top bar is no longer clipped/unclickable on FirstInstall/Settings |
+| 5.7 | Launch status messages | **DONE** | Hardcoded English container/Proton/DXVK/driver status texts moved to `strings_launcher.xml` in all 9 languages |
 
 ## Decision requests / blockers
 

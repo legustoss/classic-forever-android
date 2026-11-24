@@ -111,4 +111,9 @@
     <string name="wow_lsfg_ready">Lossless.dll はインストール済み</string>
     <string name="wow_lsfg_missing">Lossless.dll がありません</string>
     <string name="wow_lsfg_enable">フレーム生成を有効にする</string>
+    <string name="wow_launch_configuring">%1$s コンテナを構成中...</string>
+    <string name="wow_launch_first_boot">プレフィックス環境を作成中（初回起動）...</string>
+    <string name="wow_launch_extracting_proton">Proton 11 ARM64EC を展開中（約10秒）...</string>
+    <string name="wow_launch_extracting_dxvk">DXVK ARM64 を展開中...</string>
+    <string name="wow_launch_installing_driver">ドライバー %1$s をインストール中...</string>
 </resources>

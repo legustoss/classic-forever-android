@@ -111,4 +111,9 @@
     <string name="wow_lsfg_ready">Lossless.dll 已安装</string>
     <string name="wow_lsfg_missing">Lossless.dll 缺失</string>
     <string name="wow_lsfg_enable">启用帧生成</string>
+    <string name="wow_launch_configuring">正在配置 %1$s 容器...</string>
+    <string name="wow_launch_first_boot">正在创建前缀环境（首次启动）...</string>
+    <string name="wow_launch_extracting_proton">正在解压 Proton 11 ARM64EC（约 10 秒）...</string>
+    <string name="wow_launch_extracting_dxvk">正在解压 DXVK ARM64...</string>
+    <string name="wow_launch_installing_driver">正在安装 %1$s 驱动...</string>
 </resources>

@@ -1262,7 +1262,7 @@ private fun LauncherLayout(
                     .verticalScroll(scrollState)
                     .padding(horizontal = 16.dp + hinge / 2, vertical = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Top,
             ) {
                 Box(modifier = Modifier.fillMaxWidth()) {
                     content()
@@ -1694,12 +1694,12 @@ private fun prepareLaunch(context: Context, gameRoot: File, gpu: GpuProfile, scr
         }
     }
 
-    onStatus("Configuring ${gpu.label} container...")
+    onStatus(context.getString(R.string.wow_launch_configuring, gpu.label))
     val containerManager = ContainerManager(context)
     val config = containerConfig(gameRoot, gpu, screenSize, WowMachineIdentity.load(context))
     val container = containerManager.getContainerById(CONTAINER_ID)
     if (container == null) {
-        onStatus("Creating prefix environment (first boot)...")
+        onStatus(context.getString(R.string.wow_launch_first_boot))
         containerManager.createContainer(CONTAINER_ID, config)
     } else {
         container.loadData(config)
@@ -1856,7 +1856,7 @@ private fun installBundledComponents(context: Context, onStatus: (String) -> Uni
 
     val protonDir = File(ImageFs.getSharedProtonDir(context), PROTON_VERSION)
     if (!File(protonDir, "profile.json").exists() || !File(protonDir, "bin/wine").exists()) {
-        onStatus("Extracting Proton 11 ARM64EC (takes ~10s)...")
+        onStatus(context.getString(R.string.wow_launch_extracting_proton))
         check(extractBundledWcp(context, "$PROTON_VERSION.wcp", protonDir)) { "Failed to extract Proton or graphics components." }
         File(protonDir, "bin").listFiles()?.forEach {
             it.setExecutable(true, false)
@@ -1866,7 +1866,7 @@ private fun installBundledComponents(context: Context, onStatus: (String) -> Uni
 
     val dxvkDir = File(ContentsManager.getContentTypeDir(context, ContentProfile.ContentType.CONTENT_TYPE_DXVK), DXVK_VERSION)
     if (!File(dxvkDir, "profile.json").exists()) {
-        onStatus("Extracting DXVK ARM64...")
+        onStatus(context.getString(R.string.wow_launch_extracting_dxvk))
         if (!extractBundledWcp(context, "dxvk-$DXVK_VERSION.wcp", dxvkDir)) Timber.e("Failed to extract DXVK")
     }
 
@@ -1877,7 +1877,7 @@ private fun installBundledComponents(context: Context, onStatus: (String) -> Uni
 private fun installDriver(context: Context, driverName: String, assetZip: String, onStatus: (String) -> Unit) {
     val driverDir = File(context.filesDir, "contents/adrenotools/$driverName")
     if (File(driverDir, "meta.json").exists()) return
-    onStatus("Installing $driverName driver...")
+    onStatus(context.getString(R.string.wow_launch_installing_driver, driverName))
     driverDir.mkdirs()
     if (!FileUtils.extractZipFromAssets(context, "bundled_components/$assetZip", driverDir)) {
         Timber.e("Error extracting driver $driverName from $assetZip")
