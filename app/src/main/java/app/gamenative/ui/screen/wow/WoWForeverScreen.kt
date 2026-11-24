@@ -1283,7 +1283,7 @@ private fun ScreenTopBar(title: String, onBack: () -> Unit) {
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
             onClick = onBack,
-            modifier = Modifier.height(42.dp),
+            modifier = Modifier.height(48.dp).widthIn(min = 140.dp),
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
             border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
