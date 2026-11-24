@@ -126,6 +126,7 @@
     <string name="wow_components_recommended">Recommended</string>
     <string name="wow_components_active">Active: %1$s</string>
     <string name="wow_components_custom">Custom component</string>
+    <string name="wow_components_external">Third-party file %1$s</string>
     <string name="wow_components_download">Download</string>
     <string name="wow_components_import">Import file</string>
     <string name="wow_components_reset">Reset</string>

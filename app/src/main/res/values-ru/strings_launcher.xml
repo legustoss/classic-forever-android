@@ -125,6 +125,7 @@
     <string name="wow_components_recommended">Рекомендуется</string>
     <string name="wow_components_active">Активно: %1$s</string>
     <string name="wow_components_custom">Сторонний компонент</string>
+    <string name="wow_components_external">Сторонний файл %1$s</string>
     <string name="wow_components_download">Скачать</string>
     <string name="wow_components_import">Импорт файла</string>
     <string name="wow_components_reset">Сбросить</string>

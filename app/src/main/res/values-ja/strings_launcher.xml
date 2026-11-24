@@ -125,6 +125,7 @@
     <string name="wow_components_recommended">推奨</string>
     <string name="wow_components_active">アクティブ: %1$s</string>
     <string name="wow_components_custom">カスタムコンポーネント</string>
+    <string name="wow_components_external">サードパーティ製ファイル %1$s</string>
     <string name="wow_components_download">ダウンロード</string>
     <string name="wow_components_import">ファイルを読み込む</string>
     <string name="wow_components_reset">リセット</string>

@@ -125,6 +125,7 @@
     <string name="wow_components_recommended">Recommandé</string>
     <string name="wow_components_active">Actif : %1$s</string>
     <string name="wow_components_custom">Composant personnalisé</string>
+    <string name="wow_components_external">Fichier tiers %1$s</string>
     <string name="wow_components_download">Télécharger</string>
     <string name="wow_components_import">Importer un fichier</string>
     <string name="wow_components_reset">Réinitialiser</string>

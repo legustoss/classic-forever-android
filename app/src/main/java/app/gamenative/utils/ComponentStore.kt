@@ -83,6 +83,16 @@ object ComponentStore {
 
     fun isOverridden(context: Context, id: String): Boolean = activeFile(context, slotFor(id)) != null
 
+    /** Lowercase SHA-256 of the installed override for a slot, or null when no override is installed. */
+    fun activeSha256(context: Context, slot: String): String? = activeFile(context, slot)?.let { sha256(it) }
+
+    /** Whether an entry represents the component currently active in its slot. */
+    fun isSelected(context: Context, entry: LauncherComponent): Boolean {
+        val active = activeSha256(context, entry.slot) ?: return entry.recommended
+        val expected = entry.sha256 ?: return false
+        return active.equals(expected, ignoreCase = true)
+    }
+
     fun remove(context: Context, id: String): Boolean {
         val target = file(context, slotFor(id))
         return if (target.exists()) target.delete() else true
@@ -144,7 +154,7 @@ object ComponentStore {
         }
     }
 
-    private fun sha256(file: File): String {
+    internal fun sha256(file: File): String {
         val digest = MessageDigest.getInstance("SHA-256")
         file.inputStream().use { input ->
             val buffer = ByteArray(64 * 1024)
