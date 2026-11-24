@@ -12,6 +12,7 @@ Key paths:
 - `app/src/main/java/app/gamenative/ui/screen/wow/WoWForeverScreen.kt` — launcher UI, all three screens, `LauncherLayout`
 - `app/src/main/java/app/gamenative/utils/ClassicForeverPatcher.kt` — private-realm patcher (only allowed in-game memory modification)
 - `app/src/main/java/app/gamenative/utils/{ClientVersionChecker,ServerStatusProvider,DeviceCompatibility}.kt` — compatibility/config providers
+- `app/src/main/java/app/gamenative/utils/LsfgVkManager.kt` — LSFG layer; the user imports their own `Lossless.dll`, never bundle it
 - `classic-forever.properties` — user-owned config (not in git): `portal`, `key`, `server.min.build`, `server.max.build`, `server.status.source`, `server.status.guild.id`, `server.status.url`, `driver.force`
 - `tools/fetch_components.sh`, `tools/components.sha256` — runtime components (read-only unless explicitly tasked)
 - `app/build/outputs/apk/modern/{debug,release}/` — build artifacts

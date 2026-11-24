@@ -37,7 +37,7 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | # | Item | State | Acceptance criteria |
 |---|---|---|---|
 | 3.1 | Second maintainer with merge rights | **DROPPED** | User decided it is not needed right now; revisit only on request |
-| 3.2 | Rebase on GameNative upstream | **PLANNED / EXPLAINED** | Monthly diff against upstream `main`, selective cherry-picks, GPL recheck. Concept explained 2026-11-24; needs explicit approval before any diff/merge work |
+| 3.2 | Rebase on GameNative upstream | **REVIEWED / NO APPLICABLE WINS** | Read-only diff 2026-11-24: nearest fork `jaredgei/wow-forever-android` has only a version bump since our base; GameNative has no shared merge base and its recent perf work is gamescope/shader-cache/binary manifests not present here. No code ported; binary component changes remain forbidden without explicit approval |
 | 3.3 | SBOM / component inventory | **DONE** | `docs/sbom.md` — manually maintained inventory of toolchain, Gradle deps, runtime archives and proprietary components; no binaries added |
 | 3.4 | Component update automation | **PLANNED** | Script checks upstream releases and opens a PR proposal; never auto-merges |
 
@@ -45,6 +45,12 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 
 - Support for other private servers (only after the current one is stable).
 - Sponsorship/funding, if the community asks for it.
+
+## Phase 5 — LSFG (user-provided DLL)
+
+| # | Item | State | Acceptance criteria |
+|---|---|---|---|
+| 5.1 | LSFG with a user-imported `Lossless.dll` | **DONE** | The inherited `LsfgVkManager` no longer assumes a Steam install: the user imports their own DLL from launcher Settings, it is stored in app-private `files/lsfg/Lossless.dll`, copied into the container at launch, and `isArmed()` accepts it. No DLL is bundled in the APK |
 
 ## Decision requests / blockers
 
@@ -56,4 +62,4 @@ Resolved: 0.3 (release `v0.1.1` already published), 0.4 (locales synchronised).
 
 ## Next action
 
-Phase 0 and Phase 2 are closed or hard-blocked: 2.1 (tests), 2.2 (lint) and 2.3 (locales) are done. Top remaining lint warnings are upstream backlog and are not release blockers: `LogNotTimber` (286 in `com.winlator`, after fixing our 24), `MissingTranslation` (102), `TypographyEllipsis` (90), `UnusedResources` (84), `GradleDependency` (54). 3.1 is dropped, 3.3 is done, 3.2 is explained but needs approval. Items 0.2/1.3, 1.1/1.2 and 1.4 remain blocked by device/data availability. Next: either approve a read-only upstream diff (3.2), pick a lint-warning category, or wait for the server endpoint and resume 1.1/1.2.
+Phase 0, Phase 2 and Phase 5 are closed or hard-blocked: 2.1 (tests), 2.2 (lint), 2.3 (locales) and 5.1 (LSFG DLL import) are done. Top remaining lint warnings are upstream backlog and are not release blockers: `LogNotTimber` (286 in `com.winlator`, after fixing our 24), `MissingTranslation` (102), `TypographyEllipsis` (90), `UnusedResources` (84), `GradleDependency` (54). 3.1 is dropped, 3.3 is done, 3.2 is explained but needs approval. Items 0.2/1.3, 1.1/1.2 and 1.4 remain blocked by device/data availability. Next: either approve a read-only upstream diff (3.2), pick a lint-warning category, or wait for the server endpoint and resume 1.1/1.2.
