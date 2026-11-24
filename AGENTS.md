@@ -119,7 +119,7 @@ P2 OPEN    online count (blocked: no endpoint) + device validation (blocked: dev
 P3 OPEN    3.1 dropped by user; 3.2 explained, needs approval; 3.3 SBOM done; 3.4 automation needs approval (touches tools/)
 P4 PLANNED other servers, sponsorship
 TECH DEBT DONE  full suite: 391 tests, 0 failures, 12 documented skips (POSIX-only + existing)
-LINT DONE       0 errors, 809 warnings triaged as upstream backlog (see docs/ROADMAP.md)
+LINT DONE       0 errors, 785 warnings triaged as upstream backlog (see docs/ROADMAP.md)
 ```
 
 When the user does not specify a task, continue in this order: unblock P1 sign-off, then P2, then tech debt, then P3/P4. Never skip an item marked BLOCKED by silently substituting fabricated data.
