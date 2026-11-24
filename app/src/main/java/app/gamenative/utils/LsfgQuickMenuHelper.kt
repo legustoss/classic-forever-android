@@ -47,7 +47,7 @@ object LsfgQuickMenuHelper {
         applyExecutor.execute {
             container.putExtra(LsfgVkManager.EXTRA_BACKEND, backend)
             container.saveData()
-            applySettings(container, readSettings(container))
+            applySettingsNow(container, readSettings(container))
         }
     }
 
@@ -56,7 +56,7 @@ object LsfgQuickMenuHelper {
         applyExecutor.execute {
             container.putExtra(LsfgVkManager.EXTRA_PRESENT_MODE, mode)
             container.saveData()
-            applySettings(container, readSettings(container))
+            applySettingsNow(container, readSettings(container))
         }
     }
 
@@ -66,7 +66,16 @@ object LsfgQuickMenuHelper {
     fun sanitizeFlowScale(flowScale: Float): Float =
         flowScale.coerceIn(0.25f, 1.0f)
 
+    /** Persist and hot-apply settings off the UI thread: both operations touch files and the native renderer. */
     fun applySettings(container: Container, settings: Settings) {
+        val multiplier = sanitizeMultiplier(settings.multiplier)
+        val flowScale = sanitizeFlowScale(settings.flowScale)
+        applyExecutor.execute {
+            applySettingsNow(container, Settings(multiplier, flowScale, settings.performanceMode))
+        }
+    }
+
+    private fun applySettingsNow(container: Container, settings: Settings) {
         val multiplier = sanitizeMultiplier(settings.multiplier)
         val flowScale = sanitizeFlowScale(settings.flowScale)
 
