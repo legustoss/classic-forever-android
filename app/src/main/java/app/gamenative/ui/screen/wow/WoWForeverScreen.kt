@@ -184,6 +184,7 @@ fun WoWForeverScreen(
     // Bumped on every install/removal so the checkbox and summary hashes are recomputed.
     var componentRevision by remember { mutableIntStateOf(0) }
     var activeComponentHashes by remember { mutableStateOf<Map<String, String?>>(emptyMap()) }
+    var settingsTab by remember { mutableStateOf(SettingsTab.LAUNCHER) }
 
     suspend fun fetchAppUpdate(): AppUpdater.Release? {
         val release = AppUpdater.check()
@@ -725,6 +726,30 @@ fun WoWForeverScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     ScreenTopBar(context.getString(R.string.wow_settings), goToMain)
+                    TabRow(
+                        selectedTabIndex = settingsTab.ordinal,
+                        containerColor = WowPanel.copy(alpha = 0.85f),
+                        contentColor = WowNeon,
+                    ) {
+                        SettingsTab.entries.forEach { tab ->
+                            Tab(
+                                selected = settingsTab == tab,
+                                onClick = { settingsTab = tab },
+                                text = {
+                                    Text(
+                                        stringResource(
+                                            when (tab) {
+                                                SettingsTab.LAUNCHER -> R.string.wow_tab_launcher
+                                                SettingsTab.GAME -> R.string.wow_tab_game
+                                                SettingsTab.GRAPHICS -> R.string.wow_tab_graphics
+                                            },
+                                        ),
+                                        fontSize = 11.sp,
+                                    )
+                                },
+                            )
+                        }
+                    }
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -739,6 +764,9 @@ fun WoWForeverScreen(
                                 .padding(16.dp),
                             verticalArrangement = Arrangement.spacedBy(10.dp),
                         ) {
+                            sectionsFor(settingsTab).forEach { section ->
+                            when (section) {
+                            SettingsSection.DISPLAY -> {
                             SectionTitle(context.getString(R.string.wow_section_display), WowNeon)
                             OptionMenu(
                                 context.getString(R.string.wow_resolution, resolution.label(context)),
@@ -767,6 +795,8 @@ fun WoWForeverScreen(
                                     ?.recreate()
                             }
 
+                            }
+                            SettingsSection.FILES -> {
                             HorizontalDivider(color = WowBorder)
                             SectionTitle(context.getString(R.string.wow_section_files), WowNeon)
                             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
@@ -784,6 +814,8 @@ fun WoWForeverScreen(
                                 }
                             }
 
+                            }
+                            SettingsSection.ACCOUNT -> {
                             HorizontalDivider(color = WowBorder)
                             SectionTitle(context.getString(R.string.wow_group_account), WowSubtle)
                             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
@@ -799,6 +831,8 @@ fun WoWForeverScreen(
                                 }
                             }
 
+                            }
+                            SettingsSection.LSFG -> {
                             HorizontalDivider(color = WowBorder)
                             SectionTitle(context.getString(R.string.lsfg_tab_title), WowSubtle)
                             Text(
@@ -834,6 +868,8 @@ fun WoWForeverScreen(
                                 )
                             }
 
+                            }
+                            SettingsSection.COMPONENTS -> {
                             HorizontalDivider(color = WowBorder)
                             SectionTitle(context.getString(R.string.wow_components_title), WowSubtle)
                             // A phone has one GPU: show only its Turnip slot, or both with a warning when
@@ -930,6 +966,8 @@ fun WoWForeverScreen(
                                 }
                             }
 
+                            }
+                            SettingsSection.UPDATES -> {
                             HorizontalDivider(color = WowBorder)
                             SectionTitle(context.getString(R.string.wow_section_updates), WowSubtle)
                             compatibility?.let { state ->
@@ -1034,6 +1072,9 @@ fun WoWForeverScreen(
                             if (isUpdating) {
                                 Text(updateStatusText, fontSize = 11.sp, color = WowNeonDim, textAlign = TextAlign.Center)
                                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth(), color = WowNeon)
+                            }
+                            }
+                            }
                             }
                             if (gamepadConnected) GamepadHint()
                         }
