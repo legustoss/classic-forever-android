@@ -1,5 +1,17 @@
 # Release checklist
 
+## Versioning policy
+
+Semantic-version-like, adapted to a 0.x project:
+
+- **Patch** (`0.1.1` → `0.1.2`): bug fixes, config/lint/docs changes, no new user-facing feature.
+- **Minor** (`0.1.1` → `0.2.0`): a new user-facing feature or a significant UI rework. LSFG frame generation, the three-screen launcher and the categorised Quick Menu fall here.
+- **Major** (`0.x` → `1.0.0`): only when the project is considered stable for a public release. Component version bumps alone never justify a major.
+- `versionCode` increases by 1 for every release, even when `versionName` stays the same. The tag is exactly `v<versionName>` and the workflow checks it.
+- Next planned release: **v0.2.0** (LSFG is a new feature). Bump after the device re-test of the LSFG multiplier fix.
+
+## Checklist
+
 1. Confirm the target version in `app/build.gradle.kts` (`versionName`, `versionCode`).
 2. `./gradlew assembleModernDebug` — must succeed.
 3. `./gradlew testModernDebugUnitTest` — green.

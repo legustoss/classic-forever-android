@@ -41,6 +41,7 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | 3.2 | Rebase on GameNative upstream | **REVIEWED / NO APPLICABLE WINS** | Read-only diff 2026-11-24: nearest fork `jaredgei/wow-forever-android` has only a version bump since our base; GameNative has no shared merge base and its recent perf work is gamescope/shader-cache/binary manifests not present here. No code ported; binary component changes remain forbidden without explicit approval |
 | 3.3 | SBOM / component inventory | **DONE** | `docs/sbom.md` — manually maintained inventory of toolchain, Gradle deps, runtime archives and proprietary components; no binaries added |
 | 3.4 | Component update automation | **PLANNED** | Script checks upstream releases and opens a PR proposal; never auto-merges |
+| 3.5 | Versioning policy | **DONE** | Patch = fixes, Minor = new features/major UI, Major = stable 1.0; next release planned as `v0.2.0` because of LSFG. Documented in `docs/release-checklist.md` |
 
 ## Phase 4 — Optional (P4)
 
@@ -54,7 +55,8 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | 5.1 | LSFG with a user-imported `Lossless.dll` | **DONE** | The inherited `LsfgVkManager` no longer assumes a Steam install: the user imports their own DLL from launcher Settings, it is stored in app-private `files/lsfg/Lossless.dll`, copied into the container at launch, and `isArmed()` accepts it. No DLL is bundled in the APK |
 | 5.2 | Explicit launch only | **DONE** | Removed implicit `launchGame()` calls on launch, after install and after update. `WoWLauncherState.shouldAutoLaunch` defaults to `false`, so no boot splash/auto-start |
 | 5.3 | Whole Quick Menu categorisation | **DONE** | Shared `QuickMenuCategoryHeader` with divider across HUD, LSFG, Tools and Controller tabs; Controller split into Input / Touch / Motion; LSFG flow scale and performance mode grouped; Effects already had category headers. No state, focus or QuickMenu() signature changes |
-| 5.4 | On-device check: no auto-launch + LSFG + categorised Quick Menu | **IN PROGRESS** | User is testing the new debug APK on the phone; wait for the report before claiming anything works | Awaiting user report |
+| 5.4 | On-device check: no auto-launch + LSFG + categorised Quick Menu | **IN PROGRESS** | User confirmed everything works except a hitch when switching the LSFG multiplier; re-test after 5.5 | Awaiting user re-test |
+| 5.5 | LSFG multiplier hitch | **DONE** | `LsfgQuickMenuHelper.applySettings` now persists and hot-reloads on a background executor; UI state updates immediately | — |
 
 ## Decision requests / blockers
 
@@ -68,4 +70,4 @@ Resolved: 0.3 (release `v0.1.1` already published), 0.4 (locales synchronised).
 
 Phase 0, Phase 2 and Phase 5 are closed or waiting on the user: 2.1 (tests), 2.2 (lint), 2.3 (locales), 5.1–5.3 (LSFG DLL, explicit launch only, Quick Menu categories) are done; 5.4 awaits the phone test report. Remaining lint warnings are upstream backlog and not release blockers: `LogNotTimber` (286 in `com.winlator`), `MissingTranslation` (102), `TypographyEllipsis` (90), `UnusedResources` (84), `GradleDependency` (54). 3.1 is dropped, 3.2 was reviewed with no applicable wins, 3.3 is done, 3.4 needs explicit approval because it touches `tools/`.
 
-Hard-blocked: 0.2/1.3 (no device/screenshots), 1.1/1.2 (no server endpoint), 1.4 (no devices), 1.5 (no profiling device). Unblocked options if work must continue before those arrive: pick one lint-warning category (e.g. `TypographyEllipsis` or `UnusedResources`) or approve 3.4 automation. Otherwise wait for the device report and the server developer.
+Hard-blocked: 0.2/1.3 (no device/screenshots), 1.1/1.2 (no server endpoint), 1.4 (no devices), 1.5 (no profiling device). Remaining lint categories (`TypographyEllipsis`, `UnusedResources`, `ObsoleteSdkInt`) are cosmetic or touch broad runtime code; not worth the regression risk right now. Unblocked options: approve 3.4 automation (touches `tools/`). Next release is planned as **v0.2.0**; prepare it only after the user re-tests the LSFG multiplier fix.
