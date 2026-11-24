@@ -37,6 +37,8 @@ Observed 2026-11-24 (read-only research):
 
 Adoption rule: watch the component release tag and upstream revisions, compare hashes and patch lists, then propose a diff in `tools/components.sha256` for explicit approval. Never swap a binary component without an in-world device test; device compatibility takes priority over being current.
 
+Concrete candidates and their compatibility caveats are tracked in [performance-candidates.md](performance-candidates.md).
+
 ## Runtime env vars
 
 Set in `WoWForeverScreen.containerConfig()` and `XServerScreen`:

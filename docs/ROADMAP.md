@@ -42,7 +42,7 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | 3.3 | SBOM / component inventory | **DONE** | `docs/sbom.md` — manually maintained inventory of toolchain, Gradle deps, runtime archives and proprietary components; no binaries added |
 | 3.4 | Component update automation | **PLANNED** | Script checks upstream releases and opens a PR proposal; never auto-merges |
 | 3.5 | Versioning policy | **DONE** | Patch = fixes, Minor = new features/major UI, Major = stable 1.0; next release planned as `v0.2.0` because of LSFG. Documented in `docs/release-checklist.md` |
-| 3.6 | Component provenance / update watchlist | **REVIEWED** | `components-v1` is from 2026-09-30; no components-v2 tag. Newer Proton-Wine v15 + locale fix and a ~50 MB Wine size reduction exist upstream, but adopting them needs explicit approval and device validation. Details in `docs/runtime.md` |
+| 3.6 | Component provenance / update watchlist | **REVIEWED** | `components-v1` is from 2026-09-30; no components-v2 tag. Candidates: DroidDeck-Proton 11.0-12.8 arm64ec (v16, perf-relevant Wine fixes, but built for DroidDeck runtime pack and not device-tested upstream), DXVK 3.1.1 (no aarch64 EC artifact), Turnip unchanged. No binary adopted; details in `docs/performance-candidates.md` |
 
 ## Phase 4 — Optional (P4)
 
