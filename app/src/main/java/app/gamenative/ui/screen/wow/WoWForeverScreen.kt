@@ -82,11 +82,13 @@ import app.gamenative.ui.util.SnackbarManager
 import app.gamenative.utils.AppUpdater
 import app.gamenative.utils.ClientCompatibility
 import app.gamenative.utils.ClassicForeverPatcher
+import app.gamenative.utils.ContainerUtils
 import app.gamenative.utils.ClientVersionChecker
 import app.gamenative.utils.DeviceCompatibility
 import app.gamenative.utils.DeviceCompatibilityResult
 import app.gamenative.utils.DeviceStatus
 import app.gamenative.utils.LocaleHelper
+import app.gamenative.utils.LsfgVkManager
 import app.gamenative.utils.Net
 import app.gamenative.utils.ServerStatus
 import app.gamenative.utils.ServerStatusConfig
@@ -163,6 +165,8 @@ fun WoWForeverScreen(
     var pendingInstallPermission by remember { mutableStateOf(false) }
     var downloadedApk by remember { mutableStateOf<File?>(null) }
     var showUpgradeDialog by remember { mutableStateOf(false) }
+    var lsfgDllReady by remember { mutableStateOf(LsfgVkManager.isUserDllInstalled()) }
+    var lsfgEnabled by remember { mutableStateOf(false) }
 
     suspend fun fetchAppUpdate(): AppUpdater.Release? {
         val release = AppUpdater.check()
@@ -378,7 +382,28 @@ fun WoWForeverScreen(
         }
     }
 
+    val lsfgPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            val imported = withContext(Dispatchers.IO) { LsfgVkManager.importUserDll(context, uri) }
+            lsfgDllReady = LsfgVkManager.isUserDllInstalled()
+            SnackbarManager.show(
+                context.getString(if (imported && lsfgDllReady) R.string.wow_lsfg_ready else R.string.wow_lsfg_missing)
+            )
+        }
+    }
+
     val canPlay = !isLaunching && !isUpdating && !files.needsInstall && !files.isWrongGame
+
+    val lsfgContainer = if (ContainerUtils.hasContainer(context, CONTAINER_ID)) {
+        runCatching { ContainerUtils.getContainer(context, CONTAINER_ID) }.getOrNull()
+    } else {
+        null
+    }
+    LaunchedEffect(lsfgContainer?.id) {
+        lsfgEnabled = lsfgContainer?.getExtra(LsfgVkManager.EXTRA_ARMED, "false")?.toBoolean() == true
+        lsfgDllReady = LsfgVkManager.isUserDllInstalled() || lsfgContainer?.let { LsfgVkManager.containerDllPath(it) != null } == true
+    }
 
     val view = LocalView.current
     DisposableEffect(isUpdating) {
@@ -698,6 +723,41 @@ fun WoWForeverScreen(
                                     hasSavedLogin = false
                                 }
                             }
+                        }
+
+                        HorizontalDivider(color = WowBorder)
+                        SectionTitle(context.getString(R.string.lsfg_tab_title), WowSubtle)
+                        Text(
+                            text = context.getString(if (lsfgDllReady) R.string.wow_lsfg_ready else R.string.wow_lsfg_missing),
+                            fontSize = 11.sp,
+                            color = WowSubtle,
+                        )
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
+                            LinkButton(context.getString(R.string.wow_lsfg_import), Icons.Default.FolderOpen) {
+                                lsfgPicker.launch(arrayOf("*/*"))
+                            }
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = context.getString(R.string.wow_lsfg_enable),
+                                fontSize = 12.sp,
+                                color = WowNeonDim,
+                                modifier = Modifier.weight(1f),
+                            )
+                            Switch(
+                                checked = lsfgEnabled,
+                                enabled = lsfgDllReady && lsfgContainer != null,
+                                onCheckedChange = { enabled ->
+                                    lsfgEnabled = enabled
+                                    lsfgContainer?.let { container ->
+                                        container.putExtra(LsfgVkManager.EXTRA_ARMED, enabled.toString())
+                                        container.saveData()
+                                    }
+                                },
+                            )
                         }
 
                         HorizontalDivider(color = WowBorder)
