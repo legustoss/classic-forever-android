@@ -84,3 +84,6 @@ Wow-ARM64/
 # Agent guidance (private)
 docs/
 AGENTS.md
+
+# Local test APKs (not release artifacts)
+/test-apks/
