@@ -28,7 +28,7 @@ Known environment limits: no `adb` in the current environment, so on-device/layo
 3. **Do not add dependencies** without justification: APK size, GPL compatibility, startup impact.
 4. **No cheats, no anti-cheat bypass, no in-game memory modification** outside `ClassicForeverPatcher.kt`.
 5. **One logical change = one commit.** English commit messages with prefixes: `perf(runtime):`, `refactor(patcher):`, `feat(config):`, `feat(diagnostics):`, `feat(ui):`, `feat(version):`, `docs:`, `ci:`.
-6. **Before any PR:** `./gradlew assembleModernDebug` must succeed. Fix the build first, then continue.
+6. **Build gate for ordinary work:** `./gradlew assembleModernDebug` must succeed. Fix the build first, then continue. Do **not** run `assembleModernRelease` on every task — it is only part of release preparation in `docs/release-checklist.md`. User decision 2026-11-24.
 7. **Follow GPL-3.0 and bundled component licenses** (LGPL/MIT). If compatibility is unclear — stop and ask.
 8. **Do not invent performance numbers.** Without measurement write "requires benchmark" and propose a scenario.
 9. **Never commit secrets**: keys, passwords, keystore, `.build.info` from private installs, Discord bot/user tokens.
@@ -144,7 +144,7 @@ When the user does not specify a task, continue in this order: unblock P1 sign-o
 ```bash
 # Build gates
 ./gradlew assembleModernDebug
-./gradlew assembleModernRelease
+# ./gradlew assembleModernRelease   # only when preparing a release, see docs/release-checklist.md
 ./gradlew testModernDebugUnitTest --tests "app.gamenative.utils.*"   # targeted, green
 ./gradlew lintModernDebug
 
