@@ -5,7 +5,7 @@ Snapshot: 2026-11-24. Version in `app/build.gradle.kts`: 0.1.1 (`versionCode = 2
 ## Last verified state
 
 - `assembleModernDebug`: BUILD SUCCESSFUL.
-- `testModernDebugUnitTest`: 397 tests, 0 failures, 12 skipped.
+- `testModernDebugUnitTest`: 404 tests, 0 failures, 12 skipped.
 - `lintModernDebug`: 0 errors, 835 findings; only 2 `ObsoleteSdkInt` items remain (manifest/mipmap, out of scope). Backlog remains, see ROADMAP.
 - No release build — user asked to run it only when preparing a real release.
 

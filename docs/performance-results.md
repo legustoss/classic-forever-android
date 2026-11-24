@@ -106,7 +106,7 @@ route. No conclusion can be drawn about which Proton build is faster from this s
 | Variant | Scenario | Result |
 | :--- | :--- | :--- |
 | `Classic-Forever-Proton-v16-TEST.apk` | city run, ~60 s, 2026-11-24 | 3512 frames, modern jank 0.00%, CPU p50 21 ms / p99 93 ms (see table above) |
-| `Classic-Forever-baseline.apk` | same route | **not measured yet** |
-| `Classic-Forever-Proton-stripped-TEST.apk` | same route | **not measured yet** |
+| `Classic-Forever-baseline.apk` | same route | **not captured via adb** |
+| `Classic-Forever-Proton-stripped-TEST.apk` | same route | **not captured via adb** |
 
-Until the baseline row is filled in, this page records a measurement, not a comparison.
+User observation (Poco F7, city, native resolution, 50% render scale): baseline and v16 felt roughly equal, about **35–40 fps** from the in-game HUD. This is a user report, not an adb capture. On that basis the built-in Proton stays **recommended** and v16 remains an optional/test component; no measured advantage is claimed.
