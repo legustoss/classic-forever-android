@@ -696,4 +696,7 @@
     <string name="gyro_degrees_per_second_value">%1$.1f°/s</string>
     <string name="gyro_milliseconds_value">%1$d ms</string>
     <string name="reset_gyro_settings">Reset gyro settings</string>
+    <string name="quick_menu_category_input">Input</string>
+    <string name="quick_menu_category_touch">Touch &amp; radial menus</string>
+    <string name="quick_menu_category_motion">Motion</string>
 </resources>

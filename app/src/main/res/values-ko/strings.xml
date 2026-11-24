@@ -689,4 +689,7 @@
     <string name="gyro_degrees_per_second_value">%1$.1f°/초</string>
     <string name="gyro_milliseconds_value">%1$d ms</string>
     <string name="reset_gyro_settings">자이로 설정 초기화</string>
+    <string name="quick_menu_category_input">입력</string>
+    <string name="quick_menu_category_touch">터치 및 원형 메뉴</string>
+    <string name="quick_menu_category_motion">모션</string>
 </resources>

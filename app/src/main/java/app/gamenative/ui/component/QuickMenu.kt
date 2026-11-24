@@ -787,6 +787,15 @@ fun QuickMenu(
                                             val gyroEnabled = gyroMenu?.settings?.mode
                                                 ?.let { it != GyroSettings.MODE_DISABLED } == true
                                             controllerItems.forEachIndexed { index, item ->
+                                                val categoryRes = when (item.id) {
+                                                    QuickMenuAction.DISABLE_MOUSE -> R.string.quick_menu_category_input
+                                                    QuickMenuAction.TOUCHSCREEN_MODE -> R.string.quick_menu_category_touch
+                                                    QuickMenuAction.GYRO -> R.string.quick_menu_category_motion
+                                                    else -> null
+                                                }
+                                                if (categoryRes != null) {
+                                                    QuickMenuCategoryHeader(title = stringResource(categoryRes))
+                                                }
                                                 QuickMenuItemRow(
                                                     item = item,
                                                     isActive = if (item.id == QuickMenuAction.GYRO) {
@@ -904,7 +913,7 @@ private fun ToolsQuickMenuTab(
             .focusGroup(),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        QuickMenuSectionHeader(
+        QuickMenuCategoryHeader(
             title = if (isLoadingProcesses) {
                 stringResource(R.string.main_loading)
             } else {
@@ -960,6 +969,7 @@ private fun PerformanceHudQuickMenuTab(
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         // ── FPS Limiter (topmost) ────────────────────────────────────────
+        QuickMenuCategoryHeader(title = stringResource(R.string.performance_hud_fps_limiter))
         val lsfgActive = lsfgMultiplier >= 2
         QuickMenuToggleRow(
             title = stringResource(R.string.performance_hud_fps_limiter),
@@ -1000,6 +1010,7 @@ private fun PerformanceHudQuickMenuTab(
         Spacer(modifier = Modifier.height(8.dp))
 
         // ── Performance HUD ──────────────────────────────────────────────
+        QuickMenuCategoryHeader(title = stringResource(R.string.performance_hud))
         QuickMenuToggleRow(
             title = stringResource(R.string.performance_hud),
             subtitle = stringResource(R.string.performance_hud_description),
@@ -1010,7 +1021,7 @@ private fun PerformanceHudQuickMenuTab(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        QuickMenuSectionHeader(
+        QuickMenuCategoryHeader(
             title = stringResource(R.string.performance_hud_presets),
         )
 
@@ -1037,7 +1048,7 @@ private fun PerformanceHudQuickMenuTab(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        QuickMenuSectionHeader(
+        QuickMenuCategoryHeader(
             title = stringResource(R.string.performance_hud_appearance),
         )
 
@@ -1132,7 +1143,7 @@ private fun PerformanceHudQuickMenuTab(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        QuickMenuSectionHeader(
+        QuickMenuCategoryHeader(
             title = stringResource(R.string.performance_hud_metrics),
         )
 
@@ -1307,7 +1318,7 @@ private fun LsfgQuickMenuTab(
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         // ── Multiplier (Off / 2x / 3x / 4x) ───────────────────────────────
-        QuickMenuSectionHeader(
+        QuickMenuCategoryHeader(
             title = stringResource(R.string.lsfg_multiplier),
         )
         Row(
@@ -1336,6 +1347,7 @@ private fun LsfgQuickMenuTab(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 // ── Flow Scale ────────────────────────────────────────────
+                QuickMenuCategoryHeader(title = stringResource(R.string.lsfg_flow_scale))
                 QuickMenuAdjustmentRow(
                     title = stringResource(R.string.lsfg_flow_scale),
                     subtitle = stringResource(R.string.lsfg_flow_scale_desc),
@@ -1355,6 +1367,7 @@ private fun LsfgQuickMenuTab(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 // ── Performance Mode ──────────────────────────────────────
+                QuickMenuCategoryHeader(title = stringResource(R.string.lsfg_performance_mode))
                 QuickMenuToggleRow(
                     title = stringResource(R.string.lsfg_performance_mode),
                     subtitle = stringResource(R.string.lsfg_performance_mode_desc),
@@ -1366,7 +1379,7 @@ private fun LsfgQuickMenuTab(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 // ── Present Mode (Mailbox / FIFO) ─────────────────────────
-                QuickMenuSectionHeader(
+                QuickMenuCategoryHeader(
                     title = stringResource(R.string.lsfg_present_mode),
                     subtitle = stringResource(R.string.lsfg_present_mode_desc),
                 )
@@ -1388,7 +1401,7 @@ private fun LsfgQuickMenuTab(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 // ── Backend (Legacy layer / Native renderer) ──────────────
-                QuickMenuSectionHeader(
+                QuickMenuCategoryHeader(
                     title = stringResource(R.string.lsfg_backend),
                     subtitle = stringResource(R.string.lsfg_backend_desc),
                 )
@@ -1439,6 +1452,22 @@ private fun QuickMenuSectionHeader(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+    }
+}
+
+@Composable
+private fun QuickMenuCategoryHeader(
+    title: String,
+    subtitle: String? = null,
+) {
+    Column(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+        QuickMenuSectionHeader(title = title, subtitle = subtitle)
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            thickness = 1.dp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+        )
+        Spacer(modifier = Modifier.height(6.dp))
     }
 }
 

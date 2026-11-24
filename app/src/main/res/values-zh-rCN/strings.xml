@@ -707,4 +707,7 @@
     <string name="gyro_degrees_per_second_value">%1$.1f°/秒</string>
     <string name="gyro_milliseconds_value">%1$d 毫秒</string>
     <string name="reset_gyro_settings">重置陀螺仪设置</string>
+    <string name="quick_menu_category_input">输入</string>
+    <string name="quick_menu_category_touch">触控与环形菜单</string>
+    <string name="quick_menu_category_motion">体感</string>
 </resources>
