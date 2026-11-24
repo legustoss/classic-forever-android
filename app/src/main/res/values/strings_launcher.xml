@@ -133,4 +133,7 @@
     <string name="wow_components_hash_error">Checksum mismatch</string>
     <string name="wow_components_unvalidated">Not validated on device</string>
     <string name="wow_components_available">Available for testing</string>
+    <string name="wow_components_badge_active">Active</string>
+    <string name="wow_components_slots_title">Active runtime components</string>
+    <string name="wow_components_bundled">bundled</string>
 </resources>

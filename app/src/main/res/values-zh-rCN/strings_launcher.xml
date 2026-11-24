@@ -132,4 +132,7 @@
     <string name="wow_components_hash_error">校验和不匹配</string>
     <string name="wow_components_unvalidated">未在设备上验证</string>
     <string name="wow_components_available">可用于测试</string>
+    <string name="wow_components_badge_active">当前</string>
+    <string name="wow_components_slots_title">当前运行时组件</string>
+    <string name="wow_components_bundled">内置</string>
 </resources>

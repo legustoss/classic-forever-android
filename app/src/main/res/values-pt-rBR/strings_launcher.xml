@@ -132,4 +132,7 @@
     <string name="wow_components_hash_error">A soma de verificação não confere</string>
     <string name="wow_components_unvalidated">Não validado no dispositivo</string>
     <string name="wow_components_available">Disponível para teste</string>
+    <string name="wow_components_badge_active">Ativo</string>
+    <string name="wow_components_slots_title">Componentes ativos</string>
+    <string name="wow_components_bundled">embutido</string>
 </resources>

@@ -132,4 +132,7 @@
     <string name="wow_components_hash_error">Somme de contrôle incorrecte</string>
     <string name="wow_components_unvalidated">Non validé sur l\'appareil</string>
     <string name="wow_components_available">Disponible pour test</string>
+    <string name="wow_components_badge_active">Actif</string>
+    <string name="wow_components_slots_title">Composants actifs</string>
+    <string name="wow_components_bundled">intégré</string>
 </resources>

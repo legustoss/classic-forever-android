@@ -132,4 +132,7 @@
     <string name="wow_components_hash_error">Несовпадение контрольной суммы</string>
     <string name="wow_components_unvalidated">Не проверено на устройстве</string>
     <string name="wow_components_available">Доступно для теста</string>
+    <string name="wow_components_badge_active">Активно</string>
+    <string name="wow_components_slots_title">Активные компоненты</string>
+    <string name="wow_components_bundled">встроенный</string>
 </resources>

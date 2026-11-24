@@ -132,4 +132,7 @@
     <string name="wow_components_hash_error">체크섬 불일치</string>
     <string name="wow_components_unvalidated">기기에서 검증되지 않음</string>
     <string name="wow_components_available">테스트용으로 사용 가능</string>
+    <string name="wow_components_badge_active">활성</string>
+    <string name="wow_components_slots_title">활성 런타임 구성 요소</string>
+    <string name="wow_components_bundled">기본 포함</string>
 </resources>

@@ -132,4 +132,7 @@
     <string name="wow_components_hash_error">チェックサムが一致しません</string>
     <string name="wow_components_unvalidated">デバイスで未検証</string>
     <string name="wow_components_available">テスト用に利用可能</string>
+    <string name="wow_components_badge_active">アクティブ</string>
+    <string name="wow_components_slots_title">現在のコンポーネント</string>
+    <string name="wow_components_bundled">同梱</string>
 </resources>

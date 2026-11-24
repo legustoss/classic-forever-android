@@ -132,4 +132,7 @@
     <string name="wow_components_hash_error">Prüfsumme stimmt nicht</string>
     <string name="wow_components_unvalidated">Nicht auf Gerät validiert</string>
     <string name="wow_components_available">Zum Testen verfügbar</string>
+    <string name="wow_components_badge_active">Aktiv</string>
+    <string name="wow_components_slots_title">Aktive Laufzeitkomponenten</string>
+    <string name="wow_components_bundled">integriert</string>
 </resources>
