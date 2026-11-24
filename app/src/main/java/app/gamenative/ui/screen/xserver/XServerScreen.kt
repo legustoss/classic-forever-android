@@ -242,7 +242,6 @@ private fun initialFpsLimiterTarget(container: Container): Int =
 
 private fun detectMaxRefreshRateHz(context: Context, attachedView: View?): Int {
     val display = attachedView?.display
-        ?: context.display
         ?: ContextCompat.getSystemService(context, DisplayManager::class.java)?.getDisplay(Display.DEFAULT_DISPLAY)
 
     val refreshRate = when {
@@ -1962,9 +1961,13 @@ fun XServerScreen(
                 })
 
                 // Add invisible IME receiver to capture system keyboard input when keyboard is on external display
-                val imeDisplayContext = context.display?.let { display ->
-                    context.createDisplayContext(display)
-                } ?: context
+                val imeDisplayContext = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    context.display?.let { display ->
+                        context.createDisplayContext(display)
+                    } ?: context
+                } else {
+                    context
+                }
 
                 val imeReceiver = app.gamenative.externaldisplay.IMEInputReceiver(
                     context = context,
