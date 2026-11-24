@@ -15,6 +15,15 @@ class ComponentCatalogTest {
     }
 
     @Test
+    fun catalogSlotsMatchRuntimeSlots() {
+        val slots = ComponentStore.catalog.map { it.slot }
+        assertEquals(setOf("proton", "dxvk", "turnip740", "turnip8xx"), slots.toSet())
+        assertEquals(4, slots.toSet().size)
+        val v16 = ComponentStore.catalog.first { it.id == "proton-v16" }
+        assertEquals("proton", v16.slot)
+    }
+
+    @Test
     fun recommendedComponentsUseBundledAssets() {
         ComponentStore.catalog.filter { it.recommended }.forEach {
             assertNotNull("${it.id} must have a bundled asset", it.bundledAsset)

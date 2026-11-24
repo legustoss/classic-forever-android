@@ -1,6 +1,7 @@
 package app.gamenative.utils
 
 import com.winlator.container.Container
+import timber.log.Timber
 import java.util.Locale
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
@@ -8,6 +9,11 @@ import java.util.concurrent.TimeUnit
 
 /** Helpers for Quick Menu LSFG state persistence and runtime hot-reload. */
 object LsfgQuickMenuHelper {
+    private const val TAG = "LsfgQuickMenuHelper"
+
+    /** Lower flow scale reduces frame-generation artifacts on first install. */
+    const val DEFAULT_FLOW_SCALE = 0.50f
+
     data class Settings(
         val multiplier: Int,
         val flowScale: Float,
@@ -19,7 +25,7 @@ object LsfgQuickMenuHelper {
 
     fun readSettings(container: Container): Settings = Settings(
         multiplier = LsfgVkManager.multiplier(container),
-        flowScale = LsfgVkManager.flowScale(container),
+        flowScale = flowScaleOrDefault(container.getExtra(LsfgVkManager.EXTRA_FLOW_SCALE, "")),
         performanceMode = LsfgVkManager.performanceMode(container),
     )
 
@@ -69,6 +75,10 @@ object LsfgQuickMenuHelper {
     fun sanitizeFlowScale(flowScale: Float): Float =
         flowScale.coerceIn(0.25f, 1.0f)
 
+    /** Resolve a stored flow-scale string, falling back to the stable default. */
+    fun flowScaleOrDefault(raw: String?): Float =
+        raw?.toFloatOrNull()?.let(::sanitizeFlowScale) ?: DEFAULT_FLOW_SCALE
+
     /** Persist and hot-apply settings off the UI thread, coalescing rapid FPS-step changes. */
     @Synchronized
     fun applySettings(container: Container, settings: Settings) {
@@ -83,9 +93,22 @@ object LsfgQuickMenuHelper {
         )
     }
 
-    private fun applySettingsNow(container: Container, settings: Settings) {
+    private fun applySettingsNow(
+        container: Container,
+        settings: Settings,
+        fpsLimitOverride: Int? = null,
+    ) {
         val multiplier = sanitizeMultiplier(settings.multiplier)
         val flowScale = sanitizeFlowScale(settings.flowScale)
+        val presentMode = LsfgVkManager.presentMode(container)
+        Timber.tag(TAG).i(
+            "Applied LSFG config: multiplier=%d, flowScale=%.2f, performanceMode=%s, presentMode=%s, fpsLimitOverride=%s",
+            multiplier,
+            flowScale,
+            settings.performanceMode,
+            presentMode,
+            fpsLimitOverride?.toString() ?: "none",
+        )
 
         container.putExtra(LsfgVkManager.EXTRA_MULTIPLIER, multiplier.toString())
         container.putExtra(LsfgVkManager.EXTRA_FLOW_SCALE, String.format(Locale.US, "%.2f", flowScale))
@@ -100,6 +123,7 @@ object LsfgQuickMenuHelper {
             effectiveMultiplier,
             flowScale,
             settings.performanceMode,
+            fpsLimitOverride = fpsLimitOverride,
         )
         LsfgVkManager.refreshNativeRuntime(container)
     }
