@@ -37,6 +37,7 @@ Known environment limits: no `adb` in the current environment, so on-device/layo
 12. **UI must never overflow**: responsive Composables, verified at multiple window sizes. Do not use `isTablet`-style booleans; use `WindowSizeClass`.
 13. **Do not scrape Discord ephemeral messages** and do not embed Discord credentials in the APK. A status source must be an official HTTP endpoint or a server-side proxy that keeps the token outside the app.
 14. **Do not claim a GPU/device is validated** without an in-world report. "Pending validation" stays pending until then.
+15. **Never auto-launch the game client.** Launching happens only from explicit launcher buttons — not on app start, after install, or after update (user decision 2026-11-24).
 
 ## 2. Workflow — status-aware
 
