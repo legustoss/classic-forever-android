@@ -51,6 +51,8 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | # | Item | State | Acceptance criteria |
 |---|---|---|---|
 | 5.1 | LSFG with a user-imported `Lossless.dll` | **DONE** | The inherited `LsfgVkManager` no longer assumes a Steam install: the user imports their own DLL from launcher Settings, it is stored in app-private `files/lsfg/Lossless.dll`, copied into the container at launch, and `isArmed()` accepts it. No DLL is bundled in the APK |
+| 5.2 | Explicit launch only | **DONE** | Removed implicit `launchGame()` calls on launch, after install and after update. `WoWLauncherState.shouldAutoLaunch` defaults to `false`, so no boot splash/auto-start |
+| 5.3 | Whole Quick Menu categorisation | **DONE** | Shared `QuickMenuCategoryHeader` with divider across HUD, LSFG, Tools and Controller tabs; Controller split into Input / Touch / Motion; LSFG flow scale and performance mode grouped; Effects already had category headers. No state, focus or QuickMenu() signature changes |
 
 ## Decision requests / blockers
 
