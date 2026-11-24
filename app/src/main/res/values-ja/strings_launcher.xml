@@ -136,4 +136,9 @@
     <string name="wow_components_badge_active">アクティブ</string>
     <string name="wow_components_slots_title">現在のコンポーネント</string>
     <string name="wow_components_bundled">同梱</string>
+    <string name="wow_tab_launcher">ランチャー</string>
+    <string name="wow_tab_game">ゲーム</string>
+    <string name="wow_tab_graphics">グラフィック</string>
+    <string name="wow_components_group_proton">Proton</string>
+    <string name="wow_components_group_dxvk">DXVK</string>
 </resources>

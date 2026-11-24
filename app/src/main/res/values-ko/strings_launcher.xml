@@ -136,4 +136,9 @@
     <string name="wow_components_badge_active">활성</string>
     <string name="wow_components_slots_title">활성 런타임 구성 요소</string>
     <string name="wow_components_bundled">기본 포함</string>
+    <string name="wow_tab_launcher">런처</string>
+    <string name="wow_tab_game">게임</string>
+    <string name="wow_tab_graphics">그래픽</string>
+    <string name="wow_components_group_proton">Proton</string>
+    <string name="wow_components_group_dxvk">DXVK</string>
 </resources>

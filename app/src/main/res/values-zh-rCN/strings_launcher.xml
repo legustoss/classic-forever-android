@@ -136,4 +136,9 @@
     <string name="wow_components_badge_active">当前</string>
     <string name="wow_components_slots_title">当前运行时组件</string>
     <string name="wow_components_bundled">内置</string>
+    <string name="wow_tab_launcher">启动器</string>
+    <string name="wow_tab_game">游戏</string>
+    <string name="wow_tab_graphics">图形</string>
+    <string name="wow_components_group_proton">Proton</string>
+    <string name="wow_components_group_dxvk">DXVK</string>
 </resources>

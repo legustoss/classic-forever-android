@@ -136,4 +136,9 @@
     <string name="wow_components_badge_active">Ativo</string>
     <string name="wow_components_slots_title">Componentes ativos</string>
     <string name="wow_components_bundled">embutido</string>
+    <string name="wow_tab_launcher">Iniciador</string>
+    <string name="wow_tab_game">Jogo</string>
+    <string name="wow_tab_graphics">Gráficos</string>
+    <string name="wow_components_group_proton">Proton</string>
+    <string name="wow_components_group_dxvk">DXVK</string>
 </resources>
