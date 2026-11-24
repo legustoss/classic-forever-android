@@ -33,10 +33,10 @@
 | AYN Thor (Snapdragon 8 Gen 2 / Adreno 740) | Проверено, игра работает с геймпадом |
 | Retroid Pocket 6 (Snapdragon 8 Gen 2 / Adreno 740) | Проверено исходным community-набором |
 | AYN Odin 2 / Mini (Snapdragon 8 Gen 2) | Должно работать |
-| OnePlus 15r (Snapdragon 8 Gen 5 / Adreno 829) | Проверено в игре (Nathangarl) |
+| OnePlus 15r (Snapdragon 8 Gen 5 / Adreno 829) | Проверено сообществом в игре |
 | AYN Odin Portal (Snapdragon 8 Elite / Adreno 830) | Поддерживается через Turnip v32 |
-| RedMagic 11 Pro (Snapdragon 8 Elite / Adreno 840) | Проверено в игре (arusiasotto) |
-| Poco F7 (Snapdragon 8s Gen 4 / Adreno 825) | Проверено в игре (gusebus & legustoss) |
+| RedMagic 11 Pro (Snapdragon 8 Elite / Adreno 840) | Проверено сообществом в игре |
+| Poco F7 (Snapdragon 8s Gen 4 / Adreno 825) | Проверено сообществом в игре |
 | Samsung Galaxy S23/S24/S25 / Z Fold | Поддерживается (UBWC-оптимизация) |
 
 Требования: Snapdragon 8 серии (Adreno 7xx/8xx), Android 10+, 64-bit, около **60 ГБ** на данные игры и 4 ГБ внутри, Wi-Fi.

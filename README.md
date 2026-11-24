@@ -33,10 +33,10 @@ Everything else is the same proven stack: direct ARM64 launch and in-app game up
 | AYN Thor (Snapdragon 8 Gen 2 / Adreno 740) | Tested, reaches the game world with controller support |
 | Retroid Pocket 6 (Snapdragon 8 Gen 2 / Adreno 740) | Tested by the original community setup |
 | AYN Odin 2 / Mini (Snapdragon 8 Gen 2) | Expected to work |
-| OnePlus 15r (Snapdragon 8 Gen 5 / Adreno 829) | Tested in-world by Nathangarl |
+| OnePlus 15r (Snapdragon 8 Gen 5 / Adreno 829) | Community-tested in-world |
 | AYN Odin Portal (Snapdragon 8 Elite / Adreno 830) | Supported via bundled Turnip v32 driver |
-| RedMagic 11 Pro (Snapdragon 8 Elite / Adreno 840) | Tested in-world by arusiasotto |
-| Poco F7 (Snapdragon 8s Gen 4 / Adreno 825) | Tested in-world by gusebus & legustoss |
+| RedMagic 11 Pro (Snapdragon 8 Elite / Adreno 840) | Community-tested in-world |
+| Poco F7 (Snapdragon 8s Gen 4 / Adreno 825) | Community-tested in-world |
 | Samsung Galaxy S23/S24/S25 / Z Fold series | Supported (with automatic Samsung UBWC optimization) |
 
 Requirements:
