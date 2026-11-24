@@ -1,5 +1,7 @@
 # Support plan
 
+Current work items and their state are tracked in [ROADMAP.md](ROADMAP.md).
+
 ## Version lifecycle
 
 | Phase | Trigger | Action |
