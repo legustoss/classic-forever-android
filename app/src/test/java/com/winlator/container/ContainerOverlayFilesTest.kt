@@ -5,6 +5,7 @@ import java.nio.file.Files
 import java.nio.file.LinkOption
 import java.nio.file.Paths
 import org.junit.Assert.assertEquals
+import org.junit.Assume.assumeFalse
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -16,6 +17,10 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ContainerOverlayFilesTest {
+
+    private fun requirePosixFs() = assumeFalse(
+        System.getProperty("os.name").contains("Windows", ignoreCase = true)
+    )
     @get:Rule
     val tmp = TemporaryFolder()
 
@@ -36,6 +41,7 @@ class ContainerOverlayFilesTest {
 
     @Test
     fun prune_removesIdenticalAndProtonLinkedFiles_keepsTheRest() {
+        requirePosixFs()
         val base = tmp.newFolder("base", ".wine")
         val protonLib = tmp.newFolder("proton", "lib", "wine", "aarch64-windows")
         val components = tmp.newFolder("components")
@@ -86,6 +92,7 @@ class ContainerOverlayFilesTest {
 
     @Test
     fun migrate_storesCanonicalBasePathWhenReachedThroughSymlink() {
+        requirePosixFs()
         val realProton = tmp.newFolder("imagefs_shared", "proton", "proton-9.0-arm64ec")
         val base = File(realProton, "base_prefix/.wine").apply { mkdirs() }
         val opt = tmp.newFolder("imagefs", "opt")
@@ -212,6 +219,7 @@ class ContainerOverlayFilesTest {
 
     @Test
     fun createThinPrefix_marksDosdevicesOpaque() {
+        requirePosixFs()
         val base = tmp.newFolder("base", ".wine")
         Files.createDirectories(File(base, "dosdevices").toPath())
         Files.createSymbolicLink(File(base, "dosdevices/c:").toPath(), Paths.get("../drive_c"))
@@ -229,6 +237,7 @@ class ContainerOverlayFilesTest {
 
     @Test
     fun migrate_marksDosdevicesOpaque() {
+        requirePosixFs()
         val base = tmp.newFolder("base", ".wine")
         Files.createDirectories(File(base, "dosdevices").toPath())
         Files.createSymbolicLink(File(base, "dosdevices/e:").toPath(), Paths.get("/sdcard"))
@@ -243,6 +252,7 @@ class ContainerOverlayFilesTest {
 
     @Test
     fun basePrefix_normalizeKeepsOnlyCAndZDrives() {
+        requirePosixFs()
         val wine = tmp.newFolder("base_prefix", ".wine")
         val dosdevices = File(wine, "dosdevices").apply { mkdirs() }
         Files.createSymbolicLink(File(dosdevices, "c:").toPath(), Paths.get("../drive_c"))
@@ -258,6 +268,7 @@ class ContainerOverlayFilesTest {
 
     @Test
     fun basePrefix_upgradesVersion2BaseByTrimmingDosdevices() {
+        requirePosixFs()
         val baseDir = tmp.newFolder("base_prefix")
         val dosdevices = File(baseDir, ".wine/dosdevices").apply { mkdirs() }
         Files.createSymbolicLink(File(dosdevices, "c:").toPath(), Paths.get("../drive_c"))
@@ -273,6 +284,7 @@ class ContainerOverlayFilesTest {
 
     @Test
     fun createThinPrefix_copiesSkeletonFromBase() {
+        requirePosixFs()
         val base = tmp.newFolder("base", ".wine")
         write(base, "system.reg", "sys")
         write(base, "user.reg", "usr")

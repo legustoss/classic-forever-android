@@ -42,7 +42,9 @@ class GameConfigTest {
         ensureGameConfig(root, "2772x1280")
         assertEquals(
             listOf("SET gxFullscreenResolution \"2772x1280\"", "SET gxWindowedResolution \"2772x1280\""),
-            configWtf(root).readLines().filter { it.contains("Resolution ") },
+            configWtf(root).readLines().filter {
+                it.startsWith("SET gxFullscreenResolution ") || it.startsWith("SET gxWindowedResolution ")
+            },
         )
         assertTrue(configWtf(root).readLines().contains("SET RenderScale \"0.5\""))
         assertTrue(configWtf(root).readLines().contains("SET gxFullscreen \"1\""))

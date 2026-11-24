@@ -11,6 +11,7 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assume.assumeFalse
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -19,6 +20,10 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ImageFsInstallerTest {
+
+    private fun requirePosixFs() = assumeFalse(
+        System.getProperty("os.name").contains("Windows", ignoreCase = true)
+    )
     private val context = ApplicationProvider.getApplicationContext<android.content.Context>()
     private val filesDir = context.filesDir
     private val sharedDir = File(filesDir, "imagefs_shared")
@@ -136,6 +141,7 @@ class ImageFsInstallerTest {
 
     @Test
     fun ensureProtonVersionSymlink_replacesDanglingSymlinkAtActivePath() {
+        requirePosixFs()
         val rootDir = File(filesDir, "imagefs-root-dangling-proton-${System.nanoTime()}").apply { mkdirs() }
         val activeProtonVersion = "proton-ge-9-3"
         val optDir = File(rootDir, "opt").apply { mkdirs() }

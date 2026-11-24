@@ -4,6 +4,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.LinkOption
 import org.junit.Assert.assertEquals
+import org.junit.Assume.assumeFalse
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -14,6 +15,10 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class SharedComponentsTest {
+
+    private fun requirePosixFs() = assumeFalse(
+        System.getProperty("os.name").contains("Windows", ignoreCase = true)
+    )
     @get:Rule
     val tmp = TemporaryFolder()
 
@@ -32,6 +37,7 @@ class SharedComponentsTest {
 
     @Test
     fun materialize_copiesPrivateFiles() {
+        requirePosixFs()
         val shared = sharedTree()
         val dest = tmp.newFolder("dest")
 
@@ -65,6 +71,7 @@ class SharedComponentsTest {
 
     @Test
     fun materialize_copiesConfigFilesToo() {
+        requirePosixFs()
         val shared = sharedTree()
         File(shared, "syswow64/dxvk.conf").writeText("conf")
         val dest = tmp.newFolder("dest")
