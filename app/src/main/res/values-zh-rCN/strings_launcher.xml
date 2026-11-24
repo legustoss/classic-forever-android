@@ -116,4 +116,9 @@
     <string name="wow_launch_extracting_proton">正在解压 Proton 11 ARM64EC（约 10 秒）...</string>
     <string name="wow_launch_extracting_dxvk">正在解压 DXVK ARM64...</string>
     <string name="wow_launch_installing_driver">正在安装 %1$s 驱动...</string>
+    <string name="wow_login_body">以加密形式保存在此设备上。启动游戏时会自动登录。</string>
+    <string name="wow_login_email">邮箱</string>
+    <string name="wow_login_password">密码</string>
+    <string name="wow_login_save">保存</string>
+    <string name="wow_gamepad_hint">手柄：方向键导航，A 选择，B 返回</string>
 </resources>

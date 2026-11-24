@@ -116,4 +116,9 @@
     <string name="wow_launch_extracting_proton">Извлечение Proton 11 ARM64EC (около 10 с)...</string>
     <string name="wow_launch_extracting_dxvk">Извлечение DXVK ARM64...</string>
     <string name="wow_launch_installing_driver">Установка драйвера %1$s...</string>
+    <string name="wow_login_body">Сохраняется в зашифрованном виде на устройстве. Игра будет входить автоматически при запуске.</string>
+    <string name="wow_login_email">Почта</string>
+    <string name="wow_login_password">Пароль</string>
+    <string name="wow_login_save">Сохранить</string>
+    <string name="wow_gamepad_hint">Геймпад: крестовина — навигация, A — выбор, B — назад</string>
 </resources>

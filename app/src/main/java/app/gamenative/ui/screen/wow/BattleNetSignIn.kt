@@ -6,9 +6,13 @@ import android.util.Base64
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -20,11 +24,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import app.gamenative.Crypto
+import app.gamenative.R
+import app.gamenative.ui.theme.WowNeon
+import app.gamenative.ui.theme.WowNeonDim
+import app.gamenative.ui.theme.WowPanelElevated
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -143,36 +155,65 @@ fun BattleNetCredentialDialog(
     }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Battle.net login") },
+        title = {
+            Text(
+                text = stringResource(R.string.wow_password_login),
+                color = WowNeon,
+                fontWeight = FontWeight.Bold,
+                fontSize = 17.sp,
+            )
+        },
         text = {
             Column {
-                Text("Saved encrypted on this device. WoW will automatically log in on launch.")
+                Text(
+                    text = stringResource(R.string.wow_login_body),
+                    fontSize = 12.sp,
+                    color = WowNeonDim,
+                )
                 Spacer(Modifier.height(12.dp))
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = { Text("Email") },
+                    label = { Text(stringResource(R.string.wow_login_email)) },
                     singleLine = true,
                     modifier = Modifier.focusRequester(emailFocus),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = WowNeon,
+                        focusedLabelColor = WowNeon,
+                    ),
                 )
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("Password") },
+                    label = { Text(stringResource(R.string.wow_login_password)) },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = WowNeon,
+                        focusedLabelColor = WowNeon,
+                    ),
                 )
             }
         },
         confirmButton = {
-            TextButton(
+            Button(
                 enabled = email.isNotBlank() && password.isNotEmpty(),
                 onClick = { onConfirm(BattleNetSignIn.Login(email.trim(), password)) },
-            ) { Text("Save") }
+                colors = ButtonDefaults.buttonColors(containerColor = WowNeon, contentColor = Color.Black),
+                shape = RoundedCornerShape(10.dp),
+            ) {
+                Text(stringResource(R.string.wow_login_save), fontWeight = FontWeight.Bold)
+            }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.wow_cancel), color = WowNeon)
+            }
+        },
+        containerColor = WowPanelElevated,
+        shape = RoundedCornerShape(16.dp),
     )
 }
 

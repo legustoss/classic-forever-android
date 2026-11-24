@@ -3,6 +3,8 @@ package app.gamenative.utils
 import com.winlator.container.Container
 import java.util.Locale
 import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 /** Helpers for Quick Menu LSFG state persistence and runtime hot-reload. */
 object LsfgQuickMenuHelper {
@@ -22,7 +24,8 @@ object LsfgQuickMenuHelper {
     )
 
     private val applyExecutor =
-        Executors.newSingleThreadExecutor { r -> Thread(r, "lsfg-apply").apply { isDaemon = true } }
+        Executors.newSingleThreadScheduledExecutor { r -> Thread(r, "lsfg-apply").apply { isDaemon = true } }
+    private var pendingApply: ScheduledFuture<*>? = null
 
     fun presentMode(container: Container): String = LsfgVkManager.presentMode(container)
 
@@ -66,13 +69,18 @@ object LsfgQuickMenuHelper {
     fun sanitizeFlowScale(flowScale: Float): Float =
         flowScale.coerceIn(0.25f, 1.0f)
 
-    /** Persist and hot-apply settings off the UI thread: both operations touch files and the native renderer. */
+    /** Persist and hot-apply settings off the UI thread, coalescing rapid FPS-step changes. */
+    @Synchronized
     fun applySettings(container: Container, settings: Settings) {
         val multiplier = sanitizeMultiplier(settings.multiplier)
         val flowScale = sanitizeFlowScale(settings.flowScale)
-        applyExecutor.execute {
-            applySettingsNow(container, Settings(multiplier, flowScale, settings.performanceMode))
-        }
+        val target = Settings(multiplier, flowScale, settings.performanceMode)
+        pendingApply?.cancel(false)
+        pendingApply = applyExecutor.schedule(
+            { applySettingsNow(container, target) },
+            APPLY_DEBOUNCE_MS,
+            TimeUnit.MILLISECONDS,
+        )
     }
 
     private fun applySettingsNow(container: Container, settings: Settings) {
@@ -95,4 +103,6 @@ object LsfgQuickMenuHelper {
         )
         LsfgVkManager.refreshNativeRuntime(container)
     }
+
+    private const val APPLY_DEBOUNCE_MS = 180L
 }

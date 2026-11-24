@@ -9,6 +9,7 @@ import app.gamenative.R
 import android.os.Build
 import android.os.Environment
 import android.os.SystemClock
+import android.view.KeyEvent
 import android.view.WindowManager
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -29,6 +30,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.filled.FolderOpen
+import androidx.compose.material.icons.filled.Gamepad
 import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.PlayArrow
@@ -52,7 +54,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -87,6 +91,9 @@ import app.gamenative.utils.ClientVersionChecker
 import app.gamenative.utils.DeviceCompatibility
 import app.gamenative.utils.DeviceCompatibilityResult
 import app.gamenative.utils.DeviceStatus
+import app.gamenative.utils.isLauncherGamepadBack
+import app.gamenative.utils.isLauncherGamepadConfirm
+import app.gamenative.utils.rememberGamepadConnected
 import app.gamenative.utils.LocaleHelper
 import app.gamenative.utils.LsfgVkManager
 import app.gamenative.utils.Net
@@ -168,6 +175,7 @@ fun WoWForeverScreen(
     var showUpgradeDialog by remember { mutableStateOf(false) }
     var lsfgDllReady by remember { mutableStateOf(LsfgVkManager.isUserDllInstalled()) }
     var lsfgEnabled by remember { mutableStateOf(false) }
+    val gamepadConnected by rememberGamepadConnected()
 
     suspend fun fetchAppUpdate(): AppUpdater.Release? {
         val release = AppUpdater.check()
@@ -513,6 +521,14 @@ fun WoWForeverScreen(
         foldingFeature = foldingFeature,
         scrollState = scrollState,
         fullBleed = wide && screen == LauncherScreen.MAIN,
+        modifier = Modifier.onPreviewKeyEvent { event ->
+            if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN && isLauncherGamepadBack(event.nativeKeyEvent.keyCode)) {
+                goToMain()
+                true
+            } else {
+                false
+            }
+        },
     ) {
         when (screen) {
             LauncherScreen.MAIN -> {
@@ -545,11 +561,12 @@ fun WoWForeverScreen(
                             icon = Icons.Default.PlayArrow,
                             enabled = canPlay,
                             onClick = ::launchGame,
+                            modifier = Modifier.gamepadConfirm(::launchGame),
                         )
                         OutlinedButton(
                             onClick = { screen = LauncherScreen.SETTINGS },
                             enabled = !isLaunching && !isUpdating,
-                            modifier = Modifier.fillMaxWidth().height(42.dp),
+                            modifier = Modifier.fillMaxWidth().height(42.dp).gamepadConfirm { screen = LauncherScreen.SETTINGS },
                             shape = RoundedCornerShape(14.dp),
                             colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
                             border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
@@ -597,6 +614,7 @@ fun WoWForeverScreen(
                         Text(appVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.Left, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         Text(clientVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.Left, maxLines = 2, overflow = TextOverflow.Ellipsis)
                         actionControls()
+                        if (gamepadConnected) GamepadHint()
                     }
                 } else {
                     Column(
@@ -627,6 +645,7 @@ fun WoWForeverScreen(
                         Text(clientVersion, fontSize = 11.sp, color = WowSubtle, textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis)
                         actionControls()
                         CommunityCard(serverStatus, compact = true)
+                        if (gamepadConnected) GamepadHint()
                     }
                 }
             }
@@ -847,6 +866,7 @@ fun WoWForeverScreen(
                             Text(updateStatusText, fontSize = 11.sp, color = WowNeonDim, textAlign = TextAlign.Center)
                             LinearProgressIndicator(modifier = Modifier.fillMaxWidth(), color = WowNeon)
                         }
+                        if (gamepadConnected) GamepadHint()
                     }
                 }
             }
@@ -884,6 +904,7 @@ fun WoWForeverScreen(
                         }
                     }
                 }
+                if (gamepadConnected) GamepadHint()
             }
         }
     }
@@ -1228,6 +1249,7 @@ private fun LauncherLayout(
     foldingFeature: FoldingFeature?,
     scrollState: androidx.compose.foundation.ScrollState,
     fullBleed: Boolean = false,
+    modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit,
 ) {
     // One narrow, centred column at every size: the old two-column layout could not fit
@@ -1248,7 +1270,8 @@ private fun LauncherLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(WowBackgroundGradient))
-            .windowInsetsPadding(WindowInsets.safeDrawing),
+            .windowInsetsPadding(WindowInsets.safeDrawing)
+            .then(modifier),
     ) {
         if (fullBleed) {
             Box(modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp + hinge / 2, vertical = 16.dp)) {
@@ -1272,6 +1295,39 @@ private fun LauncherLayout(
     }
 }
 
+private fun Modifier.gamepadConfirm(onConfirm: () -> Unit): Modifier = onPreviewKeyEvent { event ->
+    if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN && isLauncherGamepadConfirm(event.nativeKeyEvent.keyCode)) {
+        onConfirm()
+        true
+    } else {
+        false
+    }
+}
+
+@Composable
+private fun GamepadHint() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            Icons.Default.Gamepad,
+            contentDescription = null,
+            tint = WowNeonDim,
+            modifier = Modifier.size(18.dp),
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = stringResource(R.string.wow_gamepad_hint),
+            fontSize = 10.sp,
+            color = WowSubtle,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
 @Composable
 private fun ScreenTopBar(title: String, onBack: () -> Unit) {
     val context = LocalContext.current
@@ -1283,7 +1339,7 @@ private fun ScreenTopBar(title: String, onBack: () -> Unit) {
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
             onClick = onBack,
-            modifier = Modifier.height(48.dp).widthIn(min = 140.dp),
+            modifier = Modifier.height(48.dp).widthIn(min = 140.dp).gamepadConfirm(onBack),
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
             border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
@@ -1485,11 +1541,12 @@ private fun PrimaryButton(
     enabled: Boolean,
     onClick: () -> Unit,
     dense: Boolean = false,
+    modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,
         enabled = enabled,
-        modifier = Modifier.fillMaxWidth().height(if (dense) 42.dp else 56.dp).neonGlow(),
+        modifier = Modifier.fillMaxWidth().height(if (dense) 42.dp else 56.dp).neonGlow().then(modifier),
         colors = ButtonDefaults.buttonColors(containerColor = WowNeon, contentColor = Color.Black),
         shape = RoundedCornerShape(14.dp)
     ) {

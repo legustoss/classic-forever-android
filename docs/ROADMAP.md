@@ -60,6 +60,9 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | 5.5 | LSFG multiplier hitch | **DONE** | `LsfgQuickMenuHelper.applySettings` now persists and hot-reloads on a background executor; UI state updates immediately | — |
 | 5.6 | Back button on tall launcher screens | **DONE** | Scrollable launcher content is top-aligned instead of centered, so the top bar is no longer clipped/unclickable on FirstInstall/Settings |
 | 5.7 | Launch status messages | **DONE** | Hardcoded English container/Proton/DXVK/driver status texts moved to `strings_launcher.xml` in all 9 languages |
+| 5.8 | FPS target change stutter | **DONE** | LSFG settings apply is debounced (180 ms, latest wins) so rapid FPS steps no longer queue repeated native config/renderer reloads |
+| 5.9 | Password login dialog | **DONE** | Removed hardcoded "Battle.net" English text; dialog uses launcher strings and Wow theme |
+| 5.10 | Launcher gamepad navigation | **DONE** | `rememberGamepadConnected()` observes hot-plug without touching game input; hints with icons shown when connected; BUTTON_A confirms and BUTTON_B goes back in launcher only |
 
 ## Decision requests / blockers
 

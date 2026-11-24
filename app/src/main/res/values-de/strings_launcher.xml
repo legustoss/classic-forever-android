@@ -116,4 +116,9 @@
     <string name="wow_launch_extracting_proton">Proton 11 ARM64EC wird entpackt (ca. 10 s)...</string>
     <string name="wow_launch_extracting_dxvk">DXVK ARM64 wird entpackt...</string>
     <string name="wow_launch_installing_driver">Treiber %1$s wird installiert...</string>
+    <string name="wow_login_body">Verschlüsselt auf diesem Gerät gespeichert. Das Spiel meldet sich beim Start automatisch an.</string>
+    <string name="wow_login_email">E-Mail</string>
+    <string name="wow_login_password">Passwort</string>
+    <string name="wow_login_save">Speichern</string>
+    <string name="wow_gamepad_hint">Gamepad: D-Pad zum Navigieren, A zum Auswählen, B zum Zurück</string>
 </resources>

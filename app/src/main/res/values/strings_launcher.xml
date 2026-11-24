@@ -117,4 +117,9 @@
     <string name="wow_launch_extracting_proton">Extracting Proton 11 ARM64EC (about 10 s)...</string>
     <string name="wow_launch_extracting_dxvk">Extracting DXVK ARM64...</string>
     <string name="wow_launch_installing_driver">Installing %1$s driver...</string>
+    <string name="wow_login_body">Saved encrypted on this device. The game will sign in automatically on launch.</string>
+    <string name="wow_login_email">Email</string>
+    <string name="wow_login_password">Password</string>
+    <string name="wow_login_save">Save</string>
+    <string name="wow_gamepad_hint">Gamepad: D-pad to navigate, A to select, B to back</string>
 </resources>

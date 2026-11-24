@@ -116,4 +116,9 @@
     <string name="wow_launch_extracting_proton">Proton 11 ARM64EC を展開中（約10秒）...</string>
     <string name="wow_launch_extracting_dxvk">DXVK ARM64 を展開中...</string>
     <string name="wow_launch_installing_driver">ドライバー %1$s をインストール中...</string>
+    <string name="wow_login_body">このデバイスに暗号化して保存されます。起動時にゲームが自動でログインします。</string>
+    <string name="wow_login_email">メール</string>
+    <string name="wow_login_password">パスワード</string>
+    <string name="wow_login_save">保存</string>
+    <string name="wow_gamepad_hint">ゲームパッド: 十字キーで移動、A で決定、B で戻る</string>
 </resources>

@@ -116,4 +116,9 @@
     <string name="wow_launch_extracting_proton">Extrayendo Proton 11 ARM64EC (~10 s)...</string>
     <string name="wow_launch_extracting_dxvk">Extrayendo DXVK ARM64...</string>
     <string name="wow_launch_installing_driver">Instalando controlador %1$s...</string>
+    <string name="wow_login_body">Guardado cifrado en este dispositivo. El juego iniciará sesión automáticamente al lanzarse.</string>
+    <string name="wow_login_email">Correo</string>
+    <string name="wow_login_password">Contraseña</string>
+    <string name="wow_login_save">Guardar</string>
+    <string name="wow_gamepad_hint">Gamepad: cruceta para navegar, A para seleccionar, B para volver</string>
 </resources>
