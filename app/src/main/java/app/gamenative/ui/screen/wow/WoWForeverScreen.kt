@@ -88,6 +88,7 @@ import app.gamenative.utils.ClientCompatibility
 import app.gamenative.utils.ClassicForeverPatcher
 import app.gamenative.utils.ContainerUtils
 import app.gamenative.utils.ClientVersionChecker
+import app.gamenative.utils.ComponentStore
 import app.gamenative.utils.DeviceCompatibility
 import app.gamenative.utils.DeviceCompatibilityResult
 import app.gamenative.utils.DeviceStatus
@@ -176,6 +177,11 @@ fun WoWForeverScreen(
     var lsfgDllReady by remember { mutableStateOf(LsfgVkManager.isUserDllInstalled()) }
     var lsfgEnabled by remember { mutableStateOf(false) }
     val gamepadConnected by rememberGamepadConnected()
+    var componentOverrides by remember {
+        mutableStateOf(ComponentStore.catalog.associate { it.id to ComponentStore.isOverridden(context, it.id) })
+    }
+    var pendingComponentId by remember { mutableStateOf("") }
+    var componentBusy by remember { mutableStateOf<String?>(null) }
 
     suspend fun fetchAppUpdate(): AppUpdater.Release? {
         val release = AppUpdater.check()
@@ -398,6 +404,44 @@ fun WoWForeverScreen(
             lsfgDllReady = LsfgVkManager.isUserDllInstalled()
             SnackbarManager.show(
                 context.getString(if (imported && lsfgDllReady) R.string.wow_lsfg_ready else R.string.wow_lsfg_missing)
+            )
+        }
+    }
+
+    fun refreshComponents() {
+        componentOverrides = ComponentStore.catalog.associate { it.id to ComponentStore.isOverridden(context, it.id) }
+    }
+
+    fun downloadComponent(entry: app.gamenative.utils.LauncherComponent) {
+        if (componentBusy != null) return
+        componentBusy = entry.id
+        scope.launch {
+            val ok = withContext(Dispatchers.IO) { ComponentStore.download(context, entry) }
+            componentBusy = null
+            refreshComponents()
+            SnackbarManager.show(
+                context.getString(
+                    if (ok) R.string.wow_components_active else R.string.wow_components_hash_error,
+                    entry.displayName,
+                ),
+            )
+        }
+    }
+
+    val componentPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        val id = pendingComponentId
+        if (id.isBlank()) return@rememberLauncherForActivityResult
+        componentBusy = id
+        scope.launch {
+            val ok = withContext(Dispatchers.IO) { ComponentStore.import(context, id, uri) }
+            componentBusy = null
+            refreshComponents()
+            SnackbarManager.show(
+                context.getString(
+                    if (ok) R.string.wow_components_active else R.string.wow_components_hash_error,
+                    id,
+                ),
             )
         }
     }
@@ -760,6 +804,56 @@ fun WoWForeverScreen(
                                 },
                             )
                         }
+
+                        HorizontalDivider(color = WowBorder)
+                        SectionTitle(context.getString(R.string.wow_components_title), WowSubtle)
+                        ComponentStore.catalog.forEach { entry ->
+                            val overridden = componentOverrides[entry.id] == true
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(entry.displayName, fontSize = 11.sp, color = WowNeon)
+                                    Text(
+                                        text = stringResource(
+                                            when {
+                                                overridden -> R.string.wow_components_custom
+                                                entry.recommended -> R.string.wow_components_recommended
+                                                else -> R.string.wow_components_available
+                                            },
+                                        ),
+                                        fontSize = 10.sp,
+                                        color = WowSubtle,
+                                    )
+                                    if (componentBusy == entry.id) {
+                                        Text(
+                                            text = stringResource(R.string.wow_components_downloading, entry.displayName),
+                                            fontSize = 10.sp,
+                                            color = WowNeonDim,
+                                        )
+                                    }
+                                }
+                                if (entry.downloadUrl != null && !overridden) {
+                                    LinkButton(stringResource(R.string.wow_components_download), Icons.Default.Download) {
+                                        downloadComponent(entry)
+                                    }
+                                }
+                                LinkButton(stringResource(R.string.wow_components_import), Icons.Default.FolderOpen) {
+                                    pendingComponentId = entry.id
+                                    componentPicker.launch(arrayOf("*/*"))
+                                }
+                                if (overridden) {
+                                    LinkButton(stringResource(R.string.wow_components_reset), Icons.Default.Delete) {
+                                        scope.launch {
+                                            withContext(Dispatchers.IO) { ComponentStore.remove(context, entry.id) }
+                                            refreshComponents()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        Text(stringResource(R.string.wow_components_unvalidated), fontSize = 10.sp, color = WowSubtle)
 
                         HorizontalDivider(color = WowBorder)
                         SectionTitle(context.getString(R.string.wow_section_updates), WowSubtle)
@@ -1908,13 +2002,15 @@ private fun applyDisplayDefaultsToActiveConfig(root: File, screenSize: String) {
 private const val CONFIG_WTF = "$FLAVOR_DIR/WTF/Config.wtf"
 
 private fun installBundledComponents(context: Context, onStatus: (String) -> Unit) {
-    installDriver(context, DEFAULT_DRIVER, "turnip-wow-scheduler-test.zip", onStatus)
-    installDriver(context, ADRENO_8XX_DRIVER, "turnip-V32-RP6sched.zip", onStatus)
+    installDriver(context, DEFAULT_DRIVER, "turnip-wow-scheduler-test.zip", "turnip740", onStatus)
+    installDriver(context, ADRENO_8XX_DRIVER, "turnip-V32-RP6sched.zip", "turnip8xx", onStatus)
 
     val protonDir = File(ImageFs.getSharedProtonDir(context), PROTON_VERSION)
     if (!File(protonDir, "profile.json").exists() || !File(protonDir, "bin/wine").exists()) {
         onStatus(context.getString(R.string.wow_launch_extracting_proton))
-        check(extractBundledWcp(context, "$PROTON_VERSION.wcp", protonDir)) { "Failed to extract Proton or graphics components." }
+        val ok = ComponentStore.file(context, "proton").takeIf { it.isFile }?.let { extractWcpFile(it, protonDir) }
+            ?: extractBundledWcp(context, "$PROTON_VERSION.wcp", protonDir)
+        check(ok) { "Failed to extract Proton or graphics components." }
         File(protonDir, "bin").listFiles()?.forEach {
             it.setExecutable(true, false)
             it.setReadable(true, false)
@@ -1924,24 +2020,41 @@ private fun installBundledComponents(context: Context, onStatus: (String) -> Uni
     val dxvkDir = File(ContentsManager.getContentTypeDir(context, ContentProfile.ContentType.CONTENT_TYPE_DXVK), DXVK_VERSION)
     if (!File(dxvkDir, "profile.json").exists()) {
         onStatus(context.getString(R.string.wow_launch_extracting_dxvk))
-        if (!extractBundledWcp(context, "dxvk-$DXVK_VERSION.wcp", dxvkDir)) Timber.e("Failed to extract DXVK")
+        val ok = ComponentStore.file(context, "dxvk").takeIf { it.isFile }?.let { extractWcpFile(it, dxvkDir) }
+            ?: extractBundledWcp(context, "dxvk-$DXVK_VERSION.wcp", dxvkDir)
+        if (!ok) Timber.e("Failed to extract DXVK")
     }
 
     ImageFsInstaller.ensureBionicLib(context, ImageFs.find(context).rootDir)
     ContentsManager(context).syncContents()
 }
 
-private fun installDriver(context: Context, driverName: String, assetZip: String, onStatus: (String) -> Unit) {
+private fun installDriver(
+    context: Context,
+    driverName: String,
+    assetZip: String,
+    componentId: String,
+    onStatus: (String) -> Unit,
+) {
     val driverDir = File(context.filesDir, "contents/adrenotools/$driverName")
     if (File(driverDir, "meta.json").exists()) return
     onStatus(context.getString(R.string.wow_launch_installing_driver, driverName))
     driverDir.mkdirs()
-    if (!FileUtils.extractZipFromAssets(context, "bundled_components/$assetZip", driverDir)) {
-        Timber.e("Error extracting driver $driverName from $assetZip")
+    val custom = ComponentStore.file(context, componentId)
+    val ok = if (custom.isFile) {
+        FileUtils.extractZipFromFile(custom, driverDir)
+    } else {
+        FileUtils.extractZipFromAssets(context, "bundled_components/$assetZip", driverDir)
     }
+    if (!ok) Timber.e("Error extracting driver $driverName")
 }
 
 private fun extractBundledWcp(context: Context, assetName: String, destination: File): Boolean {
     destination.mkdirs()
     return TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, context, "bundled_components/$assetName", destination)
+}
+
+private fun extractWcpFile(source: File, destination: File): Boolean {
+    destination.mkdirs()
+    return TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, source, destination)
 }

@@ -121,4 +121,15 @@
     <string name="wow_login_password">Пароль</string>
     <string name="wow_login_save">Сохранить</string>
     <string name="wow_gamepad_hint">Геймпад: крестовина — навигация, A — выбор, B — назад</string>
+    <string name="wow_components_title">Компоненты</string>
+    <string name="wow_components_recommended">Рекомендуется</string>
+    <string name="wow_components_active">Активно: %1$s</string>
+    <string name="wow_components_custom">Сторонний компонент</string>
+    <string name="wow_components_download">Скачать</string>
+    <string name="wow_components_import">Импорт файла</string>
+    <string name="wow_components_reset">Сбросить</string>
+    <string name="wow_components_downloading">Загрузка %1$s...</string>
+    <string name="wow_components_hash_error">Несовпадение контрольной суммы</string>
+    <string name="wow_components_unvalidated">Не проверено на устройстве</string>
+    <string name="wow_components_available">Доступно для теста</string>
 </resources>

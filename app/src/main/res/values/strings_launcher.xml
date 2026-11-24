@@ -122,4 +122,15 @@
     <string name="wow_login_password">Password</string>
     <string name="wow_login_save">Save</string>
     <string name="wow_gamepad_hint">Gamepad: D-pad to navigate, A to select, B to back</string>
+    <string name="wow_components_title">Components</string>
+    <string name="wow_components_recommended">Recommended</string>
+    <string name="wow_components_active">Active: %1$s</string>
+    <string name="wow_components_custom">Custom component</string>
+    <string name="wow_components_download">Download</string>
+    <string name="wow_components_import">Import file</string>
+    <string name="wow_components_reset">Reset</string>
+    <string name="wow_components_downloading">Downloading %1$s...</string>
+    <string name="wow_components_hash_error">Checksum mismatch</string>
+    <string name="wow_components_unvalidated">Not validated on device</string>
+    <string name="wow_components_available">Available for testing</string>
 </resources>

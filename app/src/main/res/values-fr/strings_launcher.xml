@@ -121,4 +121,15 @@
     <string name="wow_login_password">Mot de passe</string>
     <string name="wow_login_save">Enregistrer</string>
     <string name="wow_gamepad_hint">Manette : pavé pour naviguer, A pour sélectionner, B pour retour</string>
+    <string name="wow_components_title">Composants</string>
+    <string name="wow_components_recommended">Recommandé</string>
+    <string name="wow_components_active">Actif : %1$s</string>
+    <string name="wow_components_custom">Composant personnalisé</string>
+    <string name="wow_components_download">Télécharger</string>
+    <string name="wow_components_import">Importer un fichier</string>
+    <string name="wow_components_reset">Réinitialiser</string>
+    <string name="wow_components_downloading">Téléchargement de %1$s...</string>
+    <string name="wow_components_hash_error">Somme de contrôle incorrecte</string>
+    <string name="wow_components_unvalidated">Non validé sur l\'appareil</string>
+    <string name="wow_components_available">Disponible pour test</string>
 </resources>

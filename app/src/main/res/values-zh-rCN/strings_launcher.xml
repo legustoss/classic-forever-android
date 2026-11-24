@@ -121,4 +121,15 @@
     <string name="wow_login_password">密码</string>
     <string name="wow_login_save">保存</string>
     <string name="wow_gamepad_hint">手柄：方向键导航，A 选择，B 返回</string>
+    <string name="wow_components_title">组件</string>
+    <string name="wow_components_recommended">推荐</string>
+    <string name="wow_components_active">当前: %1$s</string>
+    <string name="wow_components_custom">自定义组件</string>
+    <string name="wow_components_download">下载</string>
+    <string name="wow_components_import">导入文件</string>
+    <string name="wow_components_reset">重置</string>
+    <string name="wow_components_downloading">正在下载 %1$s...</string>
+    <string name="wow_components_hash_error">校验和不匹配</string>
+    <string name="wow_components_unvalidated">未在设备上验证</string>
+    <string name="wow_components_available">可用于测试</string>
 </resources>
