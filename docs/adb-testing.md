@@ -74,14 +74,31 @@ adb shell getprop ro.board.platform
 
 ## 5. Install a test build
 
-The test APKs are gitignored and are not part of a normal checkout. Run the commands from the folder that contains
-`test-apks\`. The three builds are:
+The test APKs are gitignored and are not part of a normal checkout. The three builds are:
 
 | File | Build |
 | :--- | :--- |
 | `Classic-Forever-baseline.apk` | reference build |
 | `Classic-Forever-Proton-v16-TEST.apk` | v16 test build |
 | `Classic-Forever-Proton-stripped-TEST.apk` | stripped test build |
+
+### Clear app data before switching builds
+
+Compare builds from the same starting state. Skip this on the first install. With the previous build still installed:
+
+```powershell
+adb shell pm clear app.wowforever
+```
+
+`pm clear` resets the app to a fresh install: login, preferences, driver choice, the Wine container and its cached
+components are all removed. It does **not** delete the game folder on shared storage,
+`/storage/emulated/0/WoW Forever/`, so the client files stay in place and do not need re-copying. The first launch after
+a clear recreates the container and re-extracts the bundled components, so allow extra setup time. Uninstalling the app
+also leaves the shared game folder alone.
+
+### Install
+
+Run the commands from the folder that contains `test-apks\`, one build at a time:
 
 ```powershell
 adb install -r test-apks\Classic-Forever-baseline.apk
@@ -107,18 +124,6 @@ old build first, then install again:
 ```powershell
 adb uninstall app.wowforever
 ```
-
-### Clear app data before switching builds
-
-Compare builds from the same starting state. While the previous build is still installed:
-
-```powershell
-adb shell pm clear app.wowforever
-```
-
-`pm clear` wipes the app's internal data (login, preferences, driver choice). It does **not** delete the game folder on
-shared storage, `/storage/emulated/0/WoW Forever/`, so the client files stay in place. Uninstalling the app also leaves
-that folder alone.
 
 ## 6. Run a scenario
 
