@@ -33,10 +33,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.Locale;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.concurrent.Executors;
+import java.util.Locale;
 import java.util.concurrent.Future;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class ImageFsInstaller {
@@ -274,7 +279,7 @@ public abstract class ImageFsInstaller {
     }
 
     private static boolean isImportedWineProton(Context context, String fileName) {
-        String lowerName = fileName.toLowerCase();
+        String lowerName = fileName.toLowerCase(Locale.ROOT);
 
         // Not a Wine/Proton directory
         if (!lowerName.startsWith("wine-") && !lowerName.startsWith("proton-")) {
@@ -287,10 +292,10 @@ public abstract class ImageFsInstaller {
 
         // Check if it's a bundled version
         for (String version : bionicWineEntries) {
-            if (lowerName.equals(version.toLowerCase())) return false;
+            if (lowerName.equals(version.toLowerCase(Locale.ROOT))) return false;
         }
         for (String version : glibcWineEntries) {
-            if (lowerName.equals(version.toLowerCase())) return false;
+            if (lowerName.equals(version.toLowerCase(Locale.ROOT))) return false;
         }
 
         // It's Wine/Proton but not bundled, so it's imported

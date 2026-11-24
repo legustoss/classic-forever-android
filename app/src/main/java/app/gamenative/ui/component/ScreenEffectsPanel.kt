@@ -85,6 +85,7 @@ import com.winlator.renderer.VulkanRenderer
 import kotlinx.coroutines.delay
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import java.util.Locale
 
 private const val SCREEN_EFFECT_PERCENT_STEP = 5f
 private const val SCREEN_EFFECT_GAMMA_STEP = 0.1f
@@ -389,7 +390,7 @@ fun GLScreenEffectsTabContent(
         )
         ScreenEffectAdjustmentRow(
             title = stringResource(R.string.screen_effects_gamma),
-            valueText = String.format("%.2fx", gamma),
+            valueText = String.format(Locale.US, "%.2fx", gamma),
             progress = normalizedProgress(gamma, 0.5f, 2.5f),
             onDecrease = {
                 gamma = (gamma - SCREEN_EFFECT_GAMMA_STEP).coerceIn(0.5f, 2.5f)
@@ -628,7 +629,7 @@ fun ScreenEffectsTabContent(
         )
         ScreenEffectAdjustmentRow(
             title = stringResource(R.string.screen_effects_gamma),
-            valueText = String.format("%.2fx", gamma),
+            valueText = String.format(Locale.US, "%.2fx", gamma),
             progress = normalizedProgress(gamma, 0.5f, 2.5f),
             onDecrease = {
                 gamma = (gamma - SCREEN_EFFECT_GAMMA_STEP).coerceIn(0.5f, 2.5f)
@@ -898,7 +899,7 @@ fun ScreenEffectsPanel(
                     )
                     ScreenEffectAdjustmentRow(
                         title = stringResource(R.string.screen_effects_gamma),
-                        valueText = String.format("%.2fx", gamma),
+                        valueText = String.format(Locale.US, "%.2fx", gamma),
                         progress = normalizedProgress(gamma, 0.5f, 2.5f),
                         onDecrease = {
                             gamma = (gamma - SCREEN_EFFECT_GAMMA_STEP).coerceIn(0.5f, 2.5f)

@@ -178,7 +178,7 @@ public class Container {
     }
 
     public void setSteamType(String steamType) {
-        String normalized = (steamType == null) ? "" : steamType.toLowerCase();
+        String normalized = (steamType == null) ? "" : steamType.toLowerCase(Locale.ROOT);
         switch (normalized) {
             case STEAM_TYPE_LIGHT:
                 this.steamType = STEAM_TYPE_LIGHT;

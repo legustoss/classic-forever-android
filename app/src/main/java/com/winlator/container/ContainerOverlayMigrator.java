@@ -16,7 +16,9 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Locale;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.List;
 
 public final class ContainerOverlayMigrator {
@@ -110,7 +112,7 @@ public final class ContainerOverlayMigrator {
     }
 
     static boolean isWineBuiltin(File file) {
-        String name = file.getName().toLowerCase();
+        String name = file.getName().toLowerCase(Locale.ROOT);
         if (name.endsWith(".json") || name.endsWith(".nls") || name.endsWith(".inf")) return true;
         try (java.io.FileInputStream in = new java.io.FileInputStream(file)) {
             byte[] head = new byte[4096];

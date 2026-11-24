@@ -2,6 +2,7 @@ package com.winlator.contents;
 
 import androidx.annotation.NonNull;
 
+import java.util.Locale;
 import java.util.List;
 
 public class ContentProfile {
@@ -45,7 +46,7 @@ public class ContentProfile {
 
         public static ContentType getTypeByName(String name) {
             for (ContentType type : ContentType.values())
-                if (type.typeName.toLowerCase().equals(name.toLowerCase()))
+                if (type.typeName.toLowerCase(Locale.ROOT).equals(name.toLowerCase(Locale.ROOT)))
                     return type;
             return null;
         }

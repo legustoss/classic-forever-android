@@ -22,7 +22,9 @@ import com.winlator.xenvironment.ImageFs;
 import com.winlator.xenvironment.XEnvironment;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.List;
 
 public class GuestProgramLauncherComponent extends EnvironmentComponent {
@@ -102,7 +104,7 @@ public class GuestProgramLauncherComponent extends EnvironmentComponent {
             this.steamType = Container.STEAM_TYPE_NORMAL;
             return;
         }
-        String normalized = steamType.toLowerCase();
+        String normalized = steamType.toLowerCase(Locale.ROOT);
         switch (normalized) {
             case Container.STEAM_TYPE_LIGHT:
                 this.steamType = Container.STEAM_TYPE_LIGHT;

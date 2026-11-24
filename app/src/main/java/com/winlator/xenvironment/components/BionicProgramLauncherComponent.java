@@ -51,7 +51,9 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.util.Locale;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.List;
 
 import app.gamenative.BuildConfig;
@@ -453,7 +455,7 @@ public class BionicProgramLauncherComponent extends GuestProgramLauncherComponen
         String command;
         if (wineInfo.isArm64EC()) {
             command = winePath + "/" + guestExecutable;
-            if (emulator.toLowerCase().equals("fexcore"))
+            if (emulator.toLowerCase(Locale.ROOT).equals("fexcore"))
                 envVars.put("HODLL", "libwow64fex.dll");
             else
                 envVars.put("HODLL", "wowbox64.dll");

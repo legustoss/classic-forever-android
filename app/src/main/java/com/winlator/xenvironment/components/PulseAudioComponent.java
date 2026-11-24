@@ -11,10 +11,15 @@ import com.winlator.xenvironment.EnvironmentComponent;
 import com.winlator.xenvironment.XEnvironment;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
+import java.util.Locale;
 import java.util.concurrent.Executors;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import timber.log.Timber;
@@ -304,9 +309,9 @@ public class PulseAudioComponent extends EnvironmentComponent {
 
     private boolean updateSink(boolean suspend) {
         if (!suspend) {
-            return !execPactlCommand("suspend-sink " + SINK_NAME + " false").toLowerCase().contains("process timeout");
+            return !execPactlCommand("suspend-sink " + SINK_NAME + " false").toLowerCase(Locale.ROOT).contains("process timeout");
         } else {
-            return !execPactlCommand("suspend-sink " + SINK_NAME + " true").toLowerCase().contains("process timeout");
+            return !execPactlCommand("suspend-sink " + SINK_NAME + " true").toLowerCase(Locale.ROOT).contains("process timeout");
         }
     }
 

@@ -12,7 +12,9 @@ import com.winlator.xenvironment.ImageFs;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Locale;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public final class BasePrefix {
@@ -100,7 +102,7 @@ public final class BasePrefix {
         if (entries == null) return true;
         boolean ok = true;
         for (File entry : entries) {
-            if (BASE_DRIVES.contains(entry.getName().toLowerCase())) continue;
+            if (BASE_DRIVES.contains(entry.getName().toLowerCase(Locale.ROOT))) continue;
             ok &= ContainerFiles.deleteRecursively(entry);
         }
         return ok & ensureRootDrive(wineDir);

@@ -49,6 +49,7 @@ import com.alorma.compose.settings.ui.SettingsSwitch
 import com.winlator.container.Container
 import com.winlator.renderer.VulkanRenderer
 import kotlinx.coroutines.delay
+import java.util.Locale
 
 @Composable
 fun ScreenEffectDialog(
@@ -188,7 +189,7 @@ fun ScreenEffectDialog(
                         )
                         ScreenEffectSlider(
                             label = stringResource(R.string.screen_effects_gamma),
-                            valueText = String.format("%.2fx", gamma),
+                            valueText = String.format(Locale.US, "%.2fx", gamma),
                             value = gamma,
                             valueRange = 0.5f..2.5f,
                             onValueChange = { gamma = it },

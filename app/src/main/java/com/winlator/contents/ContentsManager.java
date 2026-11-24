@@ -17,10 +17,15 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class ContentsManager {
@@ -294,8 +299,8 @@ public class ContentsManager {
             // For Wine/Proton, ensure type is included in version name
             if ((typeName.equals(ContentProfile.ContentType.CONTENT_TYPE_WINE.toString())
                     || typeName.equals(ContentProfile.ContentType.CONTENT_TYPE_PROTON.toString()))
-                    && !verName.toLowerCase().startsWith(typeName.toLowerCase())) {
-                profile.verName = typeName.toLowerCase() + "-" + verName;
+                    && !verName.toLowerCase(Locale.ROOT).startsWith(typeName.toLowerCase(Locale.ROOT))) {
+                profile.verName = typeName.toLowerCase(Locale.ROOT) + "-" + verName;
             } else {
                 profile.verName = verName;
             }
@@ -581,7 +586,7 @@ public class ContentsManager {
 
         // Try to determine type from the entry name (supports prefixed builds like "GE-Proton")
         ContentProfile.ContentType type = null;
-        String lowerVersionName = entryName.toLowerCase();
+        String lowerVersionName = entryName.toLowerCase(Locale.ROOT);
         if (lowerVersionName.contains("proton")) {
             type = ContentProfile.ContentType.CONTENT_TYPE_PROTON;
         } else if (lowerVersionName.contains("wine")) {
@@ -605,13 +610,13 @@ public class ContentsManager {
     
             for (ContentProfile profile : profiles) {
                 String verName = (profile.verName != null) ? profile.verName : "";
-                String verLower = verName.toLowerCase();
+                String verLower = verName.toLowerCase(Locale.ROOT);
     
                 String typeAndVer = profile.type.toString() + "-" + verName;
-                String typeAndVerLower = typeAndVer.toLowerCase();
+                String typeAndVerLower = typeAndVer.toLowerCase(Locale.ROOT);
     
                 String fullEntry = ContentsManager.getEntryName(profile);
-                String fullEntryLower = fullEntry.toLowerCase();
+                String fullEntryLower = fullEntry.toLowerCase(Locale.ROOT);
     
                 Log.d(
                     "ContentsManager",

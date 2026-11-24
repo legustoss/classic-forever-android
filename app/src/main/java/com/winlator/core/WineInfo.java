@@ -12,7 +12,9 @@ import com.winlator.contents.ContentsManager;
 import com.winlator.xenvironment.ImageFs;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.regex.Matcher;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import app.gamenative.R;
@@ -154,7 +156,7 @@ public class WineInfo implements Parcelable {
         ContentProfile wineProfile = contentsManager.getProfileByEntryName(identifier);
 
         if (wineProfile != null && (wineProfile.type == ContentProfile.ContentType.CONTENT_TYPE_WINE || wineProfile.type == ContentProfile.ContentType.CONTENT_TYPE_PROTON)) {
-            identifier = identifier.substring(0, identifier.length() - 2).toLowerCase();
+            identifier = identifier.substring(0, identifier.length() - 2).toLowerCase(Locale.ROOT);
         }
 
         Matcher matcher = pattern.matcher(identifier);
