@@ -875,10 +875,10 @@ fun WoWForeverScreen(
                             SettingsSection.COMPONENTS -> {
                             HorizontalDivider(color = WowBorder)
                             SectionTitle(context.getString(R.string.wow_components_title), WowSubtle)
-                            val visibleSlots = componentGroupSlots(gpu.driver)
+                            val visibleSlots = componentGroupSlots(gpu.compatibility)
                             val activeHashes = activeComponentHashes
                             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                if (gpu.driver != DEFAULT_DRIVER && gpu.driver != ADRENO_8XX_DRIVER) {
+                                if (gpu.compatibility.status == DeviceStatus.UNKNOWN) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Icon(
                                             Icons.Default.Warning,

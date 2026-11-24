@@ -1,6 +1,8 @@
 package app.gamenative.ui.screen.wow
 
 import app.gamenative.utils.DeviceCompatibility
+import app.gamenative.utils.DeviceCompatibilityResult
+import app.gamenative.utils.DeviceStatus
 
 /** Runtime slots shown for the detected GPU; both Turnip slots only when the GPU is unknown. */
 internal fun driverSlotsFor(driver: String): List<String> = when {
@@ -12,6 +14,14 @@ internal fun driverSlotsFor(driver: String): List<String> = when {
 /** Component groups in display order: Proton, DXVK, then the relevant GPU driver. */
 internal fun componentGroupSlots(driver: String): List<String> =
     listOf("proton", "dxvk") + driverSlotsFor(driver)
+
+/** Detection maps unknown GPUs to a fallback driver id, so the status decides whether to show both. */
+internal fun componentGroupSlots(detected: DeviceCompatibilityResult): List<String> =
+    if (detected.status == DeviceStatus.UNKNOWN) {
+        componentGroupSlots("unknown")
+    } else {
+        componentGroupSlots(detected.driverId)
+    }
 
 /** Only one group stays expanded at a time; tapping the open one collapses it. */
 internal fun toggleExpandedGroup(current: String?, slot: String): String? =

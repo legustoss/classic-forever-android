@@ -1,6 +1,7 @@
 package app.gamenative.ui.screen.wow
 
 import app.gamenative.utils.DeviceCompatibility
+import app.gamenative.utils.DeviceStatus
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -26,6 +27,16 @@ class SettingsComponentGroupsTest {
         assertEquals(
             listOf("proton", "dxvk", "turnip8xx"),
             componentGroupSlots(DeviceCompatibility.DRIVER_8XX),
+        )
+    }
+
+    @Test
+    fun `unresolved gpu from real detection shows both driver groups`() {
+        val detected = DeviceCompatibility.resolve(renderer = "Adreno 999")
+        assertEquals(DeviceStatus.UNKNOWN, detected.status)
+        assertEquals(
+            listOf("proton", "dxvk", "turnip740", "turnip8xx"),
+            componentGroupSlots(detected),
         )
     }
 
