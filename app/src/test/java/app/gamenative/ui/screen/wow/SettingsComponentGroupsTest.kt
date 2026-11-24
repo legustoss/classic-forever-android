@@ -28,4 +28,19 @@ class SettingsComponentGroupsTest {
             componentGroupSlots(DeviceCompatibility.DRIVER_8XX),
         )
     }
+
+    @Test
+    fun `tapping a closed group opens it`() {
+        assertEquals("proton", toggleExpandedGroup(null, "proton"))
+    }
+
+    @Test
+    fun `tapping the open group closes it`() {
+        assertEquals(null, toggleExpandedGroup("proton", "proton"))
+    }
+
+    @Test
+    fun `tapping another group closes the previous one`() {
+        assertEquals("dxvk", toggleExpandedGroup("proton", "dxvk"))
+    }
 }

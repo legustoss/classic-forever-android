@@ -34,6 +34,8 @@ import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.Gamepad
 import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Refresh
@@ -185,6 +187,7 @@ fun WoWForeverScreen(
     var componentRevision by remember { mutableIntStateOf(0) }
     var activeComponentHashes by remember { mutableStateOf<Map<String, String?>>(emptyMap()) }
     var settingsTab by remember { mutableStateOf(SettingsTab.LAUNCHER) }
+    var expandedComponentSlot by remember { mutableStateOf<String?>(null) }
 
     suspend fun fetchAppUpdate(): AppUpdater.Release? {
         val release = AppUpdater.check()
@@ -872,14 +875,7 @@ fun WoWForeverScreen(
                             SettingsSection.COMPONENTS -> {
                             HorizontalDivider(color = WowBorder)
                             SectionTitle(context.getString(R.string.wow_components_title), WowSubtle)
-                            // A phone has one GPU: show only its Turnip slot, or both with a warning when
-                            // the driver could not be identified.
-                            val driverSlots = when (gpu.driver) {
-                                DEFAULT_DRIVER -> listOf("turnip740")
-                                ADRENO_8XX_DRIVER -> listOf("turnip8xx")
-                                else -> listOf("turnip740", "turnip8xx")
-                            }
-                            val visibleSlots = listOf("proton", "dxvk") + driverSlots
+                            val visibleSlots = componentGroupSlots(gpu.driver)
                             val activeHashes = activeComponentHashes
                             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                 if (gpu.driver != DEFAULT_DRIVER && gpu.driver != ADRENO_8XX_DRIVER) {
@@ -900,47 +896,96 @@ fun WoWForeverScreen(
                                 }
                                 visibleSlots.forEach { slot ->
                                     val entries = ComponentStore.catalog.filter { it.slot == slot }
-                                    entries.forEach { entry ->
-                                        ComponentPickerRow(
-                                            label = entry.displayName,
-                                            secondary = stringResource(R.string.wow_components_recommended).takeIf { entry.recommended },
-                                            selected = if (activeHashes[entry.slot] == null) {
-                                                entry.recommended
-                                            } else {
-                                                entry.sha256?.equals(activeHashes[entry.slot], ignoreCase = true) == true
+                                    val hash = activeHashes[slot]
+                                    val activeName = if (hash == null) {
+                                        stringResource(R.string.wow_components_bundled)
+                                    } else {
+                                        ComponentStore.catalog.firstOrNull {
+                                            it.slot == slot && it.sha256?.equals(hash, ignoreCase = true) == true
+                                        }?.displayName ?: stringResource(R.string.wow_components_external, hash.take(8))
+                                    }
+                                    val groupLabel = when (slot) {
+                                        "proton" -> stringResource(R.string.wow_components_group_proton)
+                                        "dxvk" -> stringResource(R.string.wow_components_group_dxvk)
+                                        else -> entries.firstOrNull { it.recommended }?.displayName ?: slot
+                                    }
+                                    val expanded = expandedComponentSlot == slot
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                expandedComponentSlot = toggleExpandedGroup(expandedComponentSlot, slot)
+                                            }
+                                            .gamepadConfirm {
+                                                expandedComponentSlot = toggleExpandedGroup(expandedComponentSlot, slot)
                                             },
-                                            busy = componentBusy == entry.id,
-                                            canDownload = entry.downloadUrl != null,
-                                            canReset = activeHashes[slot] != null,
-                                            onDownload = { downloadComponent(entry) },
-                                            onImport = {
-                                                pendingComponentId = entry.id
-                                                componentPicker.launch(arrayOf("*/*"))
-                                            },
-                                            onReset = { resetComponent(slot) },
-                                            onCheckedChange = { checked ->
-                                                if (checked) selectComponent(entry) else resetComponent(slot)
-                                            },
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            Text(groupLabel, fontSize = 11.sp, color = WowNeon, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                            Text(
+                                                text = stringResource(R.string.wow_components_active, activeName),
+                                                fontSize = 10.sp,
+                                                color = WowSubtle,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis,
+                                            )
+                                        }
+                                        Icon(
+                                            imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(18.dp),
+                                            tint = WowSubtle,
                                         )
                                     }
-                                    val hash = activeHashes[slot]
-                                    if (hash != null && entries.none { it.sha256?.equals(hash, ignoreCase = true) == true }) {
-                                        // One checked row for an override whose hash matches no catalog entry.
-                                        ComponentPickerRow(
-                                            label = stringResource(R.string.wow_components_custom),
-                                            secondary = hash.take(8),
-                                            selected = true,
-                                            busy = componentBusy == slot,
-                                            canDownload = false,
-                                            canReset = true,
-                                            onDownload = {},
-                                            onImport = {
-                                                pendingComponentId = slot
-                                                componentPicker.launch(arrayOf("*/*"))
-                                            },
-                                            onReset = { resetComponent(slot) },
-                                            onCheckedChange = { resetComponent(slot) },
-                                        )
+                                    if (hash != null) {
+                                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                                            LinkButton(stringResource(R.string.wow_components_reset), Icons.Default.Delete, enabled = componentBusy == null) {
+                                                resetComponent(slot)
+                                            }
+                                        }
+                                    }
+                                    if (expanded) {
+                                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                            entries.forEach { entry ->
+                                                ComponentPickerRow(
+                                                    label = entry.displayName,
+                                                    secondary = stringResource(R.string.wow_components_recommended).takeIf { entry.recommended },
+                                                    selected = if (activeHashes[entry.slot] == null) {
+                                                        entry.recommended
+                                                    } else {
+                                                        entry.sha256?.equals(activeHashes[entry.slot], ignoreCase = true) == true
+                                                    },
+                                                    busy = componentBusy == entry.id,
+                                                    onCheckedChange = { checked ->
+                                                        if (checked) selectComponent(entry) else resetComponent(slot)
+                                                    },
+                                                    onDownload = if (entry.downloadUrl != null) {
+                                                        { downloadComponent(entry) }
+                                                    } else null,
+                                                )
+                                            }
+                                            if (hash != null && entries.none { it.sha256?.equals(hash, ignoreCase = true) == true }) {
+                                                ComponentPickerRow(
+                                                    label = stringResource(R.string.wow_components_custom),
+                                                    secondary = hash.take(8),
+                                                    selected = true,
+                                                    busy = componentBusy == slot,
+                                                    onCheckedChange = { resetComponent(slot) },
+                                                )
+                                            }
+                                            OutlinedButton(
+                                                onClick = {
+                                                    pendingComponentId = slot
+                                                    componentPicker.launch(arrayOf("*/*"))
+                                                },
+                                                enabled = componentBusy == null,
+                                                modifier = Modifier.fillMaxWidth().height(42.dp),
+                                                shape = RoundedCornerShape(14.dp),
+                                            ) {
+                                                Text(stringResource(R.string.wow_components_import), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                            }
+                                        }
                                     }
                                 }
                                 Text(stringResource(R.string.wow_components_unvalidated), fontSize = 10.sp, color = WowSubtle)
@@ -1846,12 +1891,8 @@ private fun ComponentPickerRow(
     secondary: String?,
     selected: Boolean,
     busy: Boolean,
-    canDownload: Boolean,
-    canReset: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    onDownload: () -> Unit,
-    onImport: () -> Unit,
-    onReset: () -> Unit,
+    onDownload: (() -> Unit)? = null,
 ) {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Checkbox(
@@ -1871,6 +1912,9 @@ private fun ComponentPickerRow(
             if (secondary != null) {
                 Text(secondary, fontSize = 10.sp, color = WowSubtle, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
+            if (onDownload != null) {
+                LinkButton(stringResource(R.string.wow_components_download), Icons.Default.Download, enabled = !busy, onClick = onDownload)
+            }
             if (busy) {
                 Text(
                     text = stringResource(R.string.wow_components_downloading, label),
@@ -1878,13 +1922,6 @@ private fun ComponentPickerRow(
                     color = WowNeonDim,
                 )
             }
-        }
-        if (canDownload) {
-            LinkButton(stringResource(R.string.wow_components_download), Icons.Default.Download, enabled = !busy, onClick = onDownload)
-        }
-        LinkButton(stringResource(R.string.wow_components_import), Icons.Default.FolderOpen, enabled = !busy, onClick = onImport)
-        if (canReset) {
-            LinkButton(stringResource(R.string.wow_components_reset), Icons.Default.Delete, enabled = !busy, onClick = onReset)
         }
     }
 }
