@@ -1705,6 +1705,12 @@ private fun prepareLaunch(context: Context, gameRoot: File, gpu: GpuProfile, scr
         container.loadData(config)
         container.saveData()
     }
+    Timber.i(
+        "Container prepare: id=%s, wineVersion=%s, exists=%s",
+        CONTAINER_ID,
+        config.opt("wineVersion"),
+        containerManager.hasContainer(CONTAINER_ID),
+    )
     check(containerManager.hasContainer(CONTAINER_ID)) { "Container creation failed. Check system storage and logs." }
     // Fill the whole surface even if the display reports a slightly different aspect than the X server.
     containerManager.getContainerById(CONTAINER_ID)?.let { active ->

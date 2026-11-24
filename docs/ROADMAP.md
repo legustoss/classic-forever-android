@@ -56,7 +56,7 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | 5.1 | LSFG with a user-imported `Lossless.dll` | **DONE** | The inherited `LsfgVkManager` no longer assumes a Steam install: the user imports their own DLL from launcher Settings, it is stored in app-private `files/lsfg/Lossless.dll`, copied into the container at launch, and `isArmed()` accepts it. No DLL is bundled in the APK |
 | 5.2 | Explicit launch only | **DONE** | Removed implicit `launchGame()` calls on launch, after install and after update. `WoWLauncherState.shouldAutoLaunch` defaults to `false`, so no boot splash/auto-start |
 | 5.3 | Whole Quick Menu categorisation | **DONE** | Shared `QuickMenuCategoryHeader` with divider across HUD, LSFG, Tools and Controller tabs; Controller split into Input / Touch / Motion; LSFG flow scale and performance mode grouped; Effects already had category headers. No state, focus or QuickMenu() signature changes |
-| 5.4 | On-device check: no auto-launch + LSFG + categorised Quick Menu | **IN PROGRESS** | User confirmed everything works except a hitch when switching the LSFG multiplier; re-test after 5.5 | Awaiting user re-test |
+| 5.4 | On-device check: no auto-launch + LSFG + categorised Quick Menu | **IN PROGRESS** | User confirmed everything works except a hitch when switching the LSFG multiplier; device log now shows `Launcher back: FIRST_INSTALL -> MAIN`, so the back button path is exercised. Re-test after 5.5 | Awaiting user re-test |
 | 5.5 | LSFG multiplier hitch | **DONE** | `LsfgQuickMenuHelper.applySettings` now persists and hot-reloads on a background executor; UI state updates immediately | — |
 
 ## Decision requests / blockers

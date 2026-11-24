@@ -118,7 +118,11 @@ public class ContainerManager {
             data.put("id", containerId);
 
             File containerDir = new File(homeDir, ImageFs.USER+"-"+containerId);
-            if (!containerDir.mkdirs()) return null;
+            // A previous failed attempt may have left the directory behind; it is safe to reuse.
+            if (!containerDir.exists() && !containerDir.mkdirs()) {
+                Log.e("Container Manager", "Cannot create container directory " + containerDir);
+                return null;
+            }
 
             Container container = new Container(containerId);
             container.setRootDir(containerDir);
@@ -450,8 +454,10 @@ public class ContainerManager {
             }
 
             if (!result) {
+                Log.d("Container Manager", "Falling back to prefixPack at " + wineInfo.path);
                 result = extractPrefixPack(wineInfo.path, containerDir);
             }
+            Log.d("Container Manager", "extractContainerPatternFile result=" + result + " wineVersion=" + wineVersion + " path=" + wineInfo.path);
 
             if (result) {
                 try {
