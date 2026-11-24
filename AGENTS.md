@@ -116,7 +116,7 @@ P1 DONE   patcher refactor + client version check + UI cleanup + responsive layo
           OPEN: responsive sign-off on four resolutions
 P2 OPEN    online count (blocked: no endpoint) + device validation (blocked: devices)
           + benchmark overlay (not implemented; requires device)
-P3 PLANNED second maintainer + upstream rebase + SBOM + component update automation
+P3 OPEN    3.1 dropped by user; 3.2 explained, needs approval; 3.3 SBOM done; 3.4 automation needs approval (touches tools/)
 P4 PLANNED other servers, sponsorship
 TECH DEBT DONE  full suite: 391 tests, 0 failures, 12 documented skips (POSIX-only + existing)
 LINT DONE       0 errors, 809 warnings triaged as upstream backlog (see docs/ROADMAP.md)
@@ -164,6 +164,7 @@ adb pull /storage/emulated/0/WoW\ Forever/logs/
 
 - Roadmap: [`docs/ROADMAP.md`](docs/ROADMAP.md)
 - Release procedure: [`docs/release-checklist.md`](docs/release-checklist.md)
+- Component inventory: [`docs/sbom.md`](docs/sbom.md)
 - GameNative upstream: https://github.com/utkarshdalal/GameNative
 - DXVK: https://github.com/doitsujin/dxvk
 - mesa-unified: https://github.com/whitebelyash/mesa-unified
