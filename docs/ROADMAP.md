@@ -27,7 +27,7 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 
 | # | Item | State | Acceptance criteria | Blocked by |
 |---|---|---|---|---|
-| 2.1 | Full unit-test suite | **PLANNED** | 12 known Windows-only failures (symlinks/paths/config) triaged: fixed or documented as environment-specific | Separate task; never mixed with feature work |
+| 2.1 | Full unit-test suite | **DONE** | 391 tests, 0 failures, 12 skipped. Fixed the config filter and cross-platform registry replacement; 10 POSIX-only tests skipped on Windows | — |
 | 2.2 | `lintModernDebug` clean or warnings triaged | **PLANNED** | No new warnings introduced by launcher changes | — |
 | 2.3 | Locale sync (if 0.4 says yes) | **PLANNED** | All 9 `strings_launcher.xml` files carry the same set of keys and equivalent labels | Decision from 0.4 |
 
@@ -55,4 +55,4 @@ Resolved: 0.3 (release `v0.1.1` already published), 0.4 (locales synchronised).
 
 ## Next action
 
-Phase 0 items are closed or hard-blocked. The first unblocked item is **2.1 — triage the 12 pre-existing Windows unit-test failures**. It is separate tech debt, so start it only on explicit user confirmation and in its own commit. If the user wants to wait for the endpoint instead, mark 1.1/1.2 as the next item when data arrives.
+Phase 0 items are closed or hard-blocked. **2.1 is done** (full suite green with 12 documented skips). The next unblocked item is **2.2 — triage `lintModernDebug` warnings**. Items 0.2/1.3, 1.1/1.2 and 1.4 remain blocked by device/data availability; mark 1.1/1.2 as next when the endpoint arrives.

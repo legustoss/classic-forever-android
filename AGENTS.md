@@ -118,7 +118,7 @@ P2 OPEN    online count (blocked: no endpoint) + device validation (blocked: dev
           + benchmark overlay (not implemented; requires device)
 P3 PLANNED second maintainer + upstream rebase + SBOM + component update automation
 P4 PLANNED other servers, sponsorship
-TECH DEBT 12 pre-existing unit-test failures on Windows (symlinks/paths/config) — separate task
+TECH DEBT DONE  full suite: 391 tests, 0 failures, 12 documented skips (POSIX-only + existing)
 ```
 
 When the user does not specify a task, continue in this order: unblock P1 sign-off, then P2, then tech debt, then P3/P4. Never skip an item marked BLOCKED by silently substituting fabricated data.
@@ -146,7 +146,7 @@ When the user does not specify a task, continue in this order: unblock P1 sign-o
 ./gradlew testModernDebugUnitTest --tests "app.gamenative.utils.*"   # targeted, green
 ./gradlew lintModernDebug
 
-# Full suite has 12 known Windows-only failures; inspect before changing anything
+# Full suite is green with 12 documented skips (POSIX-only tests on Windows)
 ./gradlew testModernDebugUnitTest
 
 # Components (read-only; do not regenerate without need)
