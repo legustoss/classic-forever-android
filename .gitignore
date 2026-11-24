@@ -87,3 +87,6 @@ AGENTS.md
 
 # Local test APKs (not release artifacts)
 /test-apks/
+
+# Superpowers scratch workspace
+/.superpowers/
