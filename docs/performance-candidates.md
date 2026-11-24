@@ -48,10 +48,11 @@ Parent `v2.4.4` removed 32-bit Windows files from its bundled Wine (APK −50 MB
 
 ## Test build prepared 2026-11-24 (not committed as a source change)
 
-- `app/build/outputs/apk/modern/debug/Classic-Forever-Proton-v16-TEST.apk` — debug APK with the DroidDeck-Proton 11.0-12.8 arm64ec `.wcp` embedded under the **existing** asset name `proton-11.0-90624-arm64ec.wcp`, so no code/container-config change was needed.
-- `app/build/outputs/apk/modern/debug/Classic-Forever-baseline.apk` — the previous, already tested debug APK.
-- Verified inside the test APK: embedded asset SHA-256 `a5e05e35214f34603f8cf9a362bb6b4bce9f18d773ee689ecfaff6136a1e9003`, size 119,875,054 bytes.
-- After the build, the working asset was restored to `137807f4145b1b440075f83b2b1b3501d19c4eb618784b1a28418652cae3db03`, matching `tools/components.sha256`. `tools/` and `tools/components.sha256` were not modified.
+- `app/build/outputs/apk/modern/debug/Classic-Forever-Proton-v16-TEST.apk` — **corrected** debug APK (213,907,578 bytes). Inside it the candidate is stored as `assets/bundled_components/proton-11.0-12.8-arm64ec.wcp` with SHA-256 `a5e05e35214f34603f8cf9a362bb6b4bce9f18d773ee689ecfaff6136a1e9003`.
+- `app/build/outputs/apk/modern/debug/Classic-Forever-baseline.apk` — the previous, already tested debug APK (222,361,681 bytes).
+- The temporary test build used `PROTON_VERSION = "proton-11.0-12.8-arm64ec"`, `PROTON_VERSION_CODE = 16`, so `wineVersion` became `proton-11.0-12.8-arm64ec-16`, matching the candidate's `profile.json` (`versionCode: 16`). These source constants were reverted afterwards; only the APK carries them.
+- The first attempt kept the old asset name and `wineVersion ...-1`; the device log showed `Container creation failed` because `WineInfo.fromIdentifier()` could not find a profile with versionCode 1. That build is discarded.
+- The working tree asset was restored to `137807f4145b1b440075f83b2b1b3501d19c4eb618784b1a28418652cae3db03`, matching `tools/components.sha256`. `tools/` and `tools/components.sha256` were not modified.
 
 **Important:** `installBundledComponents()` only extracts Proton when the app-private prefix is missing `profile.json` or `bin/wine`. Installing the test APK over an existing install will keep the old extracted Proton. Clear app data (or uninstall first) when switching to the test build; game files in `/storage/emulated/0/WoW Forever/` stay on shared storage, but the saved login in app-private storage will be lost.
 

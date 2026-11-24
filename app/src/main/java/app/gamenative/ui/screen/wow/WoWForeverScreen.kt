@@ -498,9 +498,15 @@ fun WoWForeverScreen(
         checkAppUpdate()
     }
 
-    BackHandler(enabled = screen != LauncherScreen.MAIN) {
+    val goToMain: () -> Unit = {
+        Timber.i("Launcher back: $screen -> MAIN")
         screen = LauncherScreen.MAIN
+        showLoginDialog = false
+        showUpgradeDialog = false
+        showStoragePermissionDialog = false
     }
+
+    BackHandler(enabled = screen != LauncherScreen.MAIN, onBack = goToMain)
 
     LauncherLayout(
         windowSizeClass = windowSizeClass,
@@ -626,7 +632,7 @@ fun WoWForeverScreen(
             }
 
             LauncherScreen.SETTINGS -> {
-                ScreenTopBar(context.getString(R.string.wow_settings)) { screen = LauncherScreen.MAIN }
+                ScreenTopBar(context.getString(R.string.wow_settings), goToMain)
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -846,7 +852,7 @@ fun WoWForeverScreen(
             }
 
             LauncherScreen.FIRST_INSTALL -> {
-                ScreenTopBar(context.getString(R.string.wow_readiness)) { screen = LauncherScreen.MAIN }
+                ScreenTopBar(context.getString(R.string.wow_readiness), goToMain)
                 ReadinessCard(files, gamePath, versionStatus, errorMessage)
                 if (files.needsInstall && files.hasStorageAccess) {
                     InstallCard(
@@ -1275,10 +1281,20 @@ private fun ScreenTopBar(title: String, onBack: () -> Unit) {
     ) {
         SectionTitle(title, WowNeon)
         Spacer(modifier = Modifier.weight(1f))
-        TextButton(onClick = onBack) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, modifier = Modifier.size(16.dp), tint = WowNeon)
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(context.getString(R.string.wow_back), fontSize = 12.sp, color = WowNeon)
+        OutlinedButton(
+            onClick = onBack,
+            modifier = Modifier.height(42.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
+            border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
+        ) {
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = context.getString(R.string.wow_back),
+                modifier = Modifier.size(18.dp),
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(context.getString(R.string.wow_back), fontSize = 12.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
