@@ -1435,7 +1435,8 @@ private fun ScreenTopBar(title: String, onBack: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onBack),
+            .clickable(onClick = onBack)
+            .gamepadConfirm(onBack),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         SectionTitle(title, WowNeon)
