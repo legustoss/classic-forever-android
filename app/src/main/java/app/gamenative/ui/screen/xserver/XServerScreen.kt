@@ -486,12 +486,12 @@ fun XServerScreen(
 
     // val xServer by remember {
     //     val result = mutableStateOf(XServer(ScreenInfo(xServerState.value.screenSize)))
-    //     Log.d("XServerScreen", "Remembering xServer as $result")
+    //     Timber.d("Remembering xServer as $result")
     //     result
     // }
     // var xEnvironment: XEnvironment? by remember {
     //     val result = mutableStateOf<XEnvironment?>(null)
-    //     Log.d("XServerScreen", "Remembering xEnvironment as $result")
+    //     Timber.d("Remembering xEnvironment as $result")
     //     result
     // }
     var touchMouse by remember {
@@ -2571,7 +2571,7 @@ fun XServerScreen(
             mainRoot
 
             // } else {
-            //     Log.d("XServerScreen", "Creating XServerView without creating XServer")
+            //     Timber.d("Creating XServerView without creating XServer")
             //     xServerView = XServerView(context, PluviaApp.xServer)
             // }
             // xServerView
@@ -4707,7 +4707,7 @@ private suspend fun extractGraphicsDriverFiles(
 
         adrenoToolsDriverId =
             if (selectedDriverVersion!!.contains(DefaultVersion.WRAPPER)) DefaultVersion.WRAPPER else selectedDriverVersion
-        Log.d("GraphicsDriverExtraction", "Adrenotools DriverID: " + adrenoToolsDriverId)
+        Timber.d("Adrenotools DriverID: " + adrenoToolsDriverId)
 
         val rootDir: File? = imageFs.getRootDir()
 
@@ -4752,7 +4752,7 @@ private suspend fun extractGraphicsDriverFiles(
             // We only extract if the selection is actually a wrapper file.
             if (mainWrapperSelection.lowercase(Locale.getDefault()).startsWith("wrapper")) {
                 val wrapperComponentId = mainWrapperSelection.lowercase(Locale.getDefault())
-                Log.d("GraphicsDriverExtraction", "WRAPPER selection changed or first boot. Extracting: $wrapperComponentId")
+                Timber.d("WRAPPER selection changed or first boot. Extracting: $wrapperComponentId")
                 try {
                     val wrapperContentsManager = ContentsManager(context)
                     val wrapperProfile: ContentProfile? =
@@ -4772,7 +4772,7 @@ private suspend fun extractGraphicsDriverFiles(
                         e,
                     )
                 }
-                Log.d("XServerDisplayActivity", "First time container boot, extracting extra_libs.tzst")
+                Timber.d("First time container boot, extracting extra_libs.tzst")
                 extractGraphicsDriverComponent(context, "extra_libs", rootDir!!)
                 val renderer = GPUInformation.getRenderer(null, null)
                 if (container.wineVersion.contains("arm64ec") && renderer?.contains("Mali") != true) {

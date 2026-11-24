@@ -3,7 +3,7 @@ package app.gamenative.ui.screen.xserver
 import android.graphics.PointF
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import timber.log.Timber
 import android.view.InputDevice
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -136,7 +136,7 @@ class PhysicalControllerHandler(
         activeSequenceTriggerBindings.clear()
         sendGamepadState()
         this.profile = profile
-        Log.d(TAG, "PhysicalControllerHandler: Profile set to ${profile?.name}")
+        Timber.d("PhysicalControllerHandler: Profile set to ${profile?.name}")
     }
 
     /**
@@ -884,14 +884,14 @@ class PhysicalControllerHandler(
             // Handle special bindings
             if (binding == Binding.OPEN_NAVIGATION_MENU) {
                 if (isActionDown) {
-                    Log.d(TAG, "Opening navigation menu from controller binding")
+                    Timber.d("Opening navigation menu from controller binding")
                     onOpenNavigationMenu?.invoke()
                 }
             } else if (binding == Binding.SHOW_KEYBOARD) {
                 if (isActionDown) {
                     if (!showKeyboardPressed) {
                         showKeyboardPressed = true
-                        Log.d(TAG, "Showing keyboard from controller binding")
+                        Timber.d("Showing keyboard from controller binding")
                         onShowKeyboard?.invoke()
                     }
                 } else {

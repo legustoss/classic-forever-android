@@ -1,6 +1,6 @@
 package app.gamenative.ui.component.dialog
 
-import android.util.Log
+import timber.log.Timber
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -402,7 +402,7 @@ fun ControllerBindingDialog(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
-                                            Log.d("ControllerBindingDialog", "Clearing binding for $buttonName")
+                                            Timber.d("Clearing binding for $buttonName")
                                             submitSelection(null)
                                         },
                                     color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f),
@@ -468,7 +468,7 @@ fun ControllerBindingDialog(
                                         } else if (selectedBindings.size < BindingCombo.MAX_BINDINGS) {
                                             selectedBindings.add(binding)
                                         }
-                                        Log.d("ControllerBindingDialog", "Binding toggled for $buttonName: ${binding.name}")
+                                        Timber.d("Binding toggled for $buttonName: ${binding.name}")
                                     }
                                 )
                             }
