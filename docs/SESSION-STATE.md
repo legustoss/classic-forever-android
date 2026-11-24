@@ -19,7 +19,7 @@ Snapshot: 2026-11-24. Version in `app/build.gradle.kts`: 0.1.1 (`versionCode = 2
 - Proton v16 works on user's device but is **not approved** as recommended; user will compare on two devices.
 - 32-bit trim experiment APK built from proven components-v1.
 - Launcher portrait rhythm restored with a deterministic 64 dp top spacer; Settings/FirstInstall back bar row is fully clickable and maps gamepad A via `gamepadConfirm`.
-- Windows ADB guide: `docs/adb-testing.md`; `adb` added to user PATH (`C:\Users\legustoss\AppData\Local\Android\Sdk\platform-tools`).
+- Windows ADB guide: `docs/adb-testing.md`; `adb` added to user PATH (`%LOCALAPPDATA%\Android\Sdk\platform-tools`).
 - First device measurement recorded in `docs/performance-results.md`: v16, city running ~60 s, reset at 17:03:50. CPU p50 21 ms / p90 36 ms / p95 46 ms / p99 93 ms; GPU p90+ shows 4950 ms sentinel (timing unavailable). Baseline and stripped are NOT measured on that route yet.
 - Obsolete `SDK_INT` guards removed from 8 Kotlin/Java files; multi-digit version-code suffix bug in `WineInfo` fixed earlier.
 

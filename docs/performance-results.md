@@ -9,7 +9,7 @@ Snapshot: 2026-11-24.
 
 | Field | Value |
 | :--- | :--- |
-| Device | `25053PC47G` |
+| Device | Android test device (serial withheld) |
 | Android | 16 |
 | Board (`ro.board.platform`) | `sun` |
 | Package | `app.wowforever` |
@@ -42,7 +42,7 @@ adb shell dumpsys gfxinfo app.wowforever framestats > framestats.txt
 Artifacts from this run are saved outside the repo in:
 
 ```
-C:\Users\legustoss\AppData\Local\Temp\opencode\perf\v16-city\
+%LOCALAPPDATA%\Temp\opencode\perf\v16-city\
 ```
 
 The `reset` step is mandatory. Without it, `Total frames rendered` and the legacy jank counters
@@ -75,8 +75,9 @@ run does not report per-frame GPU completion. It must not be read as a 4.95 s fr
 be averaged, charted or quoted as latency. Only the GPU p50 (13 ms) is a real reported value, and it
 should be treated as incomplete on its own.
 
-**Cumulative vs reset counters.** All figures above describe only the window after the 17:03:50
-reset. A `dumpsys gfxinfo ... framestats` dump taken without a preceding reset includes frames from
+**Cumulative vs reset counters.** Most figures above describe only the window after the 17:03:50
+reset; the `High input latency` counter is an explicit exception discussed below. A
+`dumpsys gfxinfo ... framestats` dump taken without a preceding reset includes frames from
 earlier in the session; comparing such a dump against this one is invalid. The logcat capture
 (`adb logcat -d`) keeps the whole buffer, so it can contain lines from before the reset — filter by
 timestamp when correlating log events with the run.
