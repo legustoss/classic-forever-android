@@ -1,6 +1,6 @@
 # Benchmark scenarios
 
-No FPS numbers are stored here without a real measurement. Run these scenarios on the device and record the result in an issue or release notes.
+No FPS numbers are stored here without a real measurement. Run these scenarios on the device and record the result in an issue or release notes. Actual device numbers are kept in [`performance-results.md`](performance-results.md).
 
 ## Baseline
 
@@ -20,6 +20,7 @@ No FPS numbers are stored here without a real measurement. Run these scenarios o
 
 - In-game performance HUD (FPS/CPU/RAM).
 - `adb shell dumpsys gfxinfo app.wowforever`
+- `adb shell dumpsys gfxinfo app.wowforever reset` immediately before each scenario, otherwise the counters include everything since app start.
 - Perfetto system trace (CPU/GPU scheduling, long tasks).
 - `logs/app.log` and `logs/classic-forever.log` for driver and patcher events.
 
