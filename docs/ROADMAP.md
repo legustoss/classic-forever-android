@@ -28,8 +28,8 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | # | Item | State | Acceptance criteria | Blocked by |
 |---|---|---|---|---|
 | 2.1 | Full unit-test suite | **DONE** | 391 tests, 0 failures, 12 skipped. Fixed the config filter and cross-platform registry replacement; 10 POSIX-only tests skipped on Windows | — |
-| 2.2 | `lintModernDebug` clean or warnings triaged | **PLANNED** | No new warnings introduced by launcher changes | — |
-| 2.3 | Locale sync (if 0.4 says yes) | **PLANNED** | All 9 `strings_launcher.xml` files carry the same set of keys and equivalent labels | Decision from 0.4 |
+| 2.2 | `lintModernDebug` errors and warnings triaged | **DONE** | 0 errors, 819 findings (809 warnings, 10 info). Fixed manifest features, named constants and API-29 guards; `MissingTranslation` downgraded in `app/lint.xml` because only 9 languages are supported | — |
+| 2.3 | Locale sync | **DONE** | All 9 `strings_launcher.xml` files carry the same set of keys and equivalent labels | — |
 
 ## Phase 3 — Project maturity (P3)
 
@@ -55,4 +55,4 @@ Resolved: 0.3 (release `v0.1.1` already published), 0.4 (locales synchronised).
 
 ## Next action
 
-Phase 0 items are closed or hard-blocked. **2.1 is done** (full suite green with 12 documented skips). The next unblocked item is **2.2 — triage `lintModernDebug` warnings**. Items 0.2/1.3, 1.1/1.2 and 1.4 remain blocked by device/data availability; mark 1.1/1.2 as next when the endpoint arrives.
+Phase 0 and Phase 2 are closed or hard-blocked: 2.1 (tests) and 2.2 (lint) are done, 2.3 (locales) is done. Top remaining lint warnings are upstream backlog and are not release blockers: `LogNotTimber` (310), `MissingTranslation` (102), `TypographyEllipsis` (90), `UnusedResources` (84), `GradleDependency` (54). Items 0.2/1.3, 1.1/1.2 and 1.4 remain blocked by device/data availability; mark 1.1/1.2 as next when the endpoint arrives, otherwise Phase 3 (P3) is the remaining track.

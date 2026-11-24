@@ -119,6 +119,7 @@ P2 OPEN    online count (blocked: no endpoint) + device validation (blocked: dev
 P3 PLANNED second maintainer + upstream rebase + SBOM + component update automation
 P4 PLANNED other servers, sponsorship
 TECH DEBT DONE  full suite: 391 tests, 0 failures, 12 documented skips (POSIX-only + existing)
+LINT DONE       0 errors, 809 warnings triaged as upstream backlog (see docs/ROADMAP.md)
 ```
 
 When the user does not specify a task, continue in this order: unblock P1 sign-off, then P2, then tech debt, then P3/P4. Never skip an item marked BLOCKED by silently substituting fabricated data.
