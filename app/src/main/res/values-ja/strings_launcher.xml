@@ -1,7 +1,7 @@
 <resources>
     <string name="wow_ready">起動準備完了</string>
     <string name="wow_preparing">コンポーネントを準備中...</string>
-    <string name="wow_booting">World of Warcraft を起動中...</string>
+    <string name="wow_booting">起動中...</string>
     <string name="wow_launch_failed">起動に失敗しました</string>
     <string name="wow_connecting_cdn">Blizzard CDN に接続中...</string>
     <string name="wow_checking_updates">ゲームの更新を確認中...</string>
@@ -15,7 +15,7 @@
     <string name="wow_title">WORLD OF WARCRAFT</string>
     <string name="wow_subtitle">FOREVER (ARM64 NATIVE)</string>
     <string name="wow_edition">%1$s エディション</string>
-    <string name="wow_readiness">環境の準備状況</string>
+    <string name="wow_readiness">起動準備</string>
     <string name="wow_check_arm64">ARM64 実行ファイル（%1$s）</string>
     <string name="wow_check_arm64_download">ARM64 実行ファイル（起動時にダウンロード）</string>
     <string name="wow_check_data">ゲームアーカイブ（Data/）</string>
@@ -23,8 +23,8 @@
     <string name="wow_check_info_wrong">インストール情報（%1$s - %2$s が必要）</string>
     <string name="wow_check_info_beta">インストール情報（%1$s - ベータ版、更新が必要）</string>
     <string name="wow_check_storage">すべてのファイルへのアクセス</string>
-    <string name="wow_check_login_configured">Battle.net ログイン（設定済み）</string>
-    <string name="wow_check_login_missing">Battle.net ログイン（再生ボタン下で設定）</string>
+    <string name="wow_check_login_configured">ログイン（設定済み）</string>
+    <string name="wow_check_login_missing">ログイン（再生ボタン下で設定）</string>
     <string name="wow_check_app">アプリバージョン：v%1$s</string>
     <string name="wow_check_app_update">アプリバージョン：v%1$s（v%2$s が利用可能）</string>
     <string name="wow_check_client">クライアントバージョン：%1$s（最新）</string>
@@ -55,7 +55,7 @@
     <string name="wow_update_to">%1$s に更新</string>
     <string name="wow_launch_outdated">そのまま起動（古いバージョン）</string>
     <string name="wow_wrong_game">WOW FOREVER が必要です</string>
-    <string name="wow_play">WORLD OF WARCRAFT をプレイ</string>
+    <string name="wow_play">プレイ</string>
     <string name="wow_refresh">更新</string>
     <string name="wow_location">場所</string>
     <string name="wow_addon">アドオン</string>
@@ -76,7 +76,7 @@
     <string name="wow_install_perm_body">Android では WoW Forever からのアプリインストールを許可する必要があります。\n\n次の画面で「このソースから許可する」を有効にしてください。</string>
 
     <string name="wow_install_card_upgrade">WOW FOREVER が正式リリースされました</string>
-    <string name="wow_install_card_install">WORLD OF WARCRAFT をインストール</string>
+    <string name="wow_install_card_install">インストール</string>
     <string name="wow_install_card_upgrade_body">このフォルダーには終了する Forever ベータ版があります。アップグレードすると正式版が %1$s/ にインストールされます。既存データは再利用されるため、新しいクライアント（約 100 MB）のみダウンロードされます。</string>
     <string name="wow_install_card_body">Blizzard の CDN から ARM64 クライアントとアーカイブ索引（約 250 MB）をダウンロードします。残りのデータはプレイ中に流式で読み込まれ、50 GB を超える場合があります。十分な空き容量のある場所を選んでください。</string>
     <string name="wow_install_location">インストール先：%1$s（空き %2$s GB）</string>
@@ -103,7 +103,7 @@
     <string name="wow_section_updates">更新</string>
     <string name="wow_status_patcher">パッチャー</string>
     <string name="wow_logs_hint">ログ：logs/classic-forever.log</string>
-    <string name="wow_driver_pending">GPU は未検証</string>
+    <string name="wow_driver_pending">GPU は未テスト</string>
     <string name="wow_driver_unknown">GPU モデル不明</string>
     <string name="wow_play_short">プレイ</string>
     <string name="wow_back">戻る</string>

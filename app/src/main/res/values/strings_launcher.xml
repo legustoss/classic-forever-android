@@ -2,7 +2,7 @@
     <!-- WoW Forever launcher / setup screen -->
     <string name="wow_ready">Ready to launch</string>
     <string name="wow_preparing">Preparing components...</string>
-    <string name="wow_booting">Booting into World of Warcraft...</string>
+    <string name="wow_booting">Booting...</string>
     <string name="wow_launch_failed">Launch failed</string>
     <string name="wow_connecting_cdn">Connecting to Blizzard CDN...</string>
     <string name="wow_checking_updates">Checking for game updates...</string>
@@ -16,7 +16,7 @@
     <string name="wow_title">WORLD OF WARCRAFT</string>
     <string name="wow_subtitle">FOREVER (ARM64 NATIVE)</string>
     <string name="wow_edition">%1$s Edition</string>
-    <string name="wow_readiness">ENVIRONMENT READINESS</string>
+    <string name="wow_readiness">LAUNCH READINESS</string>
     <string name="wow_check_arm64">ARM64 Binary (%1$s)</string>
     <string name="wow_check_arm64_download">ARM64 Binary (downloads on Play)</string>
     <string name="wow_check_data">Game Asset Archives (Data/)</string>
@@ -56,7 +56,7 @@
     <string name="wow_update_to">UPDATE TO %1$s</string>
     <string name="wow_launch_outdated">LAUNCH ANYWAY (OUTDATED)</string>
     <string name="wow_wrong_game">WOW FOREVER REQUIRED</string>
-    <string name="wow_play">PLAY WORLD OF WARCRAFT</string>
+    <string name="wow_play">PLAY</string>
     <string name="wow_refresh">Refresh</string>
     <string name="wow_location">Location</string>
     <string name="wow_addon">Add-on</string>
@@ -77,7 +77,7 @@
     <string name="wow_install_perm_body">Android requires permission to install apps from WoW Forever.\n\nPlease enable \'Allow from this source\' on the next screen.</string>
 
     <string name="wow_install_card_upgrade">WOW FOREVER HAS LAUNCHED</string>
-    <string name="wow_install_card_install">INSTALL WORLD OF WARCRAFT</string>
+    <string name="wow_install_card_install">INSTALL</string>
     <string name="wow_install_card_upgrade_body">This folder has the Forever beta, which Blizzard is retiring. Upgrade to install the full release into %1$s/. Your existing game data is reused, so only the new client downloads (about 100 MB).</string>
     <string name="wow_install_card_body">Downloads the ARM64 game client and archive indexes (about 250 MB) from Blizzard\'s CDN. The rest of the game streams in as you play and can grow past 50 GB, so pick a location with room to spare.</string>
     <string name="wow_install_location">Install location: %1$s (%2$s GB free)</string>
@@ -104,7 +104,7 @@
     <string name="wow_section_updates">Updates</string>
     <string name="wow_status_patcher">Patcher</string>
     <string name="wow_logs_hint">Logs: logs/classic-forever.log</string>
-    <string name="wow_driver_pending">GPU not validated yet</string>
+    <string name="wow_driver_pending">GPU not tested yet</string>
     <string name="wow_driver_unknown">GPU model unknown</string>
     <string name="wow_play_short">Play</string>
     <string name="wow_back">Back</string>

@@ -1,7 +1,7 @@
 <resources>
     <string name="wow_ready">Listo para iniciar</string>
     <string name="wow_preparing">Preparando componentes...</string>
-    <string name="wow_booting">Iniciando World of Warcraft...</string>
+    <string name="wow_booting">Iniciando...</string>
     <string name="wow_launch_failed">Error al iniciar</string>
     <string name="wow_connecting_cdn">Conectando con el CDN de Blizzard...</string>
     <string name="wow_checking_updates">Comprobando actualizaciones del juego...</string>
@@ -15,7 +15,7 @@
     <string name="wow_title">WORLD OF WARCRAFT</string>
     <string name="wow_subtitle">FOREVER (ARM64 NATIVE)</string>
     <string name="wow_edition">Edición %1$s</string>
-    <string name="wow_readiness">PREPARACIÓN DEL ENTORNO</string>
+    <string name="wow_readiness">PREPARACIÓN DEL LANZAMIENTO</string>
     <string name="wow_check_arm64">Binario ARM64 (%1$s)</string>
     <string name="wow_check_arm64_download">Binario ARM64 (se descarga al jugar)</string>
     <string name="wow_check_data">Archivos del juego (Data/)</string>
@@ -23,8 +23,8 @@
     <string name="wow_check_info_wrong">Información de instalación (%1$s - requiere %2$s)</string>
     <string name="wow_check_info_beta">Información de instalación (%1$s - beta, actualización requerida)</string>
     <string name="wow_check_storage">Acceso a todos los archivos</string>
-    <string name="wow_check_login_configured">Acceso Battle.net (configurado)</string>
-    <string name="wow_check_login_missing">Acceso Battle.net (configúralo bajo el botón Jugar)</string>
+    <string name="wow_check_login_configured">Acceso (configurado)</string>
+    <string name="wow_check_login_missing">Acceso (configúralo bajo el botón Jugar)</string>
     <string name="wow_check_app">Versión de la app: v%1$s</string>
     <string name="wow_check_app_update">Versión de la app: v%1$s (v%2$s disponible)</string>
     <string name="wow_check_client">Versión del cliente: %1$s (actualizada)</string>
@@ -55,7 +55,7 @@
     <string name="wow_update_to">ACTUALIZAR A %1$s</string>
     <string name="wow_launch_outdated">INICIAR DE TODOS MODOS (DESACTUALIZADO)</string>
     <string name="wow_wrong_game">SE REQUIERE WOW FOREVER</string>
-    <string name="wow_play">JUGAR A WORLD OF WARCRAFT</string>
+    <string name="wow_play">JUGAR</string>
     <string name="wow_refresh">Actualizar</string>
     <string name="wow_location">Ubicación</string>
     <string name="wow_addon">Add-on</string>
@@ -76,7 +76,7 @@
     <string name="wow_install_perm_body">Android requiere permiso para instalar apps desde WoW Forever.\n\nActiva «Permitir desde esta fuente» en la siguiente pantalla.</string>
 
     <string name="wow_install_card_upgrade">WOW FOREVER SE HA LANZADO</string>
-    <string name="wow_install_card_install">INSTALAR WORLD OF WARCRAFT</string>
+    <string name="wow_install_card_install">INSTALAR</string>
     <string name="wow_install_card_upgrade_body">Esta carpeta contiene la beta de Forever, que Blizzard está retirando. Actualiza para instalar la versión completa en %1$s/. Tus datos se reutilizan, así que solo se descarga el nuevo cliente (unos 100 MB).</string>
     <string name="wow_install_card_body">Descarga el cliente ARM64 y los índices de archivos (unos 250 MB) del CDN de Blizzard. El resto del juego se descarga mientras juegas y puede superar los 50 GB, así que elige una ubicación con espacio suficiente.</string>
     <string name="wow_install_location">Ubicación de instalación: %1$s (%2$s GB libres)</string>
@@ -103,7 +103,7 @@
     <string name="wow_section_updates">Actualizaciones</string>
     <string name="wow_status_patcher">Parcheador</string>
     <string name="wow_logs_hint">Logs: logs/classic-forever.log</string>
-    <string name="wow_driver_pending">GPU aún no validado</string>
+    <string name="wow_driver_pending">GPU aún no probado</string>
     <string name="wow_driver_unknown">Modelo de GPU desconocido</string>
     <string name="wow_play_short">Jugar</string>
     <string name="wow_back">Atrás</string>

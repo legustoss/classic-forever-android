@@ -1,7 +1,7 @@
 <resources>
     <string name="wow_ready">可以启动</string>
     <string name="wow_preparing">正在准备组件...</string>
-    <string name="wow_booting">正在启动魔兽世界...</string>
+    <string name="wow_booting">正在启动...</string>
     <string name="wow_launch_failed">启动失败</string>
     <string name="wow_connecting_cdn">正在连接暴雪 CDN...</string>
     <string name="wow_checking_updates">正在检查游戏更新...</string>
@@ -15,7 +15,7 @@
     <string name="wow_title">WORLD OF WARCRAFT</string>
     <string name="wow_subtitle">FOREVER (ARM64 NATIVE)</string>
     <string name="wow_edition">%1$s 版本</string>
-    <string name="wow_readiness">环境准备情况</string>
+    <string name="wow_readiness">启动准备状态</string>
     <string name="wow_check_arm64">ARM64 客户端（%1$s）</string>
     <string name="wow_check_arm64_download">ARM64 客户端（启动时下载）</string>
     <string name="wow_check_data">游戏资源档案（Data/）</string>
@@ -23,8 +23,8 @@
     <string name="wow_check_info_wrong">安装信息（%1$s - 需要 %2$s）</string>
     <string name="wow_check_info_beta">安装信息（%1$s - 测试版，需要升级）</string>
     <string name="wow_check_storage">所有文件访问权限</string>
-    <string name="wow_check_login_configured">Battle.net 登录（已配置）</string>
-    <string name="wow_check_login_missing">Battle.net 登录（请在下方按钮配置）</string>
+    <string name="wow_check_login_configured">登录（已配置）</string>
+    <string name="wow_check_login_missing">登录（请在下方按钮配置）</string>
     <string name="wow_check_app">应用版本：v%1$s</string>
     <string name="wow_check_app_update">应用版本：v%1$s（可更新至 v%2$s）</string>
     <string name="wow_check_client">客户端版本：%1$s（已是最新）</string>
@@ -55,7 +55,7 @@
     <string name="wow_update_to">更新到 %1$s</string>
     <string name="wow_launch_outdated">仍然启动（版本过旧）</string>
     <string name="wow_wrong_game">需要 WOW FOREVER</string>
-    <string name="wow_play">游玩魔兽世界</string>
+    <string name="wow_play">开始游戏</string>
     <string name="wow_refresh">刷新</string>
     <string name="wow_location">位置</string>
     <string name="wow_addon">插件</string>
@@ -76,7 +76,7 @@
     <string name="wow_install_perm_body">Android 需要允许从 WoW Forever 安装应用。\n\n请在下一页启用“允许来自此来源”。</string>
 
     <string name="wow_install_card_upgrade">WOW FOREVER 已正式发布</string>
-    <string name="wow_install_card_install">安装魔兽世界</string>
+    <string name="wow_install_card_install">安装</string>
     <string name="wow_install_card_upgrade_body">此文件夹中是即将停用的 Forever 测试版。升级会将正式版安装到 %1$s/。现有游戏数据会复用，只需下载新客户端（约 100 MB）。</string>
     <string name="wow_install_card_body">从暴雪 CDN 下载 ARM64 客户端和档案索引（约 250 MB）。其余数据会在游玩时流式加载，可能超过 50 GB，请选择空间充足的目录。</string>
     <string name="wow_install_location">安装位置：%1$s（剩余 %2$s GB）</string>
@@ -103,7 +103,7 @@
     <string name="wow_section_updates">更新</string>
     <string name="wow_status_patcher">补丁器</string>
     <string name="wow_logs_hint">日志：logs/classic-forever.log</string>
-    <string name="wow_driver_pending">GPU 尚未验证</string>
+    <string name="wow_driver_pending">GPU 尚未测试</string>
     <string name="wow_driver_unknown">GPU 型号未知</string>
     <string name="wow_play_short">开始游戏</string>
     <string name="wow_back">返回</string>

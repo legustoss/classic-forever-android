@@ -1,7 +1,7 @@
 <resources>
     <string name="wow_ready">Prêt à lancer</string>
     <string name="wow_preparing">Préparation des composants...</string>
-    <string name="wow_booting">Lancement de World of Warcraft...</string>
+    <string name="wow_booting">Lancement...</string>
     <string name="wow_launch_failed">Échec du lancement</string>
     <string name="wow_connecting_cdn">Connexion au CDN de Blizzard...</string>
     <string name="wow_checking_updates">Vérification des mises à jour du jeu...</string>
@@ -15,7 +15,7 @@
     <string name="wow_title">WORLD OF WARCRAFT</string>
     <string name="wow_subtitle">FOREVER (ARM64 NATIVE)</string>
     <string name="wow_edition">Édition %1$s</string>
-    <string name="wow_readiness">PRÉPARATION DE L\'ENVIRONNEMENT</string>
+    <string name="wow_readiness">PRÊT POUR LE LANCEMENT</string>
     <string name="wow_check_arm64">Binaire ARM64 (%1$s)</string>
     <string name="wow_check_arm64_download">Binaire ARM64 (téléchargé au lancement)</string>
     <string name="wow_check_data">Archives du jeu (Data/)</string>
@@ -23,8 +23,8 @@
     <string name="wow_check_info_wrong">Informations d\'installation (%1$s - nécessite %2$s)</string>
     <string name="wow_check_info_beta">Informations d\'installation (%1$s - bêta, mise à jour requise)</string>
     <string name="wow_check_storage">Accès à tous les fichiers</string>
-    <string name="wow_check_login_configured">Connexion Battle.net (configurée)</string>
-    <string name="wow_check_login_missing">Connexion Battle.net (à configurer sous le bouton Jouer)</string>
+    <string name="wow_check_login_configured">Connexion (configurée)</string>
+    <string name="wow_check_login_missing">Connexion (à configurer sous le bouton Jouer)</string>
     <string name="wow_check_app">Version de l\'application : v%1$s</string>
     <string name="wow_check_app_update">Version de l\'application : v%1$s (v%2$s disponible)</string>
     <string name="wow_check_client">Version du client : %1$s (à jour)</string>
@@ -55,7 +55,7 @@
     <string name="wow_update_to">METTRE À JOUR VERS %1$s</string>
     <string name="wow_launch_outdated">LANCER QUAND MÊME (ANCIENNE VERSION)</string>
     <string name="wow_wrong_game">WOW FOREVER REQUIS</string>
-    <string name="wow_play">JOUER À WORLD OF WARCRAFT</string>
+    <string name="wow_play">JOUER</string>
     <string name="wow_refresh">Actualiser</string>
     <string name="wow_location">Emplacement</string>
     <string name="wow_addon">Add-on</string>
@@ -76,7 +76,7 @@
     <string name="wow_install_perm_body">Android exige une autorisation pour installer des applications depuis WoW Forever.\n\nActivez « Autoriser depuis cette source » sur l\'écran suivant.</string>
 
     <string name="wow_install_card_upgrade">WOW FOREVER EST LANCÉ</string>
-    <string name="wow_install_card_install">INSTALLER WORLD OF WARCRAFT</string>
+    <string name="wow_install_card_install">INSTALLER</string>
     <string name="wow_install_card_upgrade_body">Ce dossier contient la bêta de Forever, que Blizzard retire. La mise à jour installe la version finale dans %1$s/. Vos données sont réutilisées : seul le nouveau client est téléchargé (environ 100 Mo).</string>
     <string name="wow_install_card_body">Télécharge le client ARM64 et les index d\'archives (environ 250 Mo) depuis le CDN de Blizzard. Le reste du jeu se télécharge pendant la partie et peut dépasser 50 Go : choisissez un emplacement avec assez d\'espace.</string>
     <string name="wow_install_location">Emplacement d\'installation : %1$s (%2$s Go libres)</string>
@@ -103,7 +103,7 @@
     <string name="wow_section_updates">Mises à jour</string>
     <string name="wow_status_patcher">Patch</string>
     <string name="wow_logs_hint">Journaux : logs/classic-forever.log</string>
-    <string name="wow_driver_pending">GPU non encore validé</string>
+    <string name="wow_driver_pending">GPU non encore testé</string>
     <string name="wow_driver_unknown">Modèle GPU inconnu</string>
     <string name="wow_play_short">Jouer</string>
     <string name="wow_back">Retour</string>
