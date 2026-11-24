@@ -28,7 +28,7 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | # | Item | State | Acceptance criteria | Blocked by |
 |---|---|---|---|---|
 | 2.1 | Full unit-test suite | **DONE** | 391 tests, 0 failures, 12 skipped. Fixed the config filter and cross-platform registry replacement; 10 POSIX-only tests skipped on Windows | — |
-| 2.2 | `lintModernDebug` errors and warnings triaged | **DONE** | 0 errors, 819 findings (809 warnings, 10 info). Fixed manifest features, named constants and API-29 guards; `MissingTranslation` downgraded in `app/lint.xml` because only 9 languages are supported | — |
+| 2.2 | `lintModernDebug` errors and warnings triaged | **DONE** | 0 errors, 799 findings after the latest strings; fixed manifest features, named constants and API-29 guards; `MissingTranslation` downgraded in `app/lint.xml` because only 9 launcher languages are supported | — |
 | 2.3 | Locale sync | **DONE** | All 9 `strings_launcher.xml` files carry the same set of keys and equivalent labels | — |
 | 2.4 | `LogNotTimber` in launcher-owned Kotlin | **DONE** | 24 warnings fixed in controller/XServer code; 286 upstream `com.winlator` Java warnings remain as backlog | — |
 
@@ -53,6 +53,7 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | 5.1 | LSFG with a user-imported `Lossless.dll` | **DONE** | The inherited `LsfgVkManager` no longer assumes a Steam install: the user imports their own DLL from launcher Settings, it is stored in app-private `files/lsfg/Lossless.dll`, copied into the container at launch, and `isArmed()` accepts it. No DLL is bundled in the APK |
 | 5.2 | Explicit launch only | **DONE** | Removed implicit `launchGame()` calls on launch, after install and after update. `WoWLauncherState.shouldAutoLaunch` defaults to `false`, so no boot splash/auto-start |
 | 5.3 | Whole Quick Menu categorisation | **DONE** | Shared `QuickMenuCategoryHeader` with divider across HUD, LSFG, Tools and Controller tabs; Controller split into Input / Touch / Motion; LSFG flow scale and performance mode grouped; Effects already had category headers. No state, focus or QuickMenu() signature changes |
+| 5.4 | On-device check: no auto-launch + LSFG + categorised Quick Menu | **IN PROGRESS** | User is testing the new debug APK on the phone; wait for the report before claiming anything works | Awaiting user report |
 
 ## Decision requests / blockers
 
@@ -64,4 +65,6 @@ Resolved: 0.3 (release `v0.1.1` already published), 0.4 (locales synchronised).
 
 ## Next action
 
-Phase 0, Phase 2 and Phase 5 are closed or hard-blocked: 2.1 (tests), 2.2 (lint), 2.3 (locales) and 5.1 (LSFG DLL import) are done. Top remaining lint warnings are upstream backlog and are not release blockers: `LogNotTimber` (286 in `com.winlator`, after fixing our 24), `MissingTranslation` (102), `TypographyEllipsis` (90), `UnusedResources` (84), `GradleDependency` (54). 3.1 is dropped, 3.3 is done, 3.2 is explained but needs approval. Items 0.2/1.3, 1.1/1.2 and 1.4 remain blocked by device/data availability. Next: either approve a read-only upstream diff (3.2), pick a lint-warning category, or wait for the server endpoint and resume 1.1/1.2.
+Phase 0, Phase 2 and Phase 5 are closed or waiting on the user: 2.1 (tests), 2.2 (lint), 2.3 (locales), 5.1–5.3 (LSFG DLL, explicit launch only, Quick Menu categories) are done; 5.4 awaits the phone test report. Remaining lint warnings are upstream backlog and not release blockers: `LogNotTimber` (286 in `com.winlator`), `MissingTranslation` (102), `TypographyEllipsis` (90), `UnusedResources` (84), `GradleDependency` (54). 3.1 is dropped, 3.2 was reviewed with no applicable wins, 3.3 is done, 3.4 needs explicit approval because it touches `tools/`.
+
+Hard-blocked: 0.2/1.3 (no device/screenshots), 1.1/1.2 (no server endpoint), 1.4 (no devices), 1.5 (no profiling device). Unblocked options if work must continue before those arrive: pick one lint-warning category (e.g. `TypographyEllipsis` or `UnusedResources`) or approve 3.4 automation. Otherwise wait for the device report and the server developer.
