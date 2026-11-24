@@ -128,7 +128,7 @@ When the user does not specify a task, continue in this order: unblock P1 sign-o
 - Do not rewrite `ClassicForeverPatcher.kt` wholesale "for cleanliness".
 - Do not change DXVK/Turnip/Proton versions in `tools/components.sha256` without an explicit task.
 - Do not add Hilt/Koin/Room/Moshi "for architecture" — the project is small.
-- Do not touch README localizations without a request. RU-only launcher string edits must be reported as inconsistent with the other 8 locales until the user decides.
+- Do not touch README localizations without a request. Launcher strings are synchronised across all 9 `strings_launcher.xml` files; add new keys to every locale.
 - Do not "optimize" `gradle.properties` (heap, parallel) without measurement.
 - Do not propose anti-cheat bypass, cheats, or game-memory changes outside the patcher.
 - Do not output FPS estimates "by eye" — only with a stated source.

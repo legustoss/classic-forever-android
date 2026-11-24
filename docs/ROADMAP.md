@@ -9,15 +9,15 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | # | Item | State | Acceptance criteria | Blocked by |
 |---|---|---|---|---|
 | 0.1 | Three-screen launcher (Main / Settings / FirstInstall), compact landscape layout, localized `wow_back` | **DONE** | Commits `1670a53`, `ced8069`, `180d503`, `7bbf87e`; debug + release builds pass | — |
-| 0.2 | Visual sign-off at 360×640, 412×915, 800×1280, 1280×800 | **BLOCKED** | No overflow/clipping in portrait or landscape; buttons reachable at all four sizes | No `adb`/emulator in the environment; need a device or user screenshots |
-| 0.3 | Publish release `v0.1.1` | **BLOCKED** | Tag `v0.1.1` matches `versionName`; workflow signature check passes; APK downloadable | User must run Actions → Release; four signing secrets must be configured |
-| 0.4 | Locale consistency after the RU-only label shortenings | **IN PROGRESS** | Decide whether shortened RU strings (`wow_play`, `wow_readiness`, `wow_booting`, `wow_install_card_install`, `wow_driver_pending`) should be mirrored in EN and the other 7 locales | Decision from user; do not silently rewrite translations |
+| 0.2 | Visual sign-off at 360×640, 412×915, 800×1280, 1280×800 | **BLOCKED** | No overflow/clipping in portrait or landscape; buttons reachable at all four sizes | No `adb`/emulator; user cannot provide screenshots. Keep as a documented verification gap — never claim it passed |
+| 0.3 | Publish release `v0.1.1` | **DONE** | Release already exists on GitHub with tag `v0.1.1` | — |
+| 0.4 | Locale consistency after the RU-only label shortenings | **DONE** | All 9 `strings_launcher.xml` files now carry the shortened pattern: booting/readiness/login/play/install/driver strings | — |
 
 ## Phase 1 — Close the original AGENTS.md steps
 
 | # | Item | State | Acceptance criteria | Blocked by |
 |---|---|---|---|---|
-| 1.1 | Online count from a real source | **BLOCKED** | `server.status.source=http` + URL returning `{"online": 12, ...}`; UI shows "In-game online: 12" or "—" | Discord `/status` is ephemeral; Discord widget returns 403; need an HTTP endpoint or server-side proxy |
+| 1.1 | Online count from a real source | **WAITING** | `server.status.source=http` + URL returning `{"online": 12, ...}`; UI shows "In-game online: 12" or "—" | Server developer has not provided data access; wait for a response. Meanwhile the counter stays "—" |
 | 1.2 | Dynamic supported client build from that endpoint | **PLANNED** | `client_build` parsed and used as compatibility requirement; unit tests for parse/boundaries; download logic untouched | Same endpoint as 1.1 |
 | 1.3 | Step 6 sign-off | **BLOCKED** | Same as 0.2 | Device/screenshots |
 | 1.4 | Step 7 device validation | **BLOCKED** | `device report` issues with GPU, driver id, in-world result; then flip Adreno 750/735/825/850 from "pending validation" | Real devices |
@@ -45,13 +45,14 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 - Support for other private servers (only after the current one is stable).
 - Sponsorship/funding, if the community asks for it.
 
-## Decision requests (need user input)
+## Decision requests / blockers
 
-1. **0.2 / 1.3:** provide four screenshots (or a device with `adb`) for responsive sign-off.
-2. **0.3:** trigger the `v0.1.1` release and confirm the signing secrets exist.
-3. **0.4:** should the shortened Russian labels be applied to English and the other locales, or stay RU-only?
-4. **1.1 / 1.2:** is there a public HTTP status endpoint (or can the Discord bot expose one)? If yes, send URL + sample JSON. Ephemeral Discord replies cannot be used.
+1. **0.2 / 1.3:** user cannot provide screenshots or a device. Remains an accepted verification gap; do not mark as passed.
+2. **1.1 / 1.2:** awaiting the server developer's response about data access. If an endpoint appears, send URL + sample JSON. Ephemeral Discord replies cannot be used.
+3. **1.4:** needs real devices for in-world validation.
+
+Resolved: 0.3 (release `v0.1.1` already published), 0.4 (locales synchronised).
 
 ## Next action
 
-The first unblocked action is **0.4** — but it requires the locale decision above. Items 0.2, 0.3, 1.1 and 1.4 are hard-blocked by device/credentials/data source. Once the user answers, update this table, then execute exactly one item in one logical commit.
+Phase 0 items are closed or hard-blocked. The first unblocked item is **2.1 — triage the 12 pre-existing Windows unit-test failures**. It is separate tech debt, so start it only on explicit user confirmation and in its own commit. If the user wants to wait for the endpoint instead, mark 1.1/1.2 as the next item when data arrives.
