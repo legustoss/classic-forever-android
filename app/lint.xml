@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!--
+      The launcher is deliberately translated into 9 languages. Other locale folders
+      inherited from GameNative only cover upstream strings; they are not a promise
+      to translate launcher strings. Keep this as a warning instead of an error.
+    -->
+    <issue id="MissingTranslation" severity="warning" />
+</lint>
