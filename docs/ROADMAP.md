@@ -28,9 +28,10 @@ Legend: **DONE** · **IN PROGRESS** · **BLOCKED** (needs input/device) · **PLA
 | # | Item | State | Acceptance criteria | Blocked by |
 |---|---|---|---|---|
 | 2.1 | Full unit-test suite | **DONE** | 391 tests, 0 failures, 12 skipped. Fixed the config filter and cross-platform registry replacement; 10 POSIX-only tests skipped on Windows | — |
-| 2.2 | `lintModernDebug` errors and warnings triaged | **DONE** | 0 errors, 799 findings after the latest strings; fixed manifest features, named constants and API-29 guards; `MissingTranslation` downgraded in `app/lint.xml` because only 9 launcher languages are supported | — |
+| 2.2 | `lintModernDebug` errors and warnings triaged | **DONE** | 0 errors, 773 findings; fixed manifest features, named constants and API-29 guards; `MissingTranslation` downgraded in `app/lint.xml` because only 9 launcher languages are supported | — |
 | 2.3 | Locale sync | **DONE** | All 9 `strings_launcher.xml` files carry the same set of keys and equivalent labels | — |
-| 2.4 | `LogNotTimber` in launcher-owned Kotlin | **DONE** | 24 warnings fixed in controller/XServer code; 286 upstream `com.winlator` Java warnings remain as backlog | — |
+| 2.4 | `LogNotTimber` in launcher-owned Kotlin | **DONE** | 24 warnings fixed in controller/XServer code; 286 upstream `com.winlator` Java warnings remain as backlog |
+| 2.5 | `DefaultLocale` correctness warnings | **DONE** | 26 warnings fixed: internal identifier lowercasing uses `Locale.ROOT`, four `String.format("%.2fx")` use `Locale.US` | — |
 
 ## Phase 3 — Project maturity (P3)
 
