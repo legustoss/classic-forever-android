@@ -120,7 +120,8 @@ import java.io.File
 import java.io.IOException
 
 object WoWLauncherState {
-    var shouldAutoLaunch = true
+    // The game is only launched from an explicit launcher button. Kept for the boot splash state.
+    var shouldAutoLaunch = false
 }
 
 private const val CONTAINER_ID = "wow_forever"
@@ -451,7 +452,6 @@ fun WoWForeverScreen(
             compatibility = null
             if (checkFiles()) {
                 checkVersionStatus()
-                if (hasSavedLogin) launchGame()
             }
         }
     }
@@ -463,7 +463,6 @@ fun WoWForeverScreen(
             clearSkippedUpdate(context)
             versionStatus = target.copy(isOutdated = false, localVersion = target.remoteVersion)
             compatibility = ClientVersionChecker.check(File(gamePath))
-            launchGame()
         }
     }
 
@@ -489,37 +488,14 @@ fun WoWForeverScreen(
         if (!files.hasStorageAccess) {
             showStoragePermissionDialog = true
         }
-        Timber.i("WoWForeverScreen LaunchedEffect: gamePath=$gamePath, ready=$ready, hasSavedLogin=$hasSavedLogin, shouldAutoLaunch=${WoWLauncherState.shouldAutoLaunch}")
-        when {
-            !ready || !hasSavedLogin -> {
-                WoWLauncherState.shouldAutoLaunch = false
-                PluviaApp.events.emit(AndroidEvent.ClearBootingSplash)
-                if (files.isLegacyBeta) showUpgradeDialog = true
-                if (ready) {
-                    checkVersionStatus()
-                    checkAppUpdate()
-                }
-            }
-            !WoWLauncherState.shouldAutoLaunch -> {
-                checkVersionStatus()
-                checkAppUpdate()
-            }
-            else -> {
-                val updateJob = async { fetchAppUpdate() }
-                fetchVersionStatus()
-                val update = updateJob.await()
-                Timber.i(
-                    "WoWForeverScreen LaunchedEffect: isOutdated=${versionStatus?.isOutdated}, " +
-                        "appUpdate=$update, compatibility=$compatibility",
-                )
-                WoWLauncherState.shouldAutoLaunch = false
-                if (versionStatus?.isOutdated == true || update != null || compatibility is ClientCompatibility.TooOld) {
-                    PluviaApp.events.emit(AndroidEvent.ClearBootingSplash)
-                } else {
-                    launchGame()
-                }
-            }
+        Timber.i("WoWForeverScreen LaunchedEffect: gamePath=$gamePath, ready=$ready, hasSavedLogin=$hasSavedLogin")
+        // No implicit launch: the game only starts from an explicit Play button.
+        if (!ready || !hasSavedLogin) {
+            PluviaApp.events.emit(AndroidEvent.ClearBootingSplash)
+            if (files.isLegacyBeta) showUpgradeDialog = true
         }
+        checkVersionStatus()
+        checkAppUpdate()
     }
 
     BackHandler(enabled = screen != LauncherScreen.MAIN) {
