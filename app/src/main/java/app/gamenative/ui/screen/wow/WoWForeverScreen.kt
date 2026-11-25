@@ -728,7 +728,11 @@ fun WoWForeverScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    ScreenTopBar(context.getString(R.string.wow_settings), goToMain)
+                    ScreenTopBar(
+                        context.getString(R.string.wow_settings),
+                        goToMain,
+                        showBack = backPlacementFor(!wide) == BackPlacement.TOP,
+                    )
                     TabRow(
                         selectedTabIndex = settingsTab.ordinal,
                         containerColor = WowPanel.copy(alpha = 0.85f),
@@ -1124,7 +1128,7 @@ fun WoWForeverScreen(
                             if (gamepadConnected) GamepadHint()
                         }
                     }
-                    BottomBackButton(goToMain)
+                    if (backPlacementFor(!wide) == BackPlacement.BOTTOM) BottomBackButton(goToMain)
                 }
             }
 
@@ -1133,7 +1137,11 @@ fun WoWForeverScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    ScreenTopBar(context.getString(R.string.wow_readiness), goToMain)
+                    ScreenTopBar(
+                        context.getString(R.string.wow_readiness),
+                        goToMain,
+                        showBack = backPlacementFor(!wide) == BackPlacement.TOP,
+                    )
                     ReadinessCard(files, gamePath, versionStatus, errorMessage)
                     if (files.needsInstall && files.hasStorageAccess) {
                         InstallCard(
@@ -1166,7 +1174,7 @@ fun WoWForeverScreen(
                         }
                     }
                     if (gamepadConnected) GamepadHint()
-                    BottomBackButton(goToMain)
+                    if (backPlacementFor(!wide) == BackPlacement.BOTTOM) BottomBackButton(goToMain)
                 }
             }
         }
@@ -1618,41 +1626,42 @@ private fun GamepadHint() {
 }
 
 @Composable
-private fun ScreenTopBar(title: String, onBack: () -> Unit) {
+private fun ScreenTopBar(title: String, onBack: () -> Unit, showBack: Boolean = true) {
     val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onBack)
-            .gamepadConfirm(onBack),
+            .then(if (showBack) Modifier.clickable(onClick = onBack).gamepadConfirm(onBack) else Modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         SectionTitle(title, WowNeon)
-        Spacer(modifier = Modifier.weight(1f))
-        OutlinedButton(
-            onClick = onBack,
-            modifier = Modifier.height(48.dp).widthIn(min = 140.dp).gamepadConfirm(onBack),
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
-            border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
-        ) {
-            Icon(
-                Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = context.getString(R.string.wow_back),
-                modifier = Modifier.size(18.dp),
-            )
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(context.getString(R.string.wow_back), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+        if (showBack) {
+            Spacer(modifier = Modifier.weight(1f))
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier.height(48.dp).widthIn(min = 140.dp).gamepadConfirm(onBack),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
+                border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = context.getString(R.string.wow_back),
+                    modifier = Modifier.size(18.dp),
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(context.getString(R.string.wow_back), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            }
         }
     }
 }
 
-/** A second, full-width Back target for touch and gamepad at the bottom of Settings and Setup. */
+/** The portrait Back target for touch and gamepad at the bottom of Settings and Setup. */
 @Composable
 private fun BottomBackButton(onBack: () -> Unit) {
     OutlinedButton(
         onClick = onBack,
-        modifier = Modifier.fillMaxWidth().height(48.dp).gamepadConfirm(onBack),
+        modifier = Modifier.widthIn(min = 140.dp).height(48.dp).gamepadConfirm(onBack),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
         border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
