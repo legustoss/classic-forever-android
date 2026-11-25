@@ -32,7 +32,6 @@ import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.Gamepad
-import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -60,6 +59,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -1768,7 +1768,11 @@ private fun CommunityCard(status: ServerStatus, compact: Boolean = false) {
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = WowNeon),
                 border = BorderStroke(1.dp, WowNeon.copy(alpha = 0.6f)),
             ) {
-                Icon(Icons.Default.Forum, contentDescription = context.getString(R.string.wow_discord), modifier = Modifier.size(20.dp))
+                Icon(
+                    painter = painterResource(R.drawable.ic_discord),
+                    contentDescription = context.getString(R.string.wow_discord),
+                    modifier = Modifier.size(20.dp),
+                )
             }
         }
         // Hidden until a real data source is configured; never show a fabricated or placeholder count.
