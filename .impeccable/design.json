@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-26T09:00:00Z",
+  "title": "Design System: Classic Forever",
+  "extensions": {
+    "colorMeta": {
+      "screen-black": { "role": "neutral", "displayName": "Screen Black", "canonical": "#000000", "tonalRamp": ["#000000", "#111111", "#222222", "#333333", "#4A4A4A", "#6B6B6B", "#9A9A9A", "#FFFFFF"] },
+      "paper-white": { "role": "neutral", "displayName": "Paper White", "canonical": "#FFFFFF", "tonalRamp": ["#000000", "#333333", "#666666", "#999999", "#BBBBBB", "#DDDDDD", "#F5F5F5", "#FFFFFF"] },
+      "quiet-grey": { "role": "neutral", "displayName": "Quiet Grey", "canonical": "#8A8A8A", "tonalRamp": ["#1A1A1A", "#303030", "#4A4A4A", "#666666", "#8A8A8A", "#A8A8A8", "#C8C8C8", "#FFFFFF"] },
+      "divider-grey": { "role": "neutral", "displayName": "Divider Grey", "canonical": "#3A3A3A", "tonalRamp": ["#000000", "#171717", "#282828", "#3A3A3A", "#525252", "#707070", "#9C9C9C", "#FFFFFF"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Welcome heading and large section headings; Cinzel Decorative." },
+      "title": { "displayName": "Title", "purpose": "Active tabs and major labels; Cinzel Decorative." },
+      "body": { "displayName": "Body", "purpose": "All other text; Cinzel." },
+      "button": { "displayName": "Button", "purpose": "Outlined commands; Cinzel." },
+      "caption": { "displayName": "Caption", "purpose": "Version block and muted values; Cinzel." }
+    },
+    "shadows": [],
+    "motion": [],
+    "breakpoints": [
+      { "name": "phone", "value": "WindowWidthSizeClass.Compact" },
+      { "name": "tablet", "value": "WindowWidthSizeClass.Medium" },
+      { "name": "foldable", "value": "WindowWidthSizeClass.Expanded" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Outlined Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Text-only command with a thin rounded outline.",
+      "html": "<button class=\"ds-btn-outline\">LAUNCH</button>",
+      "css": ".ds-btn-outline { background: #000000; color: #FFFFFF; border: 1px solid #3A3A3A; border-radius: 12dp; min-height: 48dp; padding: 12dp 24dp; font: 400 18sp Cinzel, serif; } .ds-btn-outline:focus-visible { outline: 1px solid #FFFFFF; outline-offset: 2dp; } .ds-btn-outline:disabled { color: #8A8A8A; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Credential field with a thin outline and no fill.",
+      "html": "<input class=\"ds-field\" aria-label=\"Account name\">",
+      "css": ".ds-field { background: #000000; color: #FFFFFF; border: 1px solid #3A3A3A; border-radius: 12dp; min-height: 56dp; padding: 12dp 16dp; font: 400 18sp Cinzel, serif; } .ds-field:focus-visible { outline: 1px solid #FFFFFF; }"
+    },
+    {
+      "name": "Sidebar Tab",
+      "kind": "nav",
+      "refersTo": "button-outline",
+      "description": "Text-only navigation item; active state adds the outline.",
+      "html": "<button class=\"ds-tab-active\">LAUNCHER</button>",
+      "css": ".ds-tab-active { background: #000000; color: #FFFFFF; border: 1px solid #3A3A3A; border-radius: 12dp; min-height: 48dp; padding: 12dp 24dp; font: 700 18sp Cinzel, serif; } .ds-tab-inactive { background: #000000; color: #8A8A8A; border: none; font: 400 18sp Cinzel, serif; }"
+    },
+    {
+      "name": "Settings Row",
+      "kind": "card",
+      "refersTo": "row",
+      "description": "Label on the left, outlined action on the right.",
+      "html": "<div class=\"ds-row\"><span>GAME FOLDER</span><button class=\"ds-btn-outline\">CHANGE</button></div>",
+      "css": ".ds-row { display: flex; align-items: center; justify-content: space-between; padding: 16dp 0; border-bottom: 1px solid #3A3A3A; color: #FFFFFF; font: 400 18sp Cinzel, serif; }"
+    },
+    {
+      "name": "Version Block",
+      "kind": "custom",
+      "refersTo": "row",
+      "description": "Real app and client version, never the Figma mock value.",
+      "html": "<div class=\"ds-version\">APP 0.2.0<br>VERSION CLIENT 1.60.1.71037</div>",
+      "css": ".ds-version { color: #8A8A8A; font: 400 13sp Cinzel, serif; line-height: 1.4; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Title Screen",
+    "overview": "An exact visual reproduction of the five user-supplied Figma screens. Monochrome, high-contrast serif, thin grey outlines, no icons, no colour accent. Real build and device values replace the static numbers in the mockup.",
+    "keyCharacteristics": ["Pure black, white and two greys", "Cinzel for all text and Cinzel Decorative for headings", "Thin rounded outline controls", "Text-only launcher surfaces", "Real device and build values only"],
+    "rules": [
+      { "name": "The No-Accent Rule", "body": "Nothing in this system is coloured; state is weight, case, opacity and outline.", "section": "colors" },
+      { "name": "The All-Cinzel Rule", "body": "No second family and no icon font appears on these surfaces.", "section": "typography" }
+    ],
+    "dos": [
+      "Do reproduce the five Figma screens literally in composition and type.",
+      "Do use real version and client values.",
+      "Do keep every control at least 48dp high on touch devices."
+    ],
+    "donts": [
+      "Don't add colours, icons, gradients, shadows or filled buttons.",
+      "Don't introduce a second typeface.",
+      "Don't invent FPS, online counts or driver names."
+    ]
+  }
+}
